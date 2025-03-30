@@ -13,22 +13,22 @@ class ProfileSeeder extends Seeder
      */
     public function run(): void
     {
-        Profile::factory()->create([
+        Profile::create([
             'type' => 'admin master',
             'active' => true,
         ]);
-        
-        Profile::factory()->create([
+
+        Profile::create([
             'type' => 'admin restaurant',
             'active' => true,
         ]);
 
-        Profile::factory()->create([
+        Profile::create([
             'type' => 'user',
             'active' => true,
         ]);
 
-        Profile::factory()->create([
+        Profile::create([
             'type' => 'user restaurant',
             'active' => true,
         ]);
