@@ -17,10 +17,10 @@ Route::post('/register', [
 
 Route::post('/login', [AuthController::class,'login'])->name('login');
 
-Route::get('/teste', function () {
-    return response()->json([
-        'message' => 'Hello, World! voce tem acesso!',
-    ]);
-})->middleware('auth:sanctum');
+// Route::get('/teste', function () {
+//     return response()->json([
+//         'message' => 'Hello, World! voce tem acesso!',
+//     ]);
+// })->middleware('auth:sanctum');
 
 Route::post('/logout', [AuthController::class,'logout'])->name('logout')->middleware('auth:sanctum');
