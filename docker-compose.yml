@@ -38,9 +38,9 @@ services:
     environment:
       POSTGRES_USER: ${DB_USERNAME:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-root}
-      POSTGRES_DB: ${DB_DATABASE:-quickmenu}
+      POSTGRES_DB: ${DB_DATABASE:-app_quickmenu}
     volumes:
-      - ./docker/database/pgdata:/var/lib/postgresql/data
+      - ./pgdata:/var/lib/postgresql/data
     ports:
       - "5433:5432"
     networks:

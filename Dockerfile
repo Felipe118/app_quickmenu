@@ -1,4 +1,4 @@
-FROM php:8.4-fpm
+FROM php:8.3-fpm
 
 # set your user name, ex: user=carlos
 ARG user=luis
@@ -15,6 +15,8 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     libfreetype6-dev \
     libzip-dev \
+    libicu-dev \
+    postgresql-client \
     zip \
     unzip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg
@@ -33,7 +35,8 @@ RUN  docker-php-ext-install -j$(nproc) \
         pcntl \
         bcmath \
         gd \
-        sockets
+        sockets \
+        intl 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -57,5 +60,8 @@ WORKDIR /var/www
 
 # Copy custom configurations PHP
 COPY docker/php/custom.ini /usr/local/etc/php/conf.d/custom.ini
+
+# Adicione esta linha para garantir que as extensões estão carregadas
+RUN php -m | grep pgsql
 
 USER $user
