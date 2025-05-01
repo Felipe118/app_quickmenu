@@ -5,7 +5,6 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserRequest;
 use App\Interfaces\User\RegisterServiceInterface;
-use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -14,11 +13,25 @@ class RegisterController extends Controller
     ){}
 
     /**
-     * Store a newly created resource in storage.
-     *  
-     * @param  \Illuminate\Http\UserRequest  $request
-     * @return \Illuminate\Http\Response
+     * @OA\Post(
+     *     path="/api/register",
+     *     summary="Registrar usuário",
+     *     tags={"User"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="name", type="string", example="João Silva"),
+     *             @OA\Property(property="email", type="string", example="joao@email.com"),
+     *             @OA\Property(property="password", type="string", example="123456")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Usuário registrado com sucesso"
+     *     )
+     * )
      */
+
     public function register(UserRequest $request)
     {
         try{

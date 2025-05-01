@@ -1,0 +1,205 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Api QuickMenu",
+        "description": "Documentação da API do sistema de restaurante quickmenu.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://my-default-host.com",
+            "description": "Servidor principal"
+        }
+    ],
+    "paths": {
+        "/api/address/store": {
+            "post": {
+                "tags": [
+                    "Address"
+                ],
+                "summary": "Store address",
+                "description": "Store address",
+                "operationId": "118d0f248e23cf01a2083fe6cd6b3133",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "address_name": {
+                                        "type": "string",
+                                        "example": "Rua das Flores"
+                                    },
+                                    "quatrain": {
+                                        "type": "string",
+                                        "example": "Quadra 10"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": "São Paulo"
+                                    },
+                                    "state": {
+                                        "type": "string",
+                                        "example": "SP"
+                                    },
+                                    "cep": {
+                                        "type": "string",
+                                        "example": "12345-678"
+                                    },
+                                    "complement": {
+                                        "type": "string",
+                                        "example": "Apto 101"
+                                    },
+                                    "district": {
+                                        "type": "string",
+                                        "example": "Centro"
+                                    },
+                                    "neighborhood": {
+                                        "type": "string",
+                                        "example": "Jardim das Flores"
+                                    },
+                                    "number": {
+                                        "type": "string",
+                                        "example": "123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Endereço registrado com sucesso"
+                    }
+                }
+            }
+        },
+        "/api/address/update/{id}": {
+            "put": {
+                "tags": [
+                    "Address"
+                ],
+                "summary": "Store address",
+                "description": "Store address",
+                "operationId": "updateAddress",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "address_name": {
+                                        "type": "string",
+                                        "example": "Rua das Flores"
+                                    },
+                                    "quatrain": {
+                                        "type": "string",
+                                        "example": "Quadra 10"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": "São Paulo"
+                                    },
+                                    "state": {
+                                        "type": "string",
+                                        "example": "SP"
+                                    },
+                                    "cep": {
+                                        "type": "string",
+                                        "example": "12345-678"
+                                    },
+                                    "complement": {
+                                        "type": "string",
+                                        "example": "Apto 101"
+                                    },
+                                    "district": {
+                                        "type": "string",
+                                        "example": "Centro"
+                                    },
+                                    "neighborhood": {
+                                        "type": "string",
+                                        "example": "Jardim das Flores"
+                                    },
+                                    "number": {
+                                        "type": "string",
+                                        "example": "123"
+                                    },
+                                    "id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Endereço atualizado com sucesso"
+                    }
+                }
+            }
+        },
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Registrar usuário",
+                "operationId": "7fe0bf4a23de80345ff3c252a4ddc9ff",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "João Silva"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "joao@email.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuário registrado com sucesso"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Address",
+            "description": "Address"
+        },
+        {
+            "name": "User",
+            "description": "User"
+        }
+    ]
+}

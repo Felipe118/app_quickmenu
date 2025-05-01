@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Address\AddressController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\User\RegisterController;
 use App\Http\Middleware\PreventAdminAssignmentMiddleware;
@@ -21,4 +22,10 @@ Route::post('/login', [AuthController::class,'login'])->name('login');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class,'logout'])->name('logout');
+
+
+    Route::group(['prefix' => 'address'], function () {
+        Route::post('/store', [AddressController::class,'storeAddress'])->name('storeAddress');
+        Route::put('/update/{id}', [AddressController::class, 'updateAddress'])->name('updateAddress');
+    });
 });
