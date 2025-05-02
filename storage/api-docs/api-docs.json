@@ -153,6 +153,108 @@
                 }
             }
         },
+        "/api/address/get/{id}": {
+            "get": {
+                "tags": [
+                    "Address"
+                ],
+                "summary": "Get address by id",
+                "description": "Get address by id",
+                "operationId": "getAddress",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Address found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "address": {
+                                            "properties": {
+                                                "address_name": {
+                                                    "type": "string",
+                                                    "example": "Rua das Flores"
+                                                },
+                                                "quatrain": {
+                                                    "type": "string",
+                                                    "example": "Quadra 10"
+                                                },
+                                                "city": {
+                                                    "type": "string",
+                                                    "example": "São Paulo"
+                                                },
+                                                "state": {
+                                                    "type": "string",
+                                                    "example": "SP"
+                                                },
+                                                "cep": {
+                                                    "type": "string",
+                                                    "example": "12345-678"
+                                                },
+                                                "complement": {
+                                                    "type": "string",
+                                                    "example": "Apto 101"
+                                                },
+                                                "district": {
+                                                    "type": "string",
+                                                    "example": "Centro"
+                                                },
+                                                "neighborhood": {
+                                                    "type": "string",
+                                                    "example": "Jardim das Flores"
+                                                },
+                                                "number": {
+                                                    "type": "string",
+                                                    "example": "123"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/address/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "Address"
+                ],
+                "summary": "Delete address by id",
+                "description": "Delete address by id",
+                "operationId": "deleteAddress",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Address deleted"
+                    }
+                }
+            }
+        },
         "/api/register": {
             "post": {
                 "tags": [

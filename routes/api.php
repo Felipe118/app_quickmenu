@@ -23,9 +23,10 @@ Route::post('/login', [AuthController::class,'login'])->name('login');
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class,'logout'])->name('logout');
 
-
     Route::group(['prefix' => 'address'], function () {
         Route::post('/store', [AddressController::class,'storeAddress'])->name('storeAddress');
         Route::put('/update/{id}', [AddressController::class, 'updateAddress'])->name('updateAddress');
+        Route::get('get/{id}', [AddressController::class, 'getAddress'])->name('getAddressById');
+        Route::delete('/delete/{id}', [AddressController::class, 'destroyAddress'])->name('destroyAddress');
     });
 });

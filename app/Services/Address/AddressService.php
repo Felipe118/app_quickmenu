@@ -36,4 +36,26 @@ class AddressService implements AddressServiceInterface
 
         return $address;
     }
+
+    public function getAddressById(int $id): Address
+    {
+        $address = $this->addressRepository->getAddressById($id);
+        
+        if(!isset($address->id)){
+            throw new AddressErrorException('Endereço não encontrado.', 404);
+        }
+
+        return $address;
+    }
+
+    public function deleteAddress(int $id): bool
+    {
+        $address = $this->addressRepository->getAddressById($id);
+        
+        if(!isset($address->id)){
+            throw new AddressErrorException('Endereço não encontrado.', 404);
+        }
+
+        return $address->delete();
+    }
 }
