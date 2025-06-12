@@ -13,11 +13,8 @@ use Illuminate\Foundation\Testing\RefreshDatabaseState;
 */
 
 
-
-uses(RefreshDatabaseState::class)->in('Feature', 'Unit');
-
 pest()->extend(Tests\TestCase::class)
- // ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+ ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->in('Feature');
 
 /*
