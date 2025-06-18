@@ -15,10 +15,10 @@ class AddressService implements AddressServiceInterface
 
     public function storeAddress(array $data): Address
     {
-        $address = $this->addressRepository->storeAddress($data);
-        
-        if(!isset($address->id)){
-            throw new AddressErrorException();
+        try {
+            $address = $this->addressRepository->storeAddress($data);
+        } catch (\Throwable $e) {
+            throw new AddressErrorException('Erro ao salvar endereço');
         }
 
         return $address;
@@ -51,10 +51,6 @@ class AddressService implements AddressServiceInterface
     public function deleteAddress(int $id): bool
     {
         $address = $this->addressRepository->getAddressById($id);
-        
-        if(!isset($address->id)){
-            throw new AddressErrorException('Endereço não encontrado.', 404);
-        }
 
         return $address->delete();
     }

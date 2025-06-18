@@ -12,13 +12,13 @@ Route::get('/', function () {
     ]);
 });
 
+
 Route::post('/register', [
     RegisterController::class,
     'register'
 ])->name('register')->middleware(PreventAdminAssignmentMiddleware::class);
 
 Route::post('/login', [AuthController::class,'login'])->name('login');
-
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class,'logout'])->name('logout');

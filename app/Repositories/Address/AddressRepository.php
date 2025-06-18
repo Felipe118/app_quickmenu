@@ -25,8 +25,8 @@ class AddressRepository implements AddressRepositoryInterface
         return $address;
     }
 
-    public function getAddressById(int $id): Address
+    public function getAddressById(int $id): Address|null
     {
-        return $this->address->findOrFail($id);
+        return $this->address->find($id);
     }
 }
