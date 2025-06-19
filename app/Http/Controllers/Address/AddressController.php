@@ -14,8 +14,6 @@ class AddressController extends Controller
     )
     {}
 
-
-
     /**
      * @OA\Post(
      *    path="/api/address/store",
@@ -34,7 +32,6 @@ class AddressController extends Controller
      *              @OA\Property(property="district", type="string", example="Centro"),
      *              @OA\Property(property="neighborhood", type="string", example="Jardim das Flores"),
      *              @OA\Property(property="number", type="string", example="123"),
-     * 
      *         )
      *     ),
      *     @OA\Response(

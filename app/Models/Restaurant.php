@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Restaurant extends Model
 {
@@ -28,5 +29,10 @@ class Restaurant extends Model
          'restaurant_id',
          'user_id'
         );
+    }
+
+    public function address():HasOne
+    {
+        return $this->hasOne(Address::class,'id','address_id');
     }
 }

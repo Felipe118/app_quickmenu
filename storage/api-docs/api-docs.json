@@ -250,7 +250,66 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Address deleted"
+                        "description": "Endereço deletado com sucesso"
+                    }
+                }
+            }
+        },
+        "/api/restaurant/store": {
+            "post": {
+                "tags": [
+                    "Restaurant"
+                ],
+                "summary": "Store restaurant",
+                "description": "Store restaurant",
+                "operationId": "cee7422f4246ce97d9e8a053fc0b2189",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Restaurante 1"
+                                    },
+                                    "perfil_img": {
+                                        "type": "string",
+                                        "example": "https://example.com/perfil.jpg"
+                                    },
+                                    "capa_img": {
+                                        "type": "string",
+                                        "example": "https://example.com/capa.jpg"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "teste@example.com"
+                                    },
+                                    "open_time": {
+                                        "type": "string",
+                                        "example": "10:00"
+                                    },
+                                    "close_time": {
+                                        "type": "string",
+                                        "example": "22:00"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "1234567890"
+                                    },
+                                    "address_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Restaurante registrado com sucesso"
                     }
                 }
             }
@@ -298,6 +357,10 @@
         {
             "name": "Address",
             "description": "Address"
+        },
+        {
+            "name": "Restaurant",
+            "description": "Restaurant"
         },
         {
             "name": "User",
