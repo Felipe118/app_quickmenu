@@ -1,6 +1,6 @@
 <?php
 
-use App\Exceptions\Address\AddressErrorException;
+use App\Exceptions\Address\SistemException;
 use App\Http\Middleware\PreventAdminAssignmentMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -21,7 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->renderable(
-            function (AddressErrorException $e, $request) {
+            function (SistemException $e, $request) {
                 return response()->json([
                     'message' => $e->getMessage(),
                 ], $e->getCode());

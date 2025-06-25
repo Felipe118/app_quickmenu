@@ -8,11 +8,13 @@ use App\Models\Restaurant;
 class RestaurantRepository implements RestaurantRepositoryInterface
 {
     public function __construct(
-        public Restaurant $restaurant
+        private Restaurant $restaurant
     )
     {}
     public function store(array $data) :Restaurant
     {
+        $idUser = auth()->user();
+
         $restaurant = $this->restaurant->create(
           [
             'name' => $data['name'],
@@ -27,6 +29,15 @@ class RestaurantRepository implements RestaurantRepositoryInterface
           ]
         );
 
+        $restaurant->users()->syncWithoutDetaching($idUser);
+
         return $restaurant;
+    }
+
+    public function update(int $id, array $data) :Restaurant
+    {
+      $restaurant = $this->restaurant->findOrFail($id);
+      $restaurant->update($data);
+      return $restaurant;
     }
 }

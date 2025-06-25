@@ -2,10 +2,11 @@
 
 namespace App\Services\Address;
 
-use App\Exceptions\Address\AddressErrorException;
+use App\Exceptions\Address\SistemException;
 use App\Interfaces\Address\AddressRepositoryInterface;
 use App\Interfaces\Address\AddressServiceInterface;
 use App\Models\Address;
+use Illuminate\Support\Facades\Log;
 
 class AddressService implements AddressServiceInterface
 {
@@ -18,7 +19,8 @@ class AddressService implements AddressServiceInterface
         try {
             $address = $this->addressRepository->storeAddress($data);
         } catch (\Throwable $e) {
-            throw new AddressErrorException('Erro ao salvar endereço');
+            Log::error($e->getMessage());
+            throw new SistemException('Erro ao salvar endereço');
         }
 
         return $address;
@@ -31,7 +33,7 @@ class AddressService implements AddressServiceInterface
         $address = $this->addressRepository->updateAddress($id, $data);
         
         if(!isset($address->id)){
-            throw new AddressErrorException();
+            throw new SistemException();
         }
 
         return $address;
@@ -42,7 +44,7 @@ class AddressService implements AddressServiceInterface
         $address = $this->addressRepository->getAddressById($id);
         
         if(!isset($address->id)){
-            throw new AddressErrorException('Endereço não encontrado.', 404);
+            throw new SistemException('Endereço não encontrado.', 404);
         }
 
         return $address;

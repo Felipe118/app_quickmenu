@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Address\AddressController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Restaurant\RestaurantController;
 use App\Http\Controllers\User\RegisterController;
 use App\Http\Middleware\PreventAdminAssignmentMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -28,5 +29,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/update/{id}', [AddressController::class, 'updateAddress'])->name('updateAddress');
         Route::get('get/{id}', [AddressController::class, 'getAddress'])->name('getAddressById');
         Route::delete('/delete/{id}', [AddressController::class, 'destroyAddress'])->name('destroyAddress');
+    });
+
+    Route::group(['prefix' => 'restaurant'], function () {
+        Route::post('/store', [RestaurantController::class, 'storeRestaurant'])->name('storeRestaurant');
+        Route::get('/get/{id}', [RestaurantController::class, 'getRestaurantsById'])->name('getRestaurantsById');
     });
 });

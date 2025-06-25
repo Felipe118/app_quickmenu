@@ -4,7 +4,7 @@ namespace App\Exceptions\Address;
 
 use Exception;
 
-class AddressErrorException extends Exception
+class SistemException extends Exception
 {
     /**
      * Create a new exception instance.
@@ -12,7 +12,7 @@ class AddressErrorException extends Exception
      * @param string $message
      * @param int $code
      */
-    public function __construct(string $message = 'Erro ao registrar o endereço.', int $code = 500)
+    public function __construct(string $message = 'Error:', int $code = 500)
     {
         parent::__construct($message, $code);
     }

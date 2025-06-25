@@ -40,4 +40,31 @@ class RestaurantController extends Controller
     {
         return $this->restaurantService->storeRestaurant($request->all());
     }
+
+    /**
+     * @OA\Get(
+     *    path="/api/restaurant/get/{id}",
+     *    tags={"Restaurant"},
+     *    summary="Get restaurant",
+     *    description="Get restaurant",
+     *    @OA\Parameter(
+     *         description="ID do restaurante",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Restaurante encontrado com sucesso"
+     *     )
+     * )
+     */
+
+    public function getRestautantById($id)
+    {
+        return $this->restaurantService->getRestaurantById($id);
+    }
 }
