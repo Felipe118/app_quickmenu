@@ -33,6 +33,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::group(['prefix' => 'restaurant'], function () {
         Route::post('/store', [RestaurantController::class, 'storeRestaurant'])->name('storeRestaurant');
-        Route::get('/get/{id}', [RestaurantController::class, 'getRestaurantsById'])->name('getRestaurantsById');
+        Route::get('/get/{id}', [RestaurantController::class, 'getRestautantById'])->name('getRestaurantsById');
     });
 });

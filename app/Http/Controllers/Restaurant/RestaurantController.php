@@ -65,6 +65,7 @@ class RestaurantController extends Controller
 
     public function getRestautantById($id)
     {
+        dd($id);
         return $this->restaurantService->getRestaurantById($id);
     }
 }

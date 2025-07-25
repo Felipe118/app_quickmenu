@@ -6,7 +6,6 @@ use App\Exceptions\Address\SistemException;
 use App\Interfaces\Restaurant\RestaurantRepositoryInterface;
 use App\Interfaces\Restaurant\RestaurantServiceInterface;
 use App\Models\Restaurant;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class RestaurantService implements RestaurantServiceInterface
@@ -19,11 +18,7 @@ class RestaurantService implements RestaurantServiceInterface
     public function storeRestaurant(array $data): Restaurant
     {
         try{
-            //$idUser = Auth::user()->id;
-
             $restaunt = $this->restaurantRepository->store($data);
-
-            //$restaunt->users()->syncWithoutDetaching($idUser);
 
             return $restaunt;
         }catch(\Throwable $e){
