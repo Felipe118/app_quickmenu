@@ -11,9 +11,8 @@ class RestaurantRepository implements RestaurantRepositoryInterface
         private Restaurant $restaurant
     )
     {}
-    public function store(array $data) :Restaurant
+    public function store(int $userId,array $data) :Restaurant
     {
-        $idUser = auth()->user();
 
         $restaurant = $this->restaurant->create(
           [
@@ -29,15 +28,17 @@ class RestaurantRepository implements RestaurantRepositoryInterface
           ]
         );
 
-        $restaurant->users()->syncWithoutDetaching($idUser);
+        $restaurant->users()->syncWithoutDetaching($userId);
 
         return $restaurant;
     }
 
-    public function update(int $id, array $data) :Restaurant
+    public function update(array $data) :Restaurant
     {
-      $restaurant = $this->restaurant->findOrFail($id);
+      $restaurant = $this->restaurant->findOrFail( $data['id'] );
+
       $restaurant->update($data);
+      
       return $restaurant;
     }
 }

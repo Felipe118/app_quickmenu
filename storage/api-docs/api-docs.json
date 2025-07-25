@@ -314,6 +314,121 @@
                 }
             }
         },
+        "/api/restaurant/update": {
+            "post": {
+                "tags": [
+                    "Restaurant"
+                ],
+                "summary": "Update restaurant",
+                "description": "Update restaurant",
+                "operationId": "6ec0f648de759eb2de7b4665d21b6509",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Restaurante 1"
+                                    },
+                                    "perfil_img": {
+                                        "type": "string",
+                                        "example": "https://example.com/perfil.jpg"
+                                    },
+                                    "capa_img": {
+                                        "type": "string",
+                                        "example": "https://example.com/capa.jpg"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "teste@example.com"
+                                    },
+                                    "open_time": {
+                                        "type": "string",
+                                        "example": "10:00"
+                                    },
+                                    "close_time": {
+                                        "type": "string",
+                                        "example": "22:00"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "1234567890"
+                                    },
+                                    "address_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Restaurante atualizado com sucesso"
+                    }
+                }
+            }
+        },
+        "/api/restaurant/get/{id}": {
+            "get": {
+                "tags": [
+                    "Restaurant"
+                ],
+                "summary": "Get restaurant",
+                "description": "Get restaurant",
+                "operationId": "dc3b7122df13d683c3c45885333cd2b3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do restaurante",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Restaurante encontrado com sucesso"
+                    }
+                }
+            }
+        },
+        "/api/restaurant/user": {
+            "get": {
+                "tags": [
+                    "Restaurant"
+                ],
+                "summary": "Get restaurant by user logged",
+                "description": "Get restaurant",
+                "operationId": "5fe9cec9ab741724280247a631bb086f",
+                "responses": {
+                    "200": {
+                        "description": "Restaurante encontrado com sucesso"
+                    }
+                }
+            }
+        },
+        "/api/restaurant/getAll": {
+            "get": {
+                "tags": [
+                    "Restaurant"
+                ],
+                "summary": "Get all restaurants",
+                "description": "Get all restaurant",
+                "operationId": "fbd2ce1d73807d41a9ad713745061324",
+                "responses": {
+                    "200": {
+                        "description": "Restaurante encontrado com sucesso"
+                    }
+                }
+            }
+        },
         "/api/register": {
             "post": {
                 "tags": [
