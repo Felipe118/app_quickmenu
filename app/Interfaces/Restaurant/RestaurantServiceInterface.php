@@ -9,7 +9,7 @@ interface RestaurantServiceInterface
 {
     public function storeRestaurant(array $data) :Restaurant;
     public function getRestaurantById(int $id) :Restaurant;
-    public function getRestaurantByuser() :array;
+    public function getRestaurantByuser() :Collection;
     public function getRestaurants() :Collection;
     public function update(array $data) :Restaurant;
 }

@@ -48,7 +48,7 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }    
-    public function restaurant() :BelongsToMany
+    public function restaurants() :BelongsToMany
     {
         return $this->belongsToMany(
             Restaurant::class,

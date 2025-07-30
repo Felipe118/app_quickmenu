@@ -1,7 +1,5 @@
 <?php
 
-//Create test using pest php to test AddressService class
-
 use App\Models\Address;
 use App\Repositories\Address\AddressRepository;
 use App\Services\Address\AddressService;
@@ -11,10 +9,7 @@ beforeEach(function () {
     $this->addressService = new AddressService($this->addressRepository);
 });
 
-
 it('should create a new address', function () {
-  
-
     $data = [
         "address_name" => "Rua 3 de maio Avenida",
         "quatrain" => "Quadra 10",

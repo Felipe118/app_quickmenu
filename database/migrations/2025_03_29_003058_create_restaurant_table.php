@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('email',80)->unique();
             $table->boolean('active')->default(true);
             $table->foreignId('address_id')->constrained('address');
-            //$table->timestamps();
+            $table->timestamps();
         });
     }
 

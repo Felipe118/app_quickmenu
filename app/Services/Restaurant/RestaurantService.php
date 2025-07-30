@@ -37,9 +37,9 @@ class RestaurantService implements RestaurantServiceInterface
         try{
             $user = auth()->user();
             
-            $restaurant = $user->restaurants()->where('restaurants.id', $id)->first();
+            $restaurant = $user->restaurants()->where('restaurant.id', $id)->first();
 
-            if(count($restaurant) == 0){
+            if(!$restaurant){
                 throw new SistemException('Restaurante nao encontrado.', 404);
             }
 
@@ -72,10 +72,10 @@ class RestaurantService implements RestaurantServiceInterface
 
     }
 
-    public function getRestaurantByuser() :array
+    public function getRestaurantByuser() :Collection
     {
         try{
-            return auth()->user()->restaurant()->get();
+            return auth()->user()->restaurants()->get();
         }catch(\Throwable $e){
             Log::error($e->getMessage());
             throw new SistemException('Erro ao buscar restaurante');
