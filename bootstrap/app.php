@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\Address\SistemException;
 use App\Http\Middleware\PreventAdminAssignmentMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -15,10 +16,15 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->group('api', [
             EnsureFrontendRequestsAreStateful::class,
-            'auth:sanctum',
         ]);
         $middleware->append(PreventAdminAssignmentMiddleware::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->renderable(
+            function (SistemException $e, $request) {
+                return response()->json([
+                    'message' => $e->getMessage(),
+                ], $e->getCode());
+            }
+        );
     })->create();

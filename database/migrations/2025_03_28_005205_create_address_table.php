@@ -19,8 +19,9 @@ return new class extends Migration
             $table->string('district', 50)->nullable();
             $table->string('city', 50)->nullable();
             $table->string('state', 40)->countries()->nullable();
-            $table->string('cep', 10);
-            $table->string('street');
+            $table->string('cep', 20);
+            $table->string('quatrain');
+            $table->string('neighborhood', 50)->nullable();
             $table->timestamps();
         });
     }

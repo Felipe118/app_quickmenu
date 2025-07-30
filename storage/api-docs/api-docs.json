@@ -1,0 +1,485 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Api QuickMenu",
+        "description": "Documentação da API do sistema de restaurante quickmenu.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://my-default-host.com",
+            "description": "Servidor principal"
+        }
+    ],
+    "paths": {
+        "/api/address/store": {
+            "post": {
+                "tags": [
+                    "Address"
+                ],
+                "summary": "Store address",
+                "description": "Store address",
+                "operationId": "118d0f248e23cf01a2083fe6cd6b3133",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "address_name": {
+                                        "type": "string",
+                                        "example": "Rua das Flores"
+                                    },
+                                    "quatrain": {
+                                        "type": "string",
+                                        "example": "Quadra 10"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": "São Paulo"
+                                    },
+                                    "state": {
+                                        "type": "string",
+                                        "example": "SP"
+                                    },
+                                    "cep": {
+                                        "type": "string",
+                                        "example": "12345-678"
+                                    },
+                                    "complement": {
+                                        "type": "string",
+                                        "example": "Apto 101"
+                                    },
+                                    "district": {
+                                        "type": "string",
+                                        "example": "Centro"
+                                    },
+                                    "neighborhood": {
+                                        "type": "string",
+                                        "example": "Jardim das Flores"
+                                    },
+                                    "number": {
+                                        "type": "string",
+                                        "example": "123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Endereço registrado com sucesso"
+                    }
+                }
+            }
+        },
+        "/api/address/update/{id}": {
+            "put": {
+                "tags": [
+                    "Address"
+                ],
+                "summary": "Store address",
+                "description": "Store address",
+                "operationId": "updateAddress",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "address_name": {
+                                        "type": "string",
+                                        "example": "Rua das Flores"
+                                    },
+                                    "quatrain": {
+                                        "type": "string",
+                                        "example": "Quadra 10"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": "São Paulo"
+                                    },
+                                    "state": {
+                                        "type": "string",
+                                        "example": "SP"
+                                    },
+                                    "cep": {
+                                        "type": "string",
+                                        "example": "12345-678"
+                                    },
+                                    "complement": {
+                                        "type": "string",
+                                        "example": "Apto 101"
+                                    },
+                                    "district": {
+                                        "type": "string",
+                                        "example": "Centro"
+                                    },
+                                    "neighborhood": {
+                                        "type": "string",
+                                        "example": "Jardim das Flores"
+                                    },
+                                    "number": {
+                                        "type": "string",
+                                        "example": "123"
+                                    },
+                                    "id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Endereço atualizado com sucesso"
+                    }
+                }
+            }
+        },
+        "/api/address/get/{id}": {
+            "get": {
+                "tags": [
+                    "Address"
+                ],
+                "summary": "Get address by id",
+                "description": "Get address by id",
+                "operationId": "getAddress",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Address found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "address": {
+                                            "properties": {
+                                                "address_name": {
+                                                    "type": "string",
+                                                    "example": "Rua das Flores"
+                                                },
+                                                "quatrain": {
+                                                    "type": "string",
+                                                    "example": "Quadra 10"
+                                                },
+                                                "city": {
+                                                    "type": "string",
+                                                    "example": "São Paulo"
+                                                },
+                                                "state": {
+                                                    "type": "string",
+                                                    "example": "SP"
+                                                },
+                                                "cep": {
+                                                    "type": "string",
+                                                    "example": "12345-678"
+                                                },
+                                                "complement": {
+                                                    "type": "string",
+                                                    "example": "Apto 101"
+                                                },
+                                                "district": {
+                                                    "type": "string",
+                                                    "example": "Centro"
+                                                },
+                                                "neighborhood": {
+                                                    "type": "string",
+                                                    "example": "Jardim das Flores"
+                                                },
+                                                "number": {
+                                                    "type": "string",
+                                                    "example": "123"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/address/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "Address"
+                ],
+                "summary": "Delete address by id",
+                "description": "Delete address by id",
+                "operationId": "deleteAddress",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Endereço deletado com sucesso"
+                    }
+                }
+            }
+        },
+        "/api/restaurant/store": {
+            "post": {
+                "tags": [
+                    "Restaurant"
+                ],
+                "summary": "Store restaurant",
+                "description": "Store restaurant",
+                "operationId": "cee7422f4246ce97d9e8a053fc0b2189",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Restaurante 1"
+                                    },
+                                    "perfil_img": {
+                                        "type": "string",
+                                        "example": "https://example.com/perfil.jpg"
+                                    },
+                                    "capa_img": {
+                                        "type": "string",
+                                        "example": "https://example.com/capa.jpg"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "teste@example.com"
+                                    },
+                                    "open_time": {
+                                        "type": "string",
+                                        "example": "10:00"
+                                    },
+                                    "close_time": {
+                                        "type": "string",
+                                        "example": "22:00"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "1234567890"
+                                    },
+                                    "address_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Restaurante registrado com sucesso"
+                    }
+                }
+            }
+        },
+        "/api/restaurant/update": {
+            "post": {
+                "tags": [
+                    "Restaurant"
+                ],
+                "summary": "Update restaurant",
+                "description": "Update restaurant",
+                "operationId": "6ec0f648de759eb2de7b4665d21b6509",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Restaurante 1"
+                                    },
+                                    "perfil_img": {
+                                        "type": "string",
+                                        "example": "https://example.com/perfil.jpg"
+                                    },
+                                    "capa_img": {
+                                        "type": "string",
+                                        "example": "https://example.com/capa.jpg"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "teste@example.com"
+                                    },
+                                    "open_time": {
+                                        "type": "string",
+                                        "example": "10:00"
+                                    },
+                                    "close_time": {
+                                        "type": "string",
+                                        "example": "22:00"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "1234567890"
+                                    },
+                                    "address_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Restaurante atualizado com sucesso"
+                    }
+                }
+            }
+        },
+        "/api/restaurant/get/{id}": {
+            "get": {
+                "tags": [
+                    "Restaurant"
+                ],
+                "summary": "Get restaurant",
+                "description": "Get restaurant",
+                "operationId": "dc3b7122df13d683c3c45885333cd2b3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do restaurante",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Restaurante encontrado com sucesso"
+                    }
+                }
+            }
+        },
+        "/api/restaurant/user": {
+            "get": {
+                "tags": [
+                    "Restaurant"
+                ],
+                "summary": "Get restaurant by user logged",
+                "description": "Get restaurant",
+                "operationId": "5fe9cec9ab741724280247a631bb086f",
+                "responses": {
+                    "200": {
+                        "description": "Restaurante encontrado com sucesso"
+                    }
+                }
+            }
+        },
+        "/api/restaurant/getAll": {
+            "get": {
+                "tags": [
+                    "Restaurant"
+                ],
+                "summary": "Get all restaurants",
+                "description": "Get all restaurant",
+                "operationId": "fbd2ce1d73807d41a9ad713745061324",
+                "responses": {
+                    "200": {
+                        "description": "Restaurante encontrado com sucesso"
+                    }
+                }
+            }
+        },
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Registrar usuário",
+                "operationId": "7fe0bf4a23de80345ff3c252a4ddc9ff",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "João Silva"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "joao@email.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuário registrado com sucesso"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Address",
+            "description": "Address"
+        },
+        {
+            "name": "Restaurant",
+            "description": "Restaurant"
+        },
+        {
+            "name": "User",
+            "description": "User"
+        }
+    ]
+}

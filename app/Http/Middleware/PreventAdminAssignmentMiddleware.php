@@ -15,11 +15,20 @@ class PreventAdminAssignmentMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if($request->has('profile_id') && $request->profile_id == 1) {
+        if (! $request->has('profile_id')) {
+            return $next($request);
+        }
+
+        if (auth('api')->check() && auth('api')->user()->profile_id === 1) {
+            return $next($request);
+        }
+
+        if($request->profile_id == 1) {
             return response()->json([
                 'error' => 'Acesso negado'
             ], 403);
         }
+
         return $next($request);
     }
 }
