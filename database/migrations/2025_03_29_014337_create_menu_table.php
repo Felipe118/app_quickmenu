@@ -16,7 +16,13 @@ return new class extends Migration
             $table->string('name');
             $table->string('description')->nullable();
             $table->string('image')->nullable();
-            $table->foreignId('restaurant_id')->constrained('restaurant')->onDelete('cascade');
+            $table->foreignId('qrcode_id')
+                ->nullable()
+                ->constrained('qrcode')
+                ->onDelete('cascade');
+            $table->foreignId('restaurant_id')
+                ->constrained('restaurant')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

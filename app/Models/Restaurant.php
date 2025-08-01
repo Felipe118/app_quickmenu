@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Restaurant extends Model
 {
@@ -37,5 +38,10 @@ class Restaurant extends Model
     public function address():HasOne
     {
         return $this->hasOne(Address::class,'id','address_id');
+    }
+
+    public function menus() :HasMany
+    {
+        return $this->hasMany(Menu::class,'restaurant_id');
     }
 }
