@@ -2,11 +2,11 @@
 
 namespace App\Services\Restaurant;
 
+use App\Enums\RoleEnum;
 use App\Exceptions\Address\SistemException;
 use App\Interfaces\Restaurant\RestaurantRepositoryInterface;
 use App\Interfaces\Restaurant\RestaurantServiceInterface;
 use App\Models\Restaurant;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 
 class RestaurantService implements RestaurantServiceInterface
@@ -31,19 +31,18 @@ class RestaurantService implements RestaurantServiceInterface
        
     }
 
-    public function getRestaurantById(int $id): Restaurant
+    public function getRestaurant(): Restaurant
     {
        
         try{
             $user = auth()->user();
-            
-            $restaurant = $user->restaurants()->where('restaurant.id', $id)->first();
 
-            if(!$restaurant){
-                throw new SistemException('Restaurante nao encontrado.', 404);
+            if($user->hasRole(RoleEnum::ADMIM_MASTER->value)){
+                return Restaurant::where('active', true)->get();
             }
 
-            return $restaurant; 
+            return $user->restaurants()->where('user_id', $user->id)->get();
+   
         }catch(\Throwable $e){
             Log::error($e->getMessage());
             throw new SistemException('Erro ao buscar restaurante',500);
@@ -60,25 +59,4 @@ class RestaurantService implements RestaurantServiceInterface
         }
     }
 
-
-    public function getRestaurants() :Collection
-    {
-        try{
-            return Restaurant::all();
-        }catch(\Throwable $e){
-            Log::error($e->getMessage());
-            throw new SistemException('Erro ao buscar restaurantes');
-        }
-
-    }
-
-    public function getRestaurantByuser() :Collection
-    {
-        try{
-            return auth()->user()->restaurants()->get();
-        }catch(\Throwable $e){
-            Log::error($e->getMessage());
-            throw new SistemException('Erro ao buscar restaurante');
-        }
-    }
 }

@@ -67,7 +67,7 @@ class RestaurantController extends Controller
      * )
      */
 
-        public function updateRestaurant(RestaurantRequest $request)
+    public function updateRestaurant(RestaurantRequest $request)
     {
         return $this->restaurantService->update($request->all());
     }
@@ -94,9 +94,9 @@ class RestaurantController extends Controller
      * )
      */
 
-    public function getRestautantById($id)
+    public function getRestautant()
     {
-        return $this->restaurantService->getRestaurantById($id);
+        return $this->restaurantService->getRestaurant();
     }
 
     /**
@@ -112,31 +112,5 @@ class RestaurantController extends Controller
      *     )
      * )
      */
-
-    public function getRestautantByUser()
-    {
-        return $this->restaurantService->getRestaurantByuser();
-    }
-
-    
-    /**
-     * @OA\Get(
-     *    path="/api/restaurant/getAll",
-     *    tags={"Restaurant"},
-     *    summary="Get all restaurants",
-     *    description="Get all restaurant",
-     *
-     *     @OA\Response(
-     *         response=200,
-     *         description="Restaurante encontrado com sucesso"
-     *     )
-     * )
-     */
-
-    public function getRestautants()
-    {
-        return $this->restaurantService->getRestaurants();
-    }
-
 
 }

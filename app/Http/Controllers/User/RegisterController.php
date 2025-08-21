@@ -23,6 +23,7 @@ class RegisterController extends Controller
      *             @OA\Property(property="name", type="string", example="João Silva"),
      *             @OA\Property(property="email", type="string", example="joao@email.com"),
      *             @OA\Property(property="password", type="string", example="123456")
+     *             @OA\Property(property="role", type="int", example="4")
      *         )
      *     ),
      *     @OA\Response(
