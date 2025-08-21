@@ -52,10 +52,43 @@ class RestaurantService implements RestaurantServiceInterface
     public function update(array $data): Restaurant
     {
         try{
+            $user = auth()->user();
+
+            if(
+                $user->restaurant()->id == $data['id'] && 
+                $user->hasRole(RoleEnum::ADMIN_RESTAURANT->value)
+            )
+            {
+                return $user->restaurant()->update($data);
+            }
+            else if($user->hasRole(RoleEnum::ADMIM_MASTER->value)){
+                return $this->restaurantRepository->update($data);
+            }else{
+                throw new SistemException('Acesso negado',403);
+            }
+
             return $this->restaurantRepository->update($data);
         }catch(\Throwable $e){
             Log::error($e->getMessage());
             throw new SistemException('Erro ao atualizar restaurante');
+        }
+    }
+
+    public function destroyRestaurant(int $id): Restaurant
+    {
+        try{
+            $restaunt = Restaurant::find($id);
+
+            if(!$restaunt){
+                throw new SistemException('Restaurante nao encontrado',404);
+            }
+            
+            $restaunt->update(['active' => false, 'deleted_at' => now()])->save();
+
+            return $restaunt;
+        }catch(\Throwable $e){
+            Log::error($e->getMessage());
+            throw new SistemException('Erro ao deletar restaurante');
         }
     }
 

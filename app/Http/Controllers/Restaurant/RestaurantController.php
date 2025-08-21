@@ -100,17 +100,33 @@ class RestaurantController extends Controller
     }
 
     /**
-     * @OA\Get(
-     *    path="/api/restaurant/user",
+     * @OA\Delete(
+     *    path="/api/restaurant/delete/{id}",
      *    tags={"Restaurant"},
-     *    summary="Get restaurant by user logged",
-     *    description="Get restaurant",
-     *
+     *    summary="Delete restaurant by id",
+     *    description="Delete restaurant by id",
+     *    @OA\Parameter(
+     *         description="ID do restaurante",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Restaurante encontrado com sucesso"
-     *     )
+     *        description="Restaurante deletado com sucesso"
+     *    )
      * )
      */
+    public function destroyRestaurant(int $id)
+    {
+        $this->restaurantService->destroyRestaurant($id);
+
+        return response()->json([
+            'message' => 'Restaurante deletado com sucesso',
+        ],200);
+    }
 
 }

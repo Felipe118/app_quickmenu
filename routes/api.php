@@ -33,15 +33,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::group(['prefix' => 'restaurant'], function () {
         Route::post('/store', [RestaurantController::class, 'storeRestaurant'])
             ->name('storeRestaurant')
-            ->middleware('permission:restaurants-create');
+            ->middleware('role:admin_master|admin_restaurant');
         Route::post('/update', [RestaurantController::class, 'updateRestaurant'])
             ->name('updateRestaurant')
-            ->middleware('permission:restaurants-edit');
+            ->middleware('role:admin_master|admin_restaurant');
         Route::get('/get', [RestaurantController::class, 'getRestautant'])
             ->name('getRestautant')
-            ->middleware('permission:restaurants-list');
-        Route::delete('/delete/{id}', [RestaurantController::class, 'destroyRestaurant']);
-        Route::post('disable', [RestaurantController::class,'disable'])
-            ->name('disable');
+            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+        Route::delete('/delete/{id}', [RestaurantController::class, 'destroyRestaurant'])
+            ->name('destroyRestaurant')
+            ->middleware('role:admin_master');
     });
 });
