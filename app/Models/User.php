@@ -13,7 +13,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasRoles,HasFactory, Notifiable;
+    use HasApiTokens,HasRoles,HasFactory, Notifiable;
 
     protected $guard_name = 'api'; 
 

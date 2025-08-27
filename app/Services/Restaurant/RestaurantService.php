@@ -49,30 +49,45 @@ class RestaurantService implements RestaurantServiceInterface
         } 
     }
 
-    public function update(array $data): Restaurant
-    {
-        try{
-            $user = auth()->user();
+  public function update(array $data): Restaurant
+{
+    try {
+        $user = auth()->user();
 
-            if(
-                $user->restaurant()->id == $data['id'] && 
-                $user->hasRole(RoleEnum::ADMIN_RESTAURANT->value)
-            )
-            {
-                return $user->restaurant()->update($data);
-            }
-            else if($user->hasRole(RoleEnum::ADMIM_MASTER->value)){
-                return $this->restaurantRepository->update($data);
-            }else{
-                throw new SistemException('Acesso negado',403);
-            }
+        $restaurant = Restaurant::with('users')->findOrFail($data['id']);
 
+        if (
+            $restaurant->users()->where('user_id', $user->id)->exists() &&
+            $restaurant->users()->where('restaurant_id', $data['id'])->exists() &&
+            $user->hasRole(RoleEnum::ADMIN_RESTAURANT->value)
+        ) {
             return $this->restaurantRepository->update($data);
-        }catch(\Throwable $e){
-            Log::error($e->getMessage());
-            throw new SistemException('Erro ao atualizar restaurante');
         }
+
+        // Caso seja admin master
+        if ($user->hasRole(RoleEnum::ADMIM_MASTER->value)) {
+            return $this->restaurantRepository->update($data);
+        }
+
+        throw new SistemException('Acesso negado', 403);
+
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        throw new SistemException('Restaurante não encontrado', 404);
+    } catch (\Throwable $e) {
+        Log::error($e->getMessage());
+        throw new SistemException($e->getMessage(),$e->getCode());
     }
+}
+
+
+    // private function verifyRestaurant(int $id): Restaurant
+    // {
+    //     $user = auth()->user();
+
+    //     $restaurant = $user->restaurant();
+
+    //     if($restaurant->id == $id)
+    // }
 
     public function destroyRestaurant(int $id): Restaurant
     {
