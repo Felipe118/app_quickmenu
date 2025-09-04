@@ -67,7 +67,7 @@ class RestaurantController extends Controller
      * )
      */
 
-        public function updateRestaurant(RestaurantRequest $request)
+    public function updateRestaurant(RestaurantRequest $request)
     {
         return $this->restaurantService->update($request->all());
     }
@@ -94,49 +94,39 @@ class RestaurantController extends Controller
      * )
      */
 
-    public function getRestautantById($id)
+    public function getRestautant()
     {
-        return $this->restaurantService->getRestaurantById($id);
+        return $this->restaurantService->getRestaurant();
     }
 
     /**
-     * @OA\Get(
-     *    path="/api/restaurant/user",
+     * @OA\Delete(
+     *    path="/api/restaurant/delete/{id}",
      *    tags={"Restaurant"},
-     *    summary="Get restaurant by user logged",
-     *    description="Get restaurant",
-     *
+     *    summary="Delete restaurant by id",
+     *    description="Delete restaurant by id",
+     *    @OA\Parameter(
+     *         description="ID do restaurante",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Restaurante encontrado com sucesso"
-     *     )
+     *        description="Restaurante deletado com sucesso"
+     *    )
      * )
      */
-
-    public function getRestautantByUser()
+    public function destroyRestaurant(int $id)
     {
-        return $this->restaurantService->getRestaurantByuser();
+        $this->restaurantService->destroyRestaurant($id);
+
+        return response()->json([
+            'message' => 'Restaurante deletado com sucesso',
+        ],200);
     }
-
-    
-    /**
-     * @OA\Get(
-     *    path="/api/restaurant/getAll",
-     *    tags={"Restaurant"},
-     *    summary="Get all restaurants",
-     *    description="Get all restaurant",
-     *
-     *     @OA\Response(
-     *         response=200,
-     *         description="Restaurante encontrado com sucesso"
-     *     )
-     * )
-     */
-
-    public function getRestautants()
-    {
-        return $this->restaurantService->getRestaurants();
-    }
-
 
 }

@@ -25,7 +25,7 @@ class UserRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
-            'profile_id'=> 'nullable|integer|exists:profile,id',
+            'role'=> 'integer',
         ];
     }
 
@@ -43,8 +43,7 @@ class UserRequest extends FormRequest
             'password.required' => 'O campo senha é obrigatório',
             'password.string' => 'O campo senha deve ser uma string',
             'password.min' => 'O campo senha deve ter no mínimo 8 caracteres',
-            'profile_id.integer' => 'O campo profile_id deve ser um inteiro',
-            'profile_id.exists' => 'O perfil informado não existe',
+            'role.integer'=> 'O campo perfil deve ser uma inteiro',
         ];
     }
 }

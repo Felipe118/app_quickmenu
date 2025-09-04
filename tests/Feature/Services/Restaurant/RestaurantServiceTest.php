@@ -2,22 +2,16 @@
 
 use App\Exceptions\Address\SistemException;
 use App\Models\Address;
-use App\Models\Profile;
 use App\Models\User;
 use App\Models\Restaurant;
 use App\Services\Restaurant\RestaurantService;
 
 beforeEach(function () {
-    $this->profile = Profile::factory()->create([
-        'type' => 'admin master',
-        'active' => true,
-    ]);
 
     $this->user = User::factory()->create([
         'name' => 'Luis Felipe',
         'email' => 'luis@teste.com',
         'password' => 'Teste123',
-        'profile_id' => $this->profile->id,
     ]);
 
     $this->address = Address::factory()->create([

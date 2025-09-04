@@ -2,6 +2,7 @@
 
 namespace App\Services\Restaurant;
 
+use App\Enums\RoleEnum;
 use App\Exceptions\Address\SistemException;
 use App\Interfaces\Restaurant\RestaurantRepositoryInterface;
 use App\Interfaces\Restaurant\RestaurantServiceInterface;
@@ -31,19 +32,18 @@ class RestaurantService implements RestaurantServiceInterface
        
     }
 
-    public function getRestaurantById(int $id): Restaurant
+    public function getRestaurant(): Collection
     {
        
         try{
             $user = auth()->user();
-            
-            $restaurant = $user->restaurants()->where('restaurant.id', $id)->first();
 
-            if(!$restaurant){
-                throw new SistemException('Restaurante nao encontrado.', 404);
+            if($user->hasRole(RoleEnum::ADMIM_MASTER->value)){
+                return Restaurant::where('active', true)->get();
             }
 
-            return $restaurant; 
+            return $user->restaurants()->where('user_id', $user->id)->get();
+   
         }catch(\Throwable $e){
             Log::error($e->getMessage());
             throw new SistemException('Erro ao buscar restaurante',500);
@@ -52,33 +52,51 @@ class RestaurantService implements RestaurantServiceInterface
 
     public function update(array $data): Restaurant
     {
-        try{
-            return $this->restaurantRepository->update($data);
-        }catch(\Throwable $e){
+        try {
+            $user = auth()->user();
+
+            $restaurant = Restaurant::with('users')->findOrFail($data['id']);
+
+            if (
+                $restaurant->users()->where('user_id', $user->id)->exists() &&
+                $restaurant->users()->where('restaurant_id', $data['id'])->exists() &&
+                $user->hasRole(RoleEnum::ADMIN_RESTAURANT->value)
+            ) {
+                return $this->restaurantRepository->update($data);
+            }
+
+            // Caso seja admin master
+            if ($user->hasRole(RoleEnum::ADMIM_MASTER->value)) {
+                return $this->restaurantRepository->update($data);
+            }
+
+            throw new SistemException('Acesso negado', 403);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            throw new SistemException('Restaurante não encontrado', 404);
+        } catch (\Throwable $e) {
             Log::error($e->getMessage());
-            throw new SistemException('Erro ao atualizar restaurante');
+            throw new SistemException($e->getMessage(),$e->getCode());
         }
     }
 
 
-    public function getRestaurants() :Collection
+    public function destroyRestaurant(int $id): Restaurant|SistemException
     {
         try{
-            return Restaurant::all();
+            $restaurant = Restaurant::find($id);
+
+            if(!$restaurant){
+                return throw new SistemException('Restaurante nao encontrado',404);
+            }
+            
+            $restaurant->update(['active' => false]);
+
+            return $restaurant;
         }catch(\Throwable $e){
             Log::error($e->getMessage());
-            throw new SistemException('Erro ao buscar restaurantes');
-        }
-
-    }
-
-    public function getRestaurantByuser() :Collection
-    {
-        try{
-            return auth()->user()->restaurants()->get();
-        }catch(\Throwable $e){
-            Log::error($e->getMessage());
-            throw new SistemException('Erro ao buscar restaurante');
+            throw new SistemException('Erro ao deletar restaurante');
         }
     }
+
 }

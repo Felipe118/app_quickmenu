@@ -28,7 +28,7 @@ class RestaurantRequest extends FormRequest
             "email"=>  "required|string|email|max:255",
             "open_time"=> "required|max:255",
             "close_time"=> "required|max:255",
-            "phone"=> "required|max:30",
+            "phone"=> "required|max:30|unique:restaurant",
             "active"=> "boolean",
             "address_id"=> "required|integer|exists:address,id",
         ];
@@ -48,6 +48,7 @@ class RestaurantRequest extends FormRequest
             "close_time.required"=> "O campo Hora de Fechamento é obrigatório",
             "phone.required"=> "O campo telefone é obrigatório",
             "phone.max"=> "O campo telefone deve ter no máximo 30 caracteres",
+            "phone.unique"=> "O telefone ja foi cadastrado",
             "address_id.required"=> "O campo endereço é obrigatório",
         ];
     }

@@ -19,6 +19,8 @@ services:
       XDEBUG_CONFIG: "client_host=host.docker.internal client_port=9003"
     depends_on:
       - db
+      # - mailhog
+      # - redis
   nginx:
     image: nginx:alpine
     depends_on:
@@ -32,6 +34,37 @@ services:
     restart: always
     networks:
       - quickmenu_networks
+  # horizon:
+  #   build: .
+  #   container_name: horizon-quickmenu
+  #   command: "php artisan horizon"
+  #   restart: always
+  #   volumes:
+  #     - .:/var/www
+
+  # redis:
+  #   image: redis:alpine
+  #   container_name: redis-quickmenu
+  #   ports:
+  #     - "6379:6379"
+  #   networks:
+  #     - quickmenu_networks
+
+  # mailhog:
+  #   image: mailhog/mailhog
+  #   container_name: mailhog-quickmenu
+  #   ports:
+  #     - "1025:1025"
+  #     - "8025:8025"
+  
+  #   depends_on:
+  #     - app
+  #     - redis
+  #   networks:
+  #     - quickmenu_networks
+  
+  
+
   db:
     image: postgres:15
     container_name: db-quickmenu
@@ -46,6 +79,7 @@ services:
       - "5433:5432"
     networks:
       - quickmenu_networks
+
 networks:
   quickmenu_networks:
     driver: bridge

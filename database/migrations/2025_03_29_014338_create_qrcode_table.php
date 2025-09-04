@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('profile', function (Blueprint $table) {
+        Schema::create('qrcode', function (Blueprint $table) {
             $table->id();
-            $table->string('type', 20)->unique();
-            $table->boolean('active')->default(true);
+            $table->string('description')->nullable();
+            $table->text('payload ')->nullable();
+             $table->foreignId('menu_id')
+                ->nullable()
+                ->constrained('menu')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -24,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('profile');
+        Schema::dropIfExists('qrcode');
     }
 };
