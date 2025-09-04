@@ -6,5 +6,5 @@ use App\Models\Menu;
 
 interface MenuServiceInterface
 {
-    public function store(array $data): Menu;
+    public function storeMenu(array $data): Menu;
 }

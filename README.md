@@ -12,6 +12,7 @@
 - Docker / Docker Compose
 - Xdebug (ambiente de desenvolvimento)
 - Swagger (documentação da API)
+- EM CONSTRUÇÃO 🚧
 
 ### Frontend
 - [Vue 3](https://vuejs.org/)
@@ -19,7 +20,6 @@
 - Axios (requisições HTTP)
 - Pinia 
 - PWA
-- EM CONSTRUÇÃO 🚧
 
 ---
 

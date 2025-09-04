@@ -18,7 +18,8 @@ class Menu extends Model
         'name',
         'description',
         'image',
-        'restaurant_id'
+        'restaurant_id',
+        'slug',
     ];
 
     public function items() :HasMany

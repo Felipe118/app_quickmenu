@@ -36,7 +36,7 @@ class RestaurantController extends Controller
      *     )
      * )
      */
-    public function storeRestaurant(RestaurantRequest $request)
+    public function store(RestaurantRequest $request)
     {
         return $this->restaurantService->storeRestaurant($request->all());
     }
@@ -67,7 +67,7 @@ class RestaurantController extends Controller
      * )
      */
 
-    public function updateRestaurant(RestaurantRequest $request)
+    public function update(RestaurantRequest $request)
     {
         return $this->restaurantService->update($request->all());
     }
@@ -94,7 +94,7 @@ class RestaurantController extends Controller
      * )
      */
 
-    public function getRestautant()
+    public function get()
     {
         return $this->restaurantService->getRestaurant();
     }
@@ -120,7 +120,7 @@ class RestaurantController extends Controller
      *    )
      * )
      */
-    public function destroyRestaurant(int $id)
+    public function destroy(int $id)
     {
         $this->restaurantService->destroyRestaurant($id);
 

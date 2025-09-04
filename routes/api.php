@@ -40,22 +40,22 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::group(['prefix' => 'restaurant'], function () {
-        Route::post('/store', [RestaurantController::class, 'storeRestaurant'])
+        Route::post('/store', [RestaurantController::class, 'store'])
             ->name('storeRestaurant')
             ->middleware('role:admin_master|admin_restaurant');
-        Route::post('/update', [RestaurantController::class, 'updateRestaurant'])
+        Route::post('/update', [RestaurantController::class, 'update'])
             ->name('updateRestaurant')
             ->middleware('role:admin_master|admin_restaurant');
-        Route::get('/get', [RestaurantController::class, 'getRestautant'])
-            ->name('getRestautant')
+        Route::get('/get', [RestaurantController::class, 'get'])
+            ->name('getRestaurant')
             ->middleware('role:admin_master|admin_restaurant|user_restaurant');
-        Route::delete('/delete/{id}', [RestaurantController::class, 'destroyRestaurant'])
-            ->name('destroyRestaurant')
+        Route::delete('/delete/{id}', [RestaurantController::class, 'destroy'])
+            ->name('destroy')
             ->middleware('role:admin_master');
     });
 
     Route::group(['prefix'=> 'menu'], function () {
-        Route::post('/store', [MenuController::class,'storeMenu'])
+        Route::post('/store', [MenuController::class,'store'])
         ->name('storeMenu')
         ->middleware('role:admin_master|admin_restaurant|user_restaurant');
     });

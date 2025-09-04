@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('restaurant_id')
                 ->constrained('restaurant')
                 ->onDelete('cascade');
+            $table->string('slug',150)->unique();
             $table->timestamps();
         });
     }

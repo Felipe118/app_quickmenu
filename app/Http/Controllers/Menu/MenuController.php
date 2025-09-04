@@ -4,10 +4,17 @@ namespace App\Http\Controllers\Menu;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MenuRequest;
+use App\Interfaces\Menu\MenuServiceInterface;
 use Illuminate\Http\Request;
 
 class MenuController extends Controller
 {
+    public function __construct(
+        public MenuServiceInterface $menuService,
+    )
+    {
+        
+    }
     /**
      * @OA\Post(
      *     path="/api/menu/store",
@@ -30,6 +37,10 @@ class MenuController extends Controller
      **/
     public function store(MenuRequest $request)
     {
+        $this->menuService->storeMenu($request->all());
 
+        return response()->json([
+            'message' => 'Menu registrado com sucesso',
+        ], 201);
     }
 }

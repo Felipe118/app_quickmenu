@@ -23,8 +23,14 @@ class Restaurant extends Model
         'close_time',
         'phone',
         'active',
-        'address_id'
+        'address_id',
+        'slug',
     ];
+
+    // public function getRouteKeyName()
+    // {
+    //     return 'slug';
+    // }
 
     public function users() :BelongsToMany
     {
