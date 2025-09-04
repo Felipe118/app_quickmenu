@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Menu extends Model
 {
@@ -17,7 +18,6 @@ class Menu extends Model
         'name',
         'description',
         'image',
-        'qrcode_id',
         'restaurant_id'
     ];
 
@@ -31,8 +31,8 @@ class Menu extends Model
         return $this->belongsTo(Restaurant::class,'restaurant_id');
     }
 
-    public function qrcode() :BelongsTo
+    public function qrcode() :HasOne
     {
-        return $this->belongsTo(QrCode::class,'qrcode_id');
+        return $this->hasOne(QrCode::class,'menu_id');
     }
 }

@@ -11,7 +11,7 @@ class MenuRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class MenuRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'restaurant_id' => 'required|integer',
+            'name' => 'required|string|max:255',
         ];
     }
 }

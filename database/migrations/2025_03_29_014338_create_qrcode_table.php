@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('description')->nullable();
             $table->text('payload ')->nullable();
+             $table->foreignId('menu_id')
+                ->nullable()
+                ->constrained('menu')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

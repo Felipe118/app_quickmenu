@@ -22,7 +22,7 @@ class RegisterController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="name", type="string", example="João Silva"),
      *             @OA\Property(property="email", type="string", example="joao@email.com"),
-     *             @OA\Property(property="password", type="string", example="123456")
+     *             @OA\Property(property="password", type="string", example="123456"),
      *             @OA\Property(property="role", type="int", example="4")
      *         )
      *     ),
@@ -32,7 +32,6 @@ class RegisterController extends Controller
      *     )
      * )
      */
-
     public function register(UserRequest $request)
     {
         try{

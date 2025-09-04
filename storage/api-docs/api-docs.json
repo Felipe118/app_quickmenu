@@ -255,6 +255,41 @@
                 }
             }
         },
+        "/api/menu/store": {
+            "post": {
+                "tags": [
+                    "Menu"
+                ],
+                "summary": "Store menu",
+                "description": "Store menu",
+                "operationId": "704fc2fa61b7658f707cfe4d35395286",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Menu 1"
+                                    },
+                                    "restaurant_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Menu registrado com sucesso"
+                    }
+                }
+            }
+        },
         "/api/restaurant/store": {
             "post": {
                 "tags": [
@@ -380,7 +415,7 @@
                 ],
                 "summary": "Get restaurant",
                 "description": "Get restaurant",
-                "operationId": "dc3b7122df13d683c3c45885333cd2b3",
+                "operationId": "40428a884d390843eb2843e8ac5f9554",
                 "parameters": [
                     {
                         "name": "id",
@@ -399,32 +434,28 @@
                 }
             }
         },
-        "/api/restaurant/user": {
-            "get": {
+        "/api/restaurant/delete/{id}": {
+            "delete": {
                 "tags": [
                     "Restaurant"
                 ],
-                "summary": "Get restaurant by user logged",
-                "description": "Get restaurant",
-                "operationId": "5fe9cec9ab741724280247a631bb086f",
-                "responses": {
-                    "200": {
-                        "description": "Restaurante encontrado com sucesso"
+                "summary": "Delete restaurant by id",
+                "description": "Delete restaurant by id",
+                "operationId": "557198353d8c6c30dd8641eace1d248c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do restaurante",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
-                }
-            }
-        },
-        "/api/restaurant/getAll": {
-            "get": {
-                "tags": [
-                    "Restaurant"
                 ],
-                "summary": "Get all restaurants",
-                "description": "Get all restaurant",
-                "operationId": "fbd2ce1d73807d41a9ad713745061324",
                 "responses": {
                     "200": {
-                        "description": "Restaurante encontrado com sucesso"
+                        "description": "Restaurante deletado com sucesso"
                     }
                 }
             }
@@ -453,6 +484,10 @@
                                     "password": {
                                         "type": "string",
                                         "example": "123456"
+                                    },
+                                    "role": {
+                                        "type": "integer",
+                                        "example": "4"
                                     }
                                 },
                                 "type": "object"
@@ -472,6 +507,10 @@
         {
             "name": "Address",
             "description": "Address"
+        },
+        {
+            "name": "Menu",
+            "description": "Menu"
         },
         {
             "name": "Restaurant",

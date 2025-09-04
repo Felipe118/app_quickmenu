@@ -17,9 +17,8 @@ class RegisterService implements RegisterServiceInterface
 
             if($data["role"]) {
                 //$this->validateRoleUser($data["role"]);
+                
                 $role = $this->verifyRoleUser($data["role"]);
-
-                //dd($role);
 
                 $user = $this->registerRepository->register($data);
 

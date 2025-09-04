@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Address\AddressController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Menu\MenuController;
 use App\Http\Controllers\Restaurant\RestaurantController;
 use App\Http\Controllers\User\RegisterController;
 use Illuminate\Support\Facades\Route;
@@ -24,10 +25,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class,'logout'])->name('logout');
 
     Route::group(['prefix' => 'address'], function () {
-        Route::post('/store', [AddressController::class,'storeAddress'])->name('storeAddress');
-        Route::put('/update/{id}', [AddressController::class, 'updateAddress'])->name('updateAddress');
-        Route::get('get/{id}', [AddressController::class, 'getAddress'])->name('getAddressById');
-        Route::delete('/delete/{id}', [AddressController::class, 'destroyAddress'])->name('destroyAddress');
+        Route::post('/store', [AddressController::class,'storeAddress'])
+            ->name('storeAddress')
+            ->middleware('role:admin_master|admin_restaurant');
+        Route::put('/update/{id}', [AddressController::class, 'updateAddress'])
+            ->name('updateAddress')
+            ->middleware('role:admin_master|admin_restaurant');
+        Route::get('get/{id}', [AddressController::class, 'getAddress'])
+            ->name('getAddressById')
+            ->middleware('role:admin_master|admin_restaurant');
+        Route::delete('/delete/{id}', [AddressController::class, 'destroyAddress'])
+            ->name('destroyAddress')
+            ->middleware('role:admin_master|admin_restaurant');
     });
 
     Route::group(['prefix' => 'restaurant'], function () {
@@ -43,5 +52,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/delete/{id}', [RestaurantController::class, 'destroyRestaurant'])
             ->name('destroyRestaurant')
             ->middleware('role:admin_master');
+    });
+
+    Route::group(['prefix'=> 'menu'], function () {
+        Route::post('/store', [MenuController::class,'storeMenu'])
+        ->name('storeMenu')
+        ->middleware('role:admin_master|admin_restaurant|user_restaurant');
     });
 });

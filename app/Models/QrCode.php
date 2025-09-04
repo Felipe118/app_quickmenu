@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class QrCode extends Model
@@ -12,10 +13,11 @@ class QrCode extends Model
     protected $fillable = [
         'description',
         'payload',
+        'menu_id',
     ];
 
-    public function menu() :HasOne
+    public function menu() :BelongsTo
     {
-        return $this->hasOne(Menu::class,'qrcode_id');
+        return $this->belongsTo(Menu::class,'menu_id');
     }
 }
