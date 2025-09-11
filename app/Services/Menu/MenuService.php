@@ -7,6 +7,7 @@ use App\Helpers\SlugHelpers;
 use App\Interfaces\Menu\MenuServiceInterface;
 use App\Models\Menu;
 use App\Services\BaseService;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -36,7 +37,7 @@ class MenuService extends BaseService implements MenuServiceInterface
         }
     }
 
-    public function updateMenu(array $data): Menu
+    public function updateMenu(array $data) :void
     {
         try{
             $menu = Menu::find($data["id"]);
@@ -54,12 +55,38 @@ class MenuService extends BaseService implements MenuServiceInterface
             $menu->restaurant_id = $data["restaurant_id"];
             $menu->active = $data["active"] ?? true;
             $menu->save();
+        }catch(\Exception $e){
+            Log::error($e->getMessage());
+            throw new SistemException($e->getMessage(), $e->getCode());
+        }
+    }
+
+    public function getMenu(int $restaurant_id, ?int $id): Menu|Collection
+    {
+        try{
+            $user = Auth::user();
+            $menu = null;
+
+            if(empty($id)){
+                $menu = Menu::where('restaurant_id', $restaurant_id)->get();
+
+                return $menu;
+            }
+        
+            $menu = Menu::find($id);
+
+            if(empty($menu)){
+                throw new SistemException('Menu não encontrado',404);
+            }
+
+            $this->ensureAdminMasterOrRestaurantOwner($user, $restaurant_id);
 
             return $menu;
         }catch(\Exception $e){
             Log::error($e->getMessage());
             throw new SistemException($e->getMessage(), $e->getCode());
         }
+        
     }
 
 }

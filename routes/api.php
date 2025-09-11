@@ -62,5 +62,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/update', [MenuController::class,'update'])
             ->name('updateMenu')
             ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+
+        Route::get('/get/{restaurant_id}/{id?}', [MenuController::class,'get'])
+            ->name('getMenu')
+            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
     });
 });

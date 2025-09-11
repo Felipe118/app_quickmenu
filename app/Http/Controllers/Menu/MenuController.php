@@ -28,7 +28,7 @@ class MenuController extends Controller
      *             @OA\Property(property="name", type="string", example="Menu 1"),
      *             @OA\Property(property="description", type="string", example="Menu 1"),
      *             @OA\Property(property="image", type="string", example="https://example.com/image.jpg"),
-     *             @OA\Property(property="active", type="boolean", example=true default=true),
+     *             @OA\Property(property="active", type="boolean", example=true, default=true),
      *             @OA\Property(property="restaurant_id", type="integer", example=1),
      *         )
      *     ),
@@ -78,5 +78,56 @@ class MenuController extends Controller
             'message' => 'Menu atualizado com sucesso',
         ], 201);
 
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/menu/{id}",
+     *     tags={"Menu"},
+     *     summary="Get menu",
+     *     description="Get menu",
+     *     @OA\Parameter(
+     *         description="ID do Restaurante",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         ),
+     *     ),
+     *     @OA\Parameter(
+     *         description="ID do Menu",
+     *         in="query",
+     *         name="id",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *      ),
+     *       @OA\Response(
+     *          response=200,
+     *          description="Lista de menus",
+     *              @OA\JsonContent(
+     *                  type="array",
+     *                      @OA\Items(
+     *                          type="object",
+     *                          @OA\Property(property="id", type="integer", example=3),
+     *                          @OA\Property(property="name", type="string", example="Cardapio Teste"),
+     *                          @OA\Property(property="description", type="string", example="Cardapio Teste"),
+     *                          @OA\Property(property="image", type="string", example="Teste.jpg"),
+     *                          @OA\Property(property="restaurant_id", type="integer", example=2),
+     *                          @OA\Property(property="active", type="boolean", example=true),
+     *                          @OA\Property(property="slug", type="string", example="cardapio-Teste"),
+     *                          @OA\Property(property="created_at", type="string", format="date-time", example="2025-09-09T03:58:10.000000Z"),
+     *                          @OA\Property(property="updated_at", type="string", format="date-time", example="2025-09-09T03:58:10.000000Z")
+     *                      )
+     *                  )
+     *             )
+     *  )
+     */
+
+    public function get(int $restaurant_id,?int $id = null)
+    {
+        return $this->menuService->getMenu($restaurant_id, $id);
     }
 }
