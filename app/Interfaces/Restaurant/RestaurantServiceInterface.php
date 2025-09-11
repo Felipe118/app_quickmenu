@@ -2,7 +2,7 @@
 
 namespace App\Interfaces\Restaurant;
 
-use App\Exceptions\Address\SistemException;
+use App\Exceptions\SistemException;
 use App\Models\Restaurant;
 use Illuminate\Database\Eloquent\Collection;
 

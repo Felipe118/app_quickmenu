@@ -19,6 +19,7 @@ class Menu extends Model
         'description',
         'image',
         'restaurant_id',
+        'active',
         'slug',
     ];
 
