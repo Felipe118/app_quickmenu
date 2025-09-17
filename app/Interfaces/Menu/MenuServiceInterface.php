@@ -13,4 +13,7 @@ interface MenuServiceInterface
         int $restaurant_id,
         ?int $id
         ): Menu|Collection;
+
+    public function destroyMenu(int $restaurant_id,int $id):void;
+    public function deleteMenu(int $restaurant_id,int $id):void;
 }

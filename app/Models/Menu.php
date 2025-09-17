@@ -19,6 +19,7 @@ class Menu extends Model
         'description',
         'image',
         'restaurant_id',
+        'qrcode_path',
         'active',
         'slug',
     ];

@@ -130,4 +130,88 @@ class MenuController extends Controller
     {
         return $this->menuService->getMenu($restaurant_id, $id);
     }
+
+    /**
+     * @OA\PUT(
+     *     path="/api/menu/destroy/{restaurant_id}/{id}",
+     *     tags={"Menu"},
+     *     summary="Destroy menu ",
+     *     description="Desativar menu",
+     *     @OA\Parameter(
+     *         description="ID do Restaurante",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         ),
+     *     ),
+     *     @OA\Parameter(
+     *         description="ID do Menu",
+     *         in="query",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *      ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Menu desativado com sucesso"
+     *     )
+     * )
+     */
+
+    public function destroy(int $restaurant_id, int $id)
+    {
+        $this->menuService->destroyMenu($restaurant_id, $id);
+
+        return response()->json([
+            'message' => 'Menu desativado com sucesso',
+        ], 200);
+    }
+
+     /**
+     * @OA\DELETE(
+     *     path="/api/menu/delete/{restaurant_id}/{id}",
+     *     tags={"Menu"},
+     *     summary="Delete menu ",
+     *     description="Deletar menu",
+     *     @OA\Parameter(
+     *         description="ID do Restaurante",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         ),
+     *     ),
+     *     @OA\Parameter(
+     *         description="ID do Menu",
+     *         in="query",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *      ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Menu deletado com sucesso"
+     *     )
+     * )
+     */
+    public function delete(int $restaurant_id, int $id)
+    {
+         $this->menuService->deleteMenu($restaurant_id, $id);
+
+         return response()->json([
+             'message' => 'Menu deletado com sucesso',
+         ],200);
+    }
+
+    public function show(string $slug)
+    {
+        dd($slug);
+    }
 }
