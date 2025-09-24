@@ -13,6 +13,7 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/cardapio/{slug}', [MenuController::class, 'show'])->name('cardapio.show');
 
 Route::post('/register', [
     RegisterController::class,
@@ -56,7 +57,25 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::group(['prefix'=> 'menu'], function () {
         Route::post('/store', [MenuController::class,'store'])
-        ->name('storeMenu')
-        ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+            ->name('storeMenu')
+            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+
+        Route::post('/update', [MenuController::class,'update'])
+            ->name('updateMenu')
+            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+
+        Route::get('/get/{restaurant_id}/{id?}', [MenuController::class,'get'])
+            ->name('getMenu')
+            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+
+        Route::put('/destroy/{restaurant_id}/{id}', [MenuController::class,'destroy'])
+            ->name('destroyMenu')
+            ->middleware('role:admin_master');
+
+        Route::delete('/delete/{restaurant_id}/{id}', [MenuController::class,'delete'])
+            ->name('deleteMenu')
+            ->middleware('role:admin_master');
+            
     });
+
 });

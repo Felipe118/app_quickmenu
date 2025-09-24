@@ -24,6 +24,18 @@ class MenuRequest extends FormRequest
         return [
             'restaurant_id' => 'required|integer',
             'name' => 'required|string|max:255',
+            'image' => 'string',
+        ];
+    }
+    public function messages(): array
+    {
+        return [
+            'restaurant_id.required' => 'O campo restaurante é obrigatório',
+            'restaurant_id.integer' => 'O campo restaurante deve ser um inteiro',
+            'name.required' => 'O campo name é obrigatório',
+            'name.string' => 'O campo name deve ser uma string',
+            'name.max' => 'O campo name deve ter no.maxcdn 255 caracteres',
+            'image.string'=> 'O campo image deve ser uma string',
         ];
     }
 }

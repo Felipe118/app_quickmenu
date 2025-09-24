@@ -3,7 +3,7 @@
 namespace App\Services\Restaurant;
 
 use App\Enums\RoleEnum;
-use App\Exceptions\Address\SistemException;
+use App\Exceptions\SistemException;
 use App\Interfaces\Restaurant\RestaurantRepositoryInterface;
 use App\Interfaces\Restaurant\RestaurantServiceInterface;
 use App\Models\Restaurant;

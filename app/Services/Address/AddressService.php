@@ -2,7 +2,7 @@
 
 namespace App\Services\Address;
 
-use App\Exceptions\Address\SistemException;
+use App\Exceptions\SistemException;
 use App\Interfaces\Address\AddressRepositoryInterface;
 use App\Interfaces\Address\AddressServiceInterface;
 use App\Models\Address;

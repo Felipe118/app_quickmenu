@@ -273,6 +273,19 @@
                                         "type": "string",
                                         "example": "Menu 1"
                                     },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Menu 1"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "example": "https://example.com/image.jpg"
+                                    },
+                                    "active": {
+                                        "type": "boolean",
+                                        "default": true,
+                                        "example": true
+                                    },
                                     "restaurant_id": {
                                         "type": "integer",
                                         "example": 1
@@ -290,6 +303,138 @@
                 }
             }
         },
+        "/api/menu/update": {
+            "post": {
+                "tags": [
+                    "Menu"
+                ],
+                "summary": "Update menu",
+                "description": "Update menu",
+                "operationId": "97fc87d06f887f3bda35710ce1e03cb5",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Menu 1"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Menu 1"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "example": "https://example.com/image.jpg"
+                                    },
+                                    "active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "restaurant_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Menu registrado com sucesso"
+                    }
+                }
+            }
+        },
+        "/api/menu/{id}": {
+            "get": {
+                "tags": [
+                    "Menu"
+                ],
+                "summary": "Get menu",
+                "description": "Get menu",
+                "operationId": "fb3186aa471c4d8d426a547bfbd3d711",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do Restaurante",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "ID do Menu",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de menus",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 3
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Cardapio Teste"
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "example": "Cardapio Teste"
+                                            },
+                                            "image": {
+                                                "type": "string",
+                                                "example": "Teste.jpg"
+                                            },
+                                            "restaurant_id": {
+                                                "type": "integer",
+                                                "example": 2
+                                            },
+                                            "active": {
+                                                "type": "boolean",
+                                                "example": true
+                                            },
+                                            "slug": {
+                                                "type": "string",
+                                                "example": "cardapio-Teste"
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2025-09-09T03:58:10.000000Z"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2025-09-09T03:58:10.000000Z"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/restaurant/store": {
             "post": {
                 "tags": [
@@ -297,7 +442,7 @@
                 ],
                 "summary": "Store restaurant",
                 "description": "Store restaurant",
-                "operationId": "cee7422f4246ce97d9e8a053fc0b2189",
+                "operationId": "e16ffab74d3de2923d3d9900d965cc7e",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -356,7 +501,7 @@
                 ],
                 "summary": "Update restaurant",
                 "description": "Update restaurant",
-                "operationId": "6ec0f648de759eb2de7b4665d21b6509",
+                "operationId": "e7791203a6ee074e9b9a4f56e1679e68",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -415,7 +560,7 @@
                 ],
                 "summary": "Get restaurant",
                 "description": "Get restaurant",
-                "operationId": "40428a884d390843eb2843e8ac5f9554",
+                "operationId": "fb28d4737b66680ee5c2ba572e796bc1",
                 "parameters": [
                     {
                         "name": "id",
@@ -441,7 +586,7 @@
                 ],
                 "summary": "Delete restaurant by id",
                 "description": "Delete restaurant by id",
-                "operationId": "557198353d8c6c30dd8641eace1d248c",
+                "operationId": "5d4ce9636263edbefb889f0fbe47e927",
                 "parameters": [
                     {
                         "name": "id",
