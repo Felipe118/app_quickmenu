@@ -42,15 +42,15 @@ class RestaurantRepository implements RestaurantRepositoryInterface
       $restaurant = $this->restaurant->findOrFail( $data['id'] );
 
       $restaurant->update([
-        'name'=> $data['name'],
-        'email'=> $data['email'],
-        'perfil_img' => $data['perfil_img'],
-        'capa_img' => $data['capa_img'],
-        'open_time' => $data['open_time'],
-        'close_time' => $data['close_time'],
-        'phone' => $data['phone'], 
+        'name'=> $data['name'] ?? $restaurant->name,
+        'email'=> $data['email'] ?? $restaurant->email,
+        'perfil_img' => $data['perfil_img'] ?? $restaurant->perfil_img,
+        'capa_img' => $data['capa_img']  ?? $restaurant->capa_img,
+        'open_time' => $data['open_time'] ?? $restaurant->open_time,
+        'close_time' => $data['close_time'] ?? $restaurant->close_time,
+        'phone' => $data['phone'] ?? $restaurant->phone, 
         'active'=> true,
-        'address_id' => $data['address_id'],
+        'address_id' => $data['address_id'] ?? $restaurant->address_id,
         'slug' => $this->slugHelpers->slugify($data['name'])
       ]);
       

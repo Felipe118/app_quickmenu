@@ -94,9 +94,9 @@ class RestaurantController extends Controller
      * )
      */
 
-    public function get()
+    public function get(?int $id)
     {
-        return $this->restaurantService->getRestaurant();
+        return $this->restaurantService->getRestaurant($id);
     }
 
     /**
