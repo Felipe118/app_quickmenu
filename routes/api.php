@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Address\AddressController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Categories\CategoryController;
 use App\Http\Controllers\Menu\MenuController;
 use App\Http\Controllers\Restaurant\RestaurantController;
 use App\Http\Controllers\User\RegisterController;
@@ -76,6 +77,13 @@ Route::middleware('auth:sanctum')->group(function () {
             ->name('deleteMenu')
             ->middleware('role:admin_master');
             
+    });
+
+    
+    Route::group(['prefix'=> 'categories'], function () {
+        Route::get('/store', [CategoryController::class,'store'])
+        ->name('storeMenu')
+        ->middleware('role:admin_master|admin_restaurant|user_restaurant');
     });
 
 });

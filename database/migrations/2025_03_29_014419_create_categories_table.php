@@ -16,6 +16,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('description')->nullable();
             $table->boolean('active')->default(true);
+            $table->foreignId('restaurant_id')
+                ->constrained('restaurant')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
