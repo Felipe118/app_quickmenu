@@ -1,6 +1,6 @@
 <?php
 
-use App\Exceptions\Address\SistemException;
+use App\Exceptions\SistemException;
 use App\Services\Address\AddressService;
 use Mockery;
 
