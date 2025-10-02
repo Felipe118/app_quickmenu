@@ -255,6 +255,161 @@
                 }
             }
         },
+        "/api/category/store": {
+            "post": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Store category",
+                "description": "Store category",
+                "operationId": "ac058d873e099866846bdc4ade49c18d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Category 1"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Category 1"
+                                    },
+                                    "active": {
+                                        "type": "boolean",
+                                        "default": true,
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Categoria registrado com sucesso"
+                    }
+                }
+            }
+        },
+        "/api/category/get/{id}/restaurant/{restaurant_id}": {
+            "get": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Get category",
+                "description": "Get category",
+                "operationId": "8bf73b5ac38dc19e03bb584fd8fdd6bd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da categoria",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "restaurant_id",
+                        "in": "path",
+                        "description": "ID do restaurante",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Categoria retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Category 1"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "Category 1"
+                                        },
+                                        "active": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "restaurant_id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Categoria não encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Categoria não encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/category/update": {
+            "post": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Update category",
+                "description": "Update category",
+                "operationId": "f84cc860379c538ef76743700fe2201e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Category 1"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Category 1"
+                                    },
+                                    "active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Categoria atualizado com sucesso"
+                    }
+                }
+            }
+        },
         "/api/menu/store": {
             "post": {
                 "tags": [
@@ -431,6 +586,76 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/api/menu/destroy/{restaurant_id}/{id}": {
+            "put": {
+                "tags": [
+                    "Menu"
+                ],
+                "summary": "Destroy menu ",
+                "description": "Desativar menu",
+                "operationId": "f078595cf796117b6b06201723dcd0fc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do Restaurante",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "ID do Menu",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Menu desativado com sucesso"
+                    }
+                }
+            }
+        },
+        "/api/menu/delete/{restaurant_id}/{id}": {
+            "delete": {
+                "tags": [
+                    "Menu"
+                ],
+                "summary": "Delete menu ",
+                "description": "Deletar menu",
+                "operationId": "ecb5b5f5d20c3d3b01045c7d82b9d488",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do Restaurante",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "ID do Menu",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Menu deletado com sucesso"
                     }
                 }
             }
@@ -652,6 +877,10 @@
         {
             "name": "Address",
             "description": "Address"
+        },
+        {
+            "name": "Category",
+            "description": "Category"
         },
         {
             "name": "Menu",

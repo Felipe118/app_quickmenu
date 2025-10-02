@@ -7,7 +7,6 @@ use App\Interfaces\Categories\CategoryServiceInterface;
 use App\Models\Categories;
 use App\Services\BaseService;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class CategoryService extends BaseService implements CategoryServiceInterface
@@ -23,34 +22,50 @@ class CategoryService extends BaseService implements CategoryServiceInterface
        
     }
 
-    public function getCategory(int $id): Categories
+    public function getCategory(int $id, int $restaurant_id): Categories
     {
         try{
             $user = auth()->user();
 
-            $restaurant = $user->restaurants()->first();
+            $this->ensureAdminMasterOrRestaurantOwner($user, $restaurant_id);
 
-            $category = Categories::where('restaurant_id', $restaurant->id)
-            ->findOrFail($id);
+            $category = Categories::where('restaurant_id', $restaurant_id)
+                ->find($id);
+
+            if($category == null){
+                throw new SistemException('Categoria não encontrada',404);
+            }
+                
             return $category;
+
         }catch(\Exception $e){
             Log::error($e->getMessage());
-            throw new SistemException('Categoria não encontrada');
+            throw new SistemException($e->getMessage(), $e->getCode());
         }   
     }
 
     public function getAll(int $restaurant_id):Collection
     {
        try{
-        $user = auth()->user();
+            $user = auth()->user();
 
-        $this->ensureAdminMasterOrRestaurantOwner($user, $restaurant_id);
+            $this->ensureAdminMasterOrRestaurantOwner($user, $restaurant_id);
 
-        $category = Categories::where('restaurant_id', $restaurant_id);
-        return $category;
+            $category = Categories::where('restaurant_id', $restaurant_id)
+                ->get()
+                ->toArray();
+            
+            dd($category);
+
+            if($category == null){
+                throw new SistemException('Categorias não encontradas',404);
+            }
+
+            return $category;
+
        }catch(\Exception $e){
-           Log::error($e->getMessage());
-           throw new SistemException('Erro ao buscar categorias');
+            Log::error($e->getMessage());
+            throw new SistemException($e->getMessage(), $e->getCode());
        }
     }
 

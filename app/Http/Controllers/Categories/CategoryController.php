@@ -43,6 +43,96 @@ class CategoryController extends Controller
 
     }
 
+    /** 
+     * @OA\Get(
+     *     path="/api/category/get/{id}/restaurant/{restaurant_id}",
+     *     tags={"Category"},
+     *     summary="Get category",
+     *     description="Get category",
+     *     @OA\Parameter(
+     *         description="ID da categoria",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         ),
+     *     ),
+     *     @OA\Parameter(
+     *         description="ID do restaurante",
+     *         in="path",
+     *         name="restaurant_id",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *      ),
+     *     @OA\Response(
+     *          response=200, 
+     *              @OA\JsonContent(
+     *                  @OA\Property(property="name", type="string", example="Category 1"),
+     *                  @OA\Property(property="description", type="string", example="Category 1"),
+     *                  @OA\Property(property="active", type="boolean", example=true),
+     *                  @OA\Property(property="restaurant_id", type="integer", example=1),
+     *               )
+     * 
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Categoria não encontrada",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Categoria não encontrada")  
+     *         )
+     *     ),
+     * 
+     * )
+     */
+    public function get(int $id, int $restaurant_id)
+    {
+       return $this->categoryService->getCategory($id,$restaurant_id);
+    }
+
+    /**
+     *     @OA\Get(
+     *     path="/api/category/getAll/{restaurant_id}",
+     *     tags={"Category"},
+     *     summary="Get all categories",
+     *     description="Get all categories",
+     *     @OA\Parameter(
+     *         description="ID do restaurante",
+     *         in="path",
+     *         name="restaurant_id",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *      ),
+     *     @OA\Response(
+     *          response=200, 
+     *      
+     *              @OA\JsonContent(
+     *                  type="array",
+     *                  @OA\Property(property="name", type="string", example="Category 1"),
+     *                  @OA\Property(property="description", type="string", example="Category 1"),
+     *                  @OA\Property(property="active", type="boolean", example=true),
+     *                  @OA\Property(property="restaurant_id", type="integer", example=1),
+     *               )
+     * 
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Categoria não encontrada",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Categoria não encontrada")  
+     *         )
+     *     ),
+     * )
+     */
+    public function getAll(int $restaurant_id)
+    {
+        return $this->categoryService->getAll($restaurant_id);
+    }
+
 
     /**
      * @OA\Post(

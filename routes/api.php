@@ -81,8 +81,20 @@ Route::middleware('auth:sanctum')->group(function () {
 
     
     Route::group(['prefix'=> 'categories'], function () {
-        Route::get('/store', [CategoryController::class,'store'])
-        ->name('storeMenu')
+        Route::post('/store', [CategoryController::class,'store'])
+            ->name('storeCategory')
+            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+
+        Route::put('/update', [CategoryController::class,'update'])
+            ->name('updateCategory')
+            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+
+        Route::get('/get/{id}/restaurant/{restaurant_id}', [CategoryController::class,'get'])
+            ->name('getCategory')
+            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+
+        Route::get('getAll/{restaurant_id}', [CategoryController::class,'getAll'])
+        ->name('getAll')
         ->middleware('role:admin_master|admin_restaurant|user_restaurant');
     });
 
