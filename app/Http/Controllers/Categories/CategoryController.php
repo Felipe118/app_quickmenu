@@ -160,4 +160,62 @@ class CategoryController extends Controller
         $this->categoryService->update($request->all());
     }
 
+    /**
+     * @OA\patch(
+     *     path="/api/category/destroy/{id}",
+     *     tags={"Category"},
+     *     summary="Destroy category",
+     *     description="Destroy category",
+     *     @OA\Parameter(
+     *         description="ID da categoria",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Categoria desativada com sucesso"
+     *     )
+     * )
+     */
+    public function destroy(int $id)
+    {
+        $this->categoryService->destroy($id);
+        return response()->json([
+            'message' => 'Categoria desativada com sucesso',
+        ]);
+    }
+
+    /** 
+     * @OA\Delete(
+     *     path="/api/category/delete/{id}",
+     *     tags={"Category"},
+     *     summary="Delete category",
+     *     description="Delete category",
+     *     @OA\Parameter(
+     *         description="ID da categoria",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Categoria deletada com sucesso"
+     *     )     
+     * )
+    */
+    public function delete(int $id, int $restaurant_id)
+    {
+        $this->categoryService->delete($id, $restaurant_id);
+        return response()->json([
+            'message' => 'Categoria deletada com sucesso',
+        ]);
+    }
+
 }

@@ -69,7 +69,7 @@ Route::middleware('auth:sanctum')->group(function () {
             ->name('getMenu')
             ->middleware('role:admin_master|admin_restaurant|user_restaurant');
 
-        Route::put('/destroy/{restaurant_id}/{id}', [MenuController::class,'destroy'])
+        Route::patch('/destroy/{restaurant_id}/{id}', [MenuController::class,'destroy'])
             ->name('destroyMenu')
             ->middleware('role:admin_master');
 
@@ -94,8 +94,43 @@ Route::middleware('auth:sanctum')->group(function () {
             ->middleware('role:admin_master|admin_restaurant|user_restaurant');
 
         Route::get('getAll/{restaurant_id}', [CategoryController::class,'getAll'])
-        ->name('getAll')
-        ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+            ->name('getAll')
+            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+
+        Route::patch('/destroy/{id}', [CategoryController::class,'destroy'])
+            ->name('destroyCategory')
+            ->middleware('role:admin_master|admin_restaurant');
+
+        Route::delete('/delete/{id}/restaurant/{restaurant_id}', [CategoryController::class,'delete'])
+            ->name('deleteCategory')
+            ->middleware('role:admin_master|admin_restaurant');
     });
+
+    Route::group(['prefix'=> 'menu-item'], function () {
+        Route::post('/store', [CategoryController::class,'store'])
+            ->name('storeMenuItem')
+            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+
+        Route::put('/update', [CategoryController::class,'update'])
+            ->name('updateMenuItem')
+            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+
+        Route::get('/get/{id}/restaurant/{restaurant_id}', [CategoryController::class,'get'])
+            ->name('getMenuItem')
+            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+        
+        Route::get('/getAll/menu/{id}/restaurant/{restaurant_id}', [CategoryController::class,'getAll'])
+            ->name('getAllMenuItem')
+            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+
+        Route::patch('/destroy/{id}', [CategoryController::class,'destroy'])
+            ->name('destroyMenuItem')
+            ->middleware('role:admin_master|admin_restaurant');
+
+        Route::delete('/delete/{id}/restaurant/{restaurant_id}', [CategoryController::class,'delete'])
+            ->name('deleteMenuItem')
+            ->middleware('role:admin_master|admin_restaurant');
+    });
+
 
 });

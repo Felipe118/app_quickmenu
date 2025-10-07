@@ -54,8 +54,6 @@ class CategoryService extends BaseService implements CategoryServiceInterface
             $category = Categories::where('restaurant_id', $restaurant_id)
                 ->get()
                 ->toArray();
-            
-            dd($category);
 
             if($category == null){
                 throw new SistemException('Categorias não encontradas',404);
@@ -76,6 +74,30 @@ class CategoryService extends BaseService implements CategoryServiceInterface
         }catch(\Exception $e){
             Log::error($e->getMessage());
             throw new SistemException('Erro ao atualizar categoria');
+        }
+    }
+
+    public function destroy(int $id):void
+    {
+        try{
+            Categories::find($id)->update(['active' => false]);
+        }catch(\Exception $e){
+            Log::error($e->getMessage());
+            throw new SistemException('Erro ao desativar categoria');
+        }
+    }
+
+    public function delete(int $id, int $restaurant_id):void
+    {
+        try{
+            $user = auth()->user();
+            
+            $this->ensureAdminMasterOrRestaurantOwner($user, $restaurant_id);
+
+            Categories::find($id)->delete();
+        }catch(\Exception $e){
+            Log::error($e->getMessage());
+            throw new SistemException('Erro ao deletar categoria');
         }
     }
 
