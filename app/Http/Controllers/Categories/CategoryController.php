@@ -69,6 +69,7 @@ class CategoryController extends Controller
      *      ),
      *     @OA\Response(
      *          response=200, 
+     *          description="Restaurante encontrado",
      *              @OA\JsonContent(
      *                  @OA\Property(property="name", type="string", example="Category 1"),
      *                  @OA\Property(property="description", type="string", example="Category 1"),
@@ -83,9 +84,9 @@ class CategoryController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="message", type="string", example="Categoria não encontrada")  
      *         )
-     *     ),
-     * 
+     *     )
      * )
+     * 
      */
     public function get(int $id, int $restaurant_id)
     {
@@ -109,22 +110,22 @@ class CategoryController extends Controller
      *      ),
      *     @OA\Response(
      *          response=200, 
-     *      
-     *              @OA\JsonContent(
-     *                  type="array",
+     *          description="Restaurante encontrado",
+     *          @OA\JsonContent(
+     *               type="array",
+     *               @OA\Items(
+     *                  type="object",
      *                  @OA\Property(property="name", type="string", example="Category 1"),
      *                  @OA\Property(property="description", type="string", example="Category 1"),
      *                  @OA\Property(property="active", type="boolean", example=true),
      *                  @OA\Property(property="restaurant_id", type="integer", example=1),
      *               )
+     *           )
      * 
      *     ),
      *     @OA\Response(
      *         response=404,
      *         description="Categoria não encontrada",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Categoria não encontrada")  
-     *         )
      *     ),
      * )
      */

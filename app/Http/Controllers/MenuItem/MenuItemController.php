@@ -102,7 +102,8 @@ class MenuItemController extends Controller
      *         )
      *      ),
      *     @OA\Response(
-     *          response=200, 
+     *              response=200, 
+     *              description="Item do menu encontrado",
      *              @OA\JsonContent(
      *                  @OA\Property(property="name", type="string", example="Item 1"),
      *                  @OA\Property(property="description", type="string", example="Item 1"),
@@ -136,6 +137,7 @@ class MenuItemController extends Controller
      *      ),
      *     @OA\Response(
      *          response=200, 
+     *          description="Itens do menu encontrados",
      *              @OA\JsonContent(
      *                  @OA\Property(property="name", type="string", example="Item 1"),
      *                  @OA\Property(property="description", type="string", example="Item 1"),
@@ -178,14 +180,7 @@ class MenuItemController extends Controller
      *      ),
      *     @OA\Response(
      *          response=200, 
-     *              @OA\JsonContent(
-     *                  @OA\Property(property="name", type="string", example="Item 1"),
-     *                  @OA\Property(property="description", type="string", example="Item 1"),
-     *                  @OA\Property(property="img", type="string", example="https://example.com/image.jpg"),
-     *                  @OA\Property(property="price", type="number", example="10.99"),
-     *                  @OA\Property(property="category_id", type="integer", example=2),
-     *                  @OA\Property(property="menu_id", type="integer", example=1),
-     *              )
+     *          description="Item do menu deletado",
      *     )
      * )
      */
