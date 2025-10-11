@@ -14,6 +14,8 @@ class Categories extends Model
 
     protected $fillable = [
         'name',
+        'description',
+        'restaurant_id',
         'active'
     ];
 

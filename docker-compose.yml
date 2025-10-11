@@ -15,7 +15,7 @@ services:
     networks:
       - quickmenu_networks
     environment:
-      XDEBUG_MODE: debug
+      XDEBUG_MODE: off
       XDEBUG_CONFIG: "client_host=host.docker.internal client_port=9003"
     depends_on:
       - db

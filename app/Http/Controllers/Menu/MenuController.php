@@ -132,7 +132,7 @@ class MenuController extends Controller
     }
 
     /**
-     * @OA\PUT(
+     * @OA\patch(
      *     path="/api/menu/destroy/{restaurant_id}/{id}",
      *     tags={"Menu"},
      *     summary="Destroy menu ",

@@ -18,6 +18,7 @@ class MenuItems extends Model
         'description',
         'image',
         'price',
+        'active',
         'image',
         'category_id'
     ];
