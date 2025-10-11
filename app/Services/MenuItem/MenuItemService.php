@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Services\Menu;
+namespace App\Services\MenuItem;
 
 use App\Exceptions\SistemException;
 use App\Interfaces\MenuItem\MenuItemServiceInterface;
 use App\Models\MenuItems;
 use App\Services\BaseService;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 
 class MenuItemService extends BaseService implements MenuItemServiceInterface
@@ -57,7 +58,7 @@ class MenuItemService extends BaseService implements MenuItemServiceInterface
         }
     }
 
-    public function getAll(int $restaurant_id): array
+    public function getAll(int $restaurant_id): Collection
     {
         try{
             $user = auth()->user();
@@ -65,9 +66,21 @@ class MenuItemService extends BaseService implements MenuItemServiceInterface
             $this->ensureAdminMasterOrRestaurantOwner($user, $restaurant_id);
 
             return $this->items
-                ->with('menu')
-                ->get()
-                ->toArray();
+                ->select(
+                    'menu_items.id',
+                    'menu_items.name',
+                    'menu_items.description',
+                    'menu_items.price',
+                    'menu_items.menu_id',
+                    'menu_items.active',
+                    'menu.restaurant_id',
+                )
+                ->join(
+                    'menu','menu_id','=','menu.id'
+                )
+                ->where('menu_items.active', true)
+                ->where('restaurant_id', $restaurant_id)
+                ->get();
 
         }catch(\Exception $e){
             Log::error($e->getMessage());
@@ -75,15 +88,27 @@ class MenuItemService extends BaseService implements MenuItemServiceInterface
         }
     }
 
-    public function destroy(int $id): void
+    public function destroy(int $id, int $restaurant_id): void
     {
         try{
-            $this->items->find($id)->update(['active' => false]);
+            $user = auth()->user();
+
+            $this->ensureAdminMasterOrRestaurantOwner($user, $restaurant_id);
+            
+            $menuItem = $this->items->find($id);  
+
+            if(!$menuItem){
+                throw new SistemException('Item não encontrado',404);
+            }
+
+            $menuItem->update(['active'=> false]);
+
         }catch(\Exception $e){
             Log::error($e->getMessage());
-            throw new SistemException('Erro ao deletar item do menu');
+            throw new SistemException($e->getMessage(),$e->getCode());
         }
     }
+
     public function delete(int $id, int $restaurant_id): void
     {
         try{

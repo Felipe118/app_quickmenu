@@ -100,7 +100,7 @@ class RestaurantController extends Controller
     }
 
     /**
-     * @OA\Delete(
+     * @OA\Patch(
      *    path="/api/restaurant/delete/{id}",
      *    tags={"Restaurant"},
      *    summary="Delete restaurant by id",

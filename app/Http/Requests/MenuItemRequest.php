@@ -26,7 +26,7 @@ class MenuItemRequest extends FormRequest
             "description" => "string|min:3",
             "price"=> "required|numeric|min:0.01",
             "img"=> "image|mimes:jpeg,png,jpg,gif,svg|max:2048",
-            "menu_id" => "required|exists:menus,id",
+            "menu_id" => "required|exists:menu,id",
             "category_id" => "required|exists:categories,id"
         ];
     }
