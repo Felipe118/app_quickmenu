@@ -24,7 +24,8 @@ class UserRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
+            'password' => 'required|string|min:8|max:255',
+            'password_confirmation' => 'required',
             'role'=> 'integer',
         ];
     }
@@ -43,6 +44,8 @@ class UserRequest extends FormRequest
             'password.required' => 'O campo senha é obrigatório',
             'password.string' => 'O campo senha deve ser uma string',
             'password.min' => 'O campo senha deve ter no mínimo 8 caracteres',
+            'password.max'=> 'O campo senha deve ter no máximo 255 caracteres',
+            'password_confirmation.required' => 'O campo confirmar senha é obrigatório',
             'role.integer'=> 'O campo perfil deve ser uma inteiro',
         ];
     }

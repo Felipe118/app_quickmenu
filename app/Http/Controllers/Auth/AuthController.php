@@ -39,4 +39,9 @@ class AuthController extends Controller
             'message' => 'Deslogado com sucesso',
         ]);
     }
+
+    public function me(Request $request)
+    {
+        return response()->json($request->user());
+    }
 }

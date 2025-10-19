@@ -5,6 +5,7 @@ namespace App\Services\User;
 use App\Enums\RoleEnum;
 use App\Interfaces\User\RegisterRepositoryInterface;
 use App\Interfaces\User\RegisterServiceInterface;
+use Illuminate\Support\Facades\Log;
 
 class RegisterService implements RegisterServiceInterface
 {
@@ -15,9 +16,11 @@ class RegisterService implements RegisterServiceInterface
     {
         try {
 
-            if($data["role"]) {
+            $this->verifyPasswordConfirm($data["password"], $data["password_confirmation"]);
+
+            if(isset($data["role"])) {
                 //$this->validateRoleUser($data["role"]);
-                
+
                 $role = $this->verifyRoleUser($data["role"]);
 
                 $user = $this->registerRepository->register($data);
@@ -26,13 +29,16 @@ class RegisterService implements RegisterServiceInterface
 
                 return $user;
             }
-           
+
             $user = $this->registerRepository->register($data);
+
+            $user->assignRole(RoleEnum::ADMIN_RESTAURANT->value);
 
             return $user;
              
         } catch (\Exception $e) {
-            throw new \RuntimeException('Erro ao registrar o usuário: ' . $e->getMessage(), 500, $e);
+            Log::error($e);
+            throw new \RuntimeException($e->getMessage(), 500, $e);
         }
     }
 
@@ -49,6 +55,13 @@ class RegisterService implements RegisterServiceInterface
                 return RoleEnum::USER->value;
             default:
                 throw new \RuntimeException("Role inválido", 401);
+        }
+    }
+
+    public function verifyPasswordConfirm($password, $passwordConfirm)
+    {
+        if($password !== $passwordConfirm) {
+            throw new \RuntimeException('As senhas nao conferem', 401);
         }
     }
 
