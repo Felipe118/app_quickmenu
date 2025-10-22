@@ -104,9 +104,9 @@ class RestaurantController extends Controller
      * )
      */
 
-    public function get(?int $id)
+    public function get(int $id)
     {
-        return $this->restaurantService->getRestaurant($id);
+        return $this->restaurantService->get($id);
     }
 
     /**
@@ -138,5 +138,4 @@ class RestaurantController extends Controller
             'message' => 'Restaurante deletado com sucesso',
         ],200);
     }
-
 }

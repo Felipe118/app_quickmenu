@@ -25,5 +25,18 @@ abstract class BaseService
         }
 
         throw new AuthorizationException('Acesso negado', 403);
-    }   
+    }
+    
+    protected function verifyUserHasRestaurant(int $user_id): bool
+    {
+        if(User::find($user_id)->restaurants()->where('user_id', $user_id)->exists()){
+           return true;
+        }
+
+        if(User::find($user_id)->hasRole(RoleEnum::ADMIM_MASTER->value)){
+            return true;
+        }
+
+        return false;
+    }
 }

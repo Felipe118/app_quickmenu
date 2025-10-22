@@ -7,7 +7,6 @@ use App\Exceptions\SistemException;
 use App\Interfaces\Restaurant\RestaurantRepositoryInterface;
 use App\Interfaces\Restaurant\RestaurantServiceInterface;
 use App\Models\Restaurant;
-use App\Models\User;
 use App\Services\BaseService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
@@ -34,21 +33,19 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
        
     }
 
-    public function getRestaurant(?int $id): Collection
+    public function get(int $id): Collection
     {
         try{
             $user = auth()->user();
 
-            if($user->hasRole(RoleEnum::ADMIM_MASTER->value) && empty($id)){
-                return Restaurant::where('active', true)->get();
-            }
-
-            if($user->hasRole(RoleEnum::ADMIM_MASTER->value) && !empty($id)){
+            if($user->hasRole(RoleEnum::ADMIM_MASTER->value)){
                 return Restaurant::where('id', $id)->get();
             }
 
             if($user->restaurants()->where('user_id', $user->id)->exists()){
-                 return $user->restaurants()->where('user_id', $user->id)->get();
+                 return $user->restaurants()->where('user_id', $user->id)
+                 ->where('restaurant_id', $id)
+                 ->get();
             }
 
              throw new SistemException('Restaurante nao encontrado', 404);
@@ -56,6 +53,22 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
             Log::error($e->getMessage());
             throw new SistemException($e->getMessage(),$e->getCode());
         } 
+    }
+
+    public function getAll(): Collection
+    {
+        try{
+            $user = auth()->user();
+
+            if($user->hasRole(RoleEnum::ADMIM_MASTER->value)){
+                return Restaurant::all();
+            }
+
+            return $user->restaurants()->where('user_id', $user->id)->get();
+        }catch(\Throwable $e){
+            Log::error($e->getMessage());
+            throw new SistemException('Restaurante nao encontrado',404);
+        }
     }
 
     public function update(array $data): Restaurant
