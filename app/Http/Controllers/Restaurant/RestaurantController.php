@@ -110,6 +110,33 @@ class RestaurantController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *    path="/api/restaurant/get-all",
+     *    tags={"Restaurant"},
+     *    summary="Get all restaurants",
+     *    description="Get all restaurants",
+     *    @OA\Response(
+     *         response=200,
+     *         description="Restaurante encontrado",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="name", type="string", example="Restaurante 1"),
+     *              @OA\Property(property="perfil_img", type="string", example="https://example.com/perfil.jpg"),
+     *              @OA\Property(property="capa_img", type="string", example="https://example.com/capa.jpg"),
+     *              @OA\Property(property="email", type="string", example="teste@example.com"),
+     *              @OA\Property(property="open_time", type="string", example="10:00"),
+     *              @OA\Property(property="close_time", type="string", example="22:00"),
+     *              @OA\Property(property="phone", type="string", example="1234567890"),
+     *              @OA\Property(property="address_id", type="integer", example=1),
+     *         )
+     *     )
+     * )
+     */
+    public function getAll()
+    {
+        return $this->restaurantService->getAll();
+    }
+
+    /**
      * @OA\Patch(
      *    path="/api/restaurant/delete/{id}",
      *    tags={"Restaurant"},

@@ -53,6 +53,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/get', [RestaurantController::class, 'get'])
             ->name('getRestaurant')
             ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+        Route::get('/get-all', [RestaurantController::class,'getAll'])
+            ->name('getAll')
+            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
         Route::delete('/delete/{id}', [RestaurantController::class, 'destroy'])
             ->name('destroy')
             ->middleware('role:admin_master');
