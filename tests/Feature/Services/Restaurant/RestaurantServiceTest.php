@@ -6,6 +6,7 @@ use App\Models\Address;
 use App\Models\User;
 use App\Models\Restaurant;
 use App\Services\Restaurant\RestaurantService;
+use Illuminate\Auth\Access\AuthorizationException;
 use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
@@ -16,6 +17,12 @@ beforeEach(function () {
         'password' => 'Teste123',
     ]);
 
+     $this->userNotOwner = User::factory()->create([
+        'name' => 'Renato',
+        'email' => 'renato@teste.com',
+        'password' => 'Teste123',
+    ]);
+
     $this->address = Address::factory()->create([
         'address_name' => 'Quadra 122 Rua 12 Lote 3',
         'neighborhood' => 'Mansões Odisseaia',
@@ -23,6 +30,18 @@ beforeEach(function () {
         'number' => '22',
         'complement' => 'Apt 200',
         'district' => 'Rua 3',
+        'city' => 'Águas Lindas',
+        'state' => 'GO',
+        'cep' => '72735888',
+    ]);
+
+       $this->address2 = Address::factory()->create([
+        'address_name' => 'Quadra 133 Rua 22 Lote 3',
+        'neighborhood' => 'Mansões Odisseaia',
+        'quatrain' => 'QA22',
+        'number' => '22',
+        'complement' => 'Apt 200',
+        'district' => 'Rua 22',
         'city' => 'Águas Lindas',
         'state' => 'GO',
         'cep' => '72735888',
@@ -67,10 +86,10 @@ it('should get all restaurants for perfil admin master', function () {
 
     $this->user->assignRole(Role::create(['name' => RoleEnum::ADMIM_MASTER->value, 'guard_name' => 'api']));
 
-     $restaurant->users()->syncWithoutDetaching($this->user->id);
+    $restaurant->users()->syncWithoutDetaching($this->user->id);
 
     $service = makeService();
-    $result = $service->getRestaurant(null);
+    $result = $service->getAll();
 
     expect($result->first()->id)->toBe($restaurant->id);
 });
@@ -85,23 +104,29 @@ it('should get restaurants for perfil admin restaurant', function () {
     $restaurant->users()->syncWithoutDetaching($this->user->id);
 
     $service = makeService();
-    $result = $service->getRestaurant(null);
+    $result = $service->get($restaurant->id);
 
     expect($result->first()->id)->toBe($restaurant->id);
     
 });
 
 it('should exception for user not owner restaurant', function () {
+    
     $restaurant = Restaurant::factory()->create([
         'address_id' => $this->address->id,
     ]);
 
     $this->user->assignRole(Role::create(['name'=> RoleEnum::ADMIN_RESTAURANT->value, 'guard_name' => 'api']));
+
+    
+    $restaurant->users()->syncWithoutDetaching($this->userNotOwner->id);
     
     $service = makeService();
 
-    $this->expectException(SistemException::class);
-    $service->getRestaurant(null);
+    $this->expectException(AuthorizationException::class);
+
+    $service->get($restaurant->id);
+
 });
 
 it('should get a restaurant by ID', function () {
@@ -112,9 +137,9 @@ it('should get a restaurant by ID', function () {
     $this->user->assignRole(Role::create(['name' => RoleEnum::ADMIM_MASTER->value, 'guard_name' => 'api']));
 
     $service = makeService();
-    $result = $service->getRestaurant($restaurant->id);
+    $result = $service->get($restaurant->id);
 
-    expect($result[0]->id)->toBe($restaurant->id);
+    expect($result->id)->toBe($restaurant->id);
 });
 
 it('should update a restaurant admin master', function () {    
@@ -124,10 +149,12 @@ it('should update a restaurant admin master', function () {
 
     $this->user->assignRole(Role::create(['name' => RoleEnum::ADMIM_MASTER->value, 'guard_name' => 'api']));
 
+    $restaurant->users()->syncWithoutDetaching($this->user->id);
+
     $service = makeService();
 
     $data = [
-        'id'=> $restaurant->id,
+        'id' => $restaurant->id,
         'name'=> 'Restaurante Teste 2',
         'slug' => 'restaurante-teste-2',
     ];
@@ -183,9 +210,11 @@ it('should destroy a restaurant', function () {
 
     $service = makeService();
 
-    $destroy = $service->destroyRestaurant($restaurant->id);
+    $service->destroyRestaurant($restaurant->id);
 
-    expect($destroy->active)->toBe(false);
+    $restaurantDisabled = $service->get($restaurant->id);
+
+    expect($restaurantDisabled->active)->toBe(0);
 });
 
 

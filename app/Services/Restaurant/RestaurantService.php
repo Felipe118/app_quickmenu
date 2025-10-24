@@ -31,24 +31,20 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
        
     }
 
-    public function get(int $id): Collection
+    public function get(int $id): Restaurant
     {
         try{
             $user = auth()->user();
 
-            if($user->hasRole(RoleEnum::ADMIM_MASTER->value)){
-                return Restaurant::where('id', $id)
-                ->where('active', true)
-                ->get();
-            }
-            
-            return $user->restaurants()->where('user_id', $user->id)
-                 ->where('restaurant_id', $id)
-                 ->get();
-        }catch(\Throwable $e){
+            $this->ensureAdminMasterOrRestaurantOwner($user, $id);
+
+            return Restaurant::where('id', $id)->first();
+        }catch (\Illuminate\Auth\Access\AuthorizationException $e) {
+            throw $e;
+        }catch (\Throwable $e) {
             Log::error($e->getMessage());
-            throw new SistemException('Restaurante nao encontrado',404);
-        } 
+            throw new SistemException('Erro ao buscar restaurante', 500);
+        }
     }
 
     public function getAll(): Collection
@@ -57,8 +53,7 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
             $user = auth()->user();
 
             if($user->hasRole(RoleEnum::ADMIM_MASTER->value)){
-                return Restaurant::where('active', true)
-                ->all();
+                return Restaurant::where('active', true)->get();
             }
 
             return $user->restaurants()->where('user_id', $user->id)->get();
@@ -75,10 +70,12 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
 
             $this->ensureAdminMasterOrRestaurantOwner($user, $data['id']);
 
-            return Restaurant::with('users')->findOrFail($data['id']);
+            return $this->restaurantRepository->update($data);
+
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             throw new SistemException('Restaurante não encontrado', 404);
         } catch (\Throwable $e) {
+            // dd($e->getMessage());
             Log::error($e->getMessage());
             throw new SistemException($e->getMessage(),$e->getCode());
         }
