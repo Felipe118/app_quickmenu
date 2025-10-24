@@ -30,7 +30,7 @@ class MenuService extends BaseService implements MenuServiceInterface
             
             $qrcode = $this->gerarQRcode($slug_complete);
             
-            $menu = Menu::create(
+            return Menu::create(
                 [
                     "name"=> $data["name"],
                     "description" => $data["description"] ?? null,
@@ -40,8 +40,6 @@ class MenuService extends BaseService implements MenuServiceInterface
                     "slug" => $slug
                 ]
             );
-
-            return $menu;
         }catch(\Exception $e){
             Log::error($e->getMessage());
             throw new SistemException('Erro ao salvar menu');
@@ -78,15 +76,13 @@ class MenuService extends BaseService implements MenuServiceInterface
             $user = Auth::user();
             $menu = null;
 
-            if(empty($id)){
-                $menu = Menu::where('restaurant_id', $restaurant_id)->get();
-
-                return $menu;
+            if(is_null($id)){
+                return Menu::where('restaurant_id', $restaurant_id)->get();
             }
         
             $menu = Menu::find($id);
 
-            if(empty($menu)){
+            if(is_null($menu)){
                 throw new SistemException('Menu não encontrado',404);
             }
 
@@ -109,7 +105,7 @@ class MenuService extends BaseService implements MenuServiceInterface
 
             $menu = Menu::find($id);
             
-            if(empty($menu)){
+            if(is_null($menu)){
                 throw new SistemException('Menu não encontrado',404);
             }
 
@@ -129,7 +125,7 @@ class MenuService extends BaseService implements MenuServiceInterface
 
             $menu = Menu::find($id);
 
-            if(empty($menu)){
+            if(is_null($menu)){
                 throw new SistemException('Menu não encontrado',404);
             }
 

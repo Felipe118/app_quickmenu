@@ -32,7 +32,7 @@ class CategoryService extends BaseService implements CategoryServiceInterface
             $category = Categories::where('restaurant_id', $restaurant_id)
                 ->find($id);
 
-            if($category == null){
+            if($category === null){
                 throw new SistemException('Categoria não encontrada',404);
             }
                 
@@ -55,7 +55,7 @@ class CategoryService extends BaseService implements CategoryServiceInterface
                 ->get()
                 ->toArray();
 
-            if($category == null){
+            if($category === null){
                 throw new SistemException('Categorias não encontradas',404);
             }
 

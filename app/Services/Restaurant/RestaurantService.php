@@ -23,9 +23,7 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
         try{
             $userId = auth()->user()->id;
             
-            $restaunt = $this->restaurantRepository->store($userId,$data);
-
-            return $restaunt;
+            return $this->restaurantRepository->store($userId,$data);
         }catch(\Throwable $e){
             Log::error($e->getMessage());
             throw new SistemException('Erro ao salvar restaurante');
@@ -39,19 +37,17 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
             $user = auth()->user();
 
             if($user->hasRole(RoleEnum::ADMIM_MASTER->value)){
-                return Restaurant::where('id', $id)->get();
+                return Restaurant::where('id', $id)
+                ->where('active', true)
+                ->get();
             }
-
-            if($user->restaurants()->where('user_id', $user->id)->exists()){
-                 return $user->restaurants()->where('user_id', $user->id)
+            
+            return $user->restaurants()->where('user_id', $user->id)
                  ->where('restaurant_id', $id)
                  ->get();
-            }
-
-             throw new SistemException('Restaurante nao encontrado', 404);
         }catch(\Throwable $e){
             Log::error($e->getMessage());
-            throw new SistemException($e->getMessage(),$e->getCode());
+            throw new SistemException('Restaurante nao encontrado',404);
         } 
     }
 
@@ -61,7 +57,8 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
             $user = auth()->user();
 
             if($user->hasRole(RoleEnum::ADMIM_MASTER->value)){
-                return Restaurant::all();
+                return Restaurant::where('active', true)
+                ->all();
             }
 
             return $user->restaurants()->where('user_id', $user->id)->get();
@@ -76,23 +73,9 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
         try {
             $user = auth()->user();
 
-            $restaurant = Restaurant::with('users')->findOrFail($data['id']);
+            $this->ensureAdminMasterOrRestaurantOwner($user, $data['id']);
 
-            if (
-                $restaurant->users()->where('user_id', $user->id)->exists() &&
-                $restaurant->users()->where('restaurant_id', $data['id'])->exists() &&
-                $user->hasRole(RoleEnum::ADMIN_RESTAURANT->value)
-            ) {
-                return $this->restaurantRepository->update($data);
-            }
-
-            // Caso seja admin master
-            if ($user->hasRole(RoleEnum::ADMIM_MASTER->value)) {
-                return $this->restaurantRepository->update($data);
-            }
-
-            throw new SistemException('Acesso negado', 403);
-
+            return Restaurant::with('users')->findOrFail($data['id']);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             throw new SistemException('Restaurante não encontrado', 404);
         } catch (\Throwable $e) {
@@ -102,22 +85,18 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
     }
 
 
-    public function destroyRestaurant(int $id): Restaurant|SistemException
+    public function destroyRestaurant(int $id): void
     {
-        try{
-            $restaurant = Restaurant::find($id);
-
-            if(!$restaurant){
-                return throw new SistemException('Restaurante nao encontrado',404);
-            }
-            
+        try {
+            $restaurant = Restaurant::findOrFail($id);
             $restaurant->update(['active' => false]);
-
-            return $restaurant;
-        }catch(\Throwable $e){
-            Log::error($e->getMessage());
-            throw new SistemException('Erro ao deletar restaurante');
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            throw new SistemException('Restaurante não encontrado', 404);
+        } catch (\Throwable $e) {
+            Log::error($e);
+            throw new SistemException('Erro ao desativar restaurante', 500);
         }
     }
+
 
 }

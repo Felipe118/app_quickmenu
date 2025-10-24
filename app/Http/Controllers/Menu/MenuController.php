@@ -12,9 +12,8 @@ class MenuController extends Controller
     public function __construct(
         public MenuServiceInterface $menuService,
     )
-    {
-        
-    }
+    {}
+
     /**
      * @OA\Post(
      *     path="/api/menu/store",

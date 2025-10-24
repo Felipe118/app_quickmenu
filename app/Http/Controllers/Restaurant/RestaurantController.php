@@ -162,7 +162,7 @@ class RestaurantController extends Controller
         $this->restaurantService->destroyRestaurant($id);
 
         return response()->json([
-            'message' => 'Restaurante deletado com sucesso',
+            'message' => 'Restaurante desativado com sucesso',
         ],200);
     }
 }

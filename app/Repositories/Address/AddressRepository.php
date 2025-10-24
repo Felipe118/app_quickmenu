@@ -12,8 +12,7 @@ class AddressRepository implements AddressRepositoryInterface
     ){}
     public function storeAddress(array $data): Address
     {
-        $address = $this->address->create($data);
-        return $address;
+        return $this->address->create($data);
     }
 
     public function updateAddress(int $id, array $data): Address
