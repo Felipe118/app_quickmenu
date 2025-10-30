@@ -129,6 +129,38 @@ class MenuController extends Controller
     {
         return $this->menuService->getMenu($restaurant_id, $id);
     }
+    
+    /**
+     * @OA\Get(
+     *     path="/api/menu/getAll",
+     *     tags={"Menu"},
+     *     summary="Get all menu",
+     *     description="Get all menu",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Lista de menus",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=3),
+     *                 @OA\Property(property="name", type="string", example="Cardapio Teste"),
+     *                 @OA\Property(property="description", type="string", example="Cardapio Teste"),
+     *                 @OA\Property(property="image", type="string", example="Teste.jpg"),
+     *                 @OA\Property(property="restaurant_id", type="integer", example=2),
+     *                 @OA\Property(property="active", type="boolean", example=true),
+     *                 @OA\Property(property="slug", type="string", example="cardapio-Teste"),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-09-09T03:58:10.000000Z"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-09-09T03:58:10.000000Z")
+     *             )
+     *         )
+     *     )
+     * )
+     */
+    public function getAll()
+    {
+        return $this->menuService->getAll();
+    }
 
     /**
      * @OA\patch(

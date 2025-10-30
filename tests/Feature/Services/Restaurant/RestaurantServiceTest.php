@@ -35,7 +35,7 @@ beforeEach(function () {
         'cep' => '72735888',
     ]);
 
-       $this->address2 = Address::factory()->create([
+    $this->address2 = Address::factory()->create([
         'address_name' => 'Quadra 133 Rua 22 Lote 3',
         'neighborhood' => 'Mansões Odisseaia',
         'quatrain' => 'QA22',
@@ -47,15 +47,12 @@ beforeEach(function () {
         'cep' => '72735888',
     ]);
 
-    $this->actingAs($this->user); // já deixa autenticado
+    $this->actingAs($this->user);
 });
 
-// helper para instanciar serviço com injeção real
 function makeService(): RestaurantService {
     return app(RestaurantService::class);
 }
-
-
 
 it('should create a new restaurant', function () {
 
@@ -118,7 +115,6 @@ it('should exception for user not owner restaurant', function () {
 
     $this->user->assignRole(Role::create(['name'=> RoleEnum::ADMIN_RESTAURANT->value, 'guard_name' => 'api']));
 
-    
     $restaurant->users()->syncWithoutDetaching($this->userNotOwner->id);
     
     $service = makeService();

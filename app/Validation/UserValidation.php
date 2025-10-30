@@ -3,22 +3,19 @@
 namespace App\Validation;
 
 use App\Enums\RoleEnum;
-use App\Exceptions\Address\SistemException;
+use App\Exceptions\SistemException;
 
 class UserValidation
 {
-    public static function validateIfUserIsOwnerRestaurantOrMaster($user) :bool
+    public function validateIfUserIsOwnerRestaurantOrMaster($user): void
     {
-       if($user->hasRole(RoleEnum::ADMIM_MASTER->value)){
-            return true;
-       }
+          $userRes = $user->restaurants()->where('user_id', $user->id)->get();
 
-       $userRes = $user->restaurants()->where('user_id', $user->id)->get();
-
-       if($userRes->isEmpty()){
-            return false;
-       }
-
-       return true;
+          if(
+               !$user->hasRole(RoleEnum::ADMIM_MASTER->value) && 
+               !$userRes->isEmpty() 
+          ){
+               throw new SistemException('Você nao tem permissao para executar essa ação',403);
+          }
     }
 }

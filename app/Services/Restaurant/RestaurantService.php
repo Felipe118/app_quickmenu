@@ -2,7 +2,7 @@
 
 namespace App\Services\Restaurant;
 
-use App\Enums\RoleEnum;
+use App\Enums\MessageEnum;
 use App\Exceptions\SistemException;
 use App\Interfaces\Restaurant\RestaurantRepositoryInterface;
 use App\Interfaces\Restaurant\RestaurantServiceInterface;
@@ -52,11 +52,10 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
         try{
             $user = auth()->user();
 
-            if($user->hasRole(RoleEnum::ADMIM_MASTER->value)){
-                return Restaurant::where('active', true)->get();
-            }
+            $this->verifyUserHasRole($user);
 
-            return $user->restaurants()->where('user_id', $user->id)->get();
+            return Restaurant::where('active', true)->get();
+           
         }catch(\Throwable $e){
             Log::error($e->getMessage());
             throw new SistemException('Restaurante nao encontrado',404);
@@ -73,7 +72,7 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
             return $this->restaurantRepository->update($data);
 
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            throw new SistemException('Restaurante não encontrado', 404);
+            throw new SistemException(MessageEnum::RESTAURANTE_NAO_ENCONTRADO->value, 404);
         } catch (\Throwable $e) {
             // dd($e->getMessage());
             Log::error($e->getMessage());
@@ -88,12 +87,10 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
             $restaurant = Restaurant::findOrFail($id);
             $restaurant->update(['active' => false]);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            throw new SistemException('Restaurante não encontrado', 404);
+            throw new SistemException(MessageEnum::RESTAURANTE_NAO_ENCONTRADO->value, 404);
         } catch (\Throwable $e) {
             Log::error($e);
-            throw new SistemException('Erro ao desativar restaurante', 500);
+            throw new SistemException(MessageEnum::ERRO_AO_DELETAR->value, 500);
         }
     }
-
-
 }
