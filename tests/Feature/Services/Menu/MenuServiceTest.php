@@ -96,7 +96,7 @@ it('should update a menu for user admin restaurant', function () {
 it('should update a menu for user admin master', function(){
     $service = instaceServiceMenu();
 
-        $menu =MenuFactory::new()->create([
+        $menu = MenuFactory::new()->create([
         'name'=> 'Menu Teste',
         'restaurant_id' => $this->restaurant->id,
         'qrcode_path' => 'qrcodes/teste.svg',
@@ -123,5 +123,9 @@ it('should update a menu for user admin master', function(){
 });
 
 it('should get menu for user admin restaurant owner ', function(){
+    $service = instaceServiceMenu();
+    
+    $menu = MenuFactory::new()->create();
 
+    $this->user->assignRole(Role::create(['name'=> RoleEnum::ADMIM_MASTER->value,''=> '']));
 });

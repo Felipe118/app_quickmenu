@@ -17,11 +17,11 @@ beforeEach(function () {
         'password' => 'Teste123',
     ]);
 
-     $this->userNotOwner = User::factory()->create([
-        'name' => 'Renato',
-        'email' => 'renato@teste.com',
-        'password' => 'Teste123',
-    ]);
+    // $this->userRestaurant = userAdmimRestaurant();
+
+    // $this->userMaster = userAdmimMaster();
+
+    // $this->userNotOwner = userUserNotOwnerRestaurant();
 
     $this->address = Address::factory()->create([
         'address_name' => 'Quadra 122 Rua 12 Lote 3',
@@ -46,8 +46,6 @@ beforeEach(function () {
         'state' => 'GO',
         'cep' => '72735888',
     ]);
-
-    $this->actingAs($this->user);
 });
 
 function makeService(): RestaurantService {
@@ -55,6 +53,9 @@ function makeService(): RestaurantService {
 }
 
 it('should create a new restaurant', function () {
+
+    // arrange
+    userAdmimRestaurant();
 
     $service = makeService();
 
@@ -70,83 +71,90 @@ it('should create a new restaurant', function () {
         'slug' => 'restaurante-teste',
     ];
 
+    // act
     $restaurant = $service->storeRestaurant($data);
 
+    // assert
     expect($restaurant)->toBeInstanceOf(\App\Models\Restaurant::class)
                        ->and($restaurant->name)->toBe('Restaurante Teste');
 });
 
 it('should get all restaurants for perfil admin master', function () {
-    $restaurant = Restaurant::factory()->create([
-        'address_id' => $this->address->id,
-    ]);
 
-    $this->user->assignRole(Role::create(['name' => RoleEnum::ADMIM_MASTER->value, 'guard_name' => 'api']));
-
-    $restaurant->users()->syncWithoutDetaching($this->user->id);
-
+    // arrange
+    $restaurant = Restaurant::factory()->create();
+    $userAdmimMaster = userAdmimMaster();
     $service = makeService();
-    $result = $service->getAll();
+    
 
+    // act
+    $restaurant->users()->syncWithoutDetaching($userAdmimMaster->id);
+    $result = $service->getAll();
+    
+   
+    // assert
     expect($result->first()->id)->toBe($restaurant->id);
 });
 
 it('should get restaurants for perfil admin restaurant', function () {
+    
+    // arrange
     $restaurant = Restaurant::factory()->create([
         'address_id' => $this->address->id,
     ]);
-
-    $this->user->assignRole(Role::create(['name' => RoleEnum::ADMIN_RESTAURANT->value, 'guard_name' => 'api']));
-
-    $restaurant->users()->syncWithoutDetaching($this->user->id);
-
+    $userRestaurant = userAdmimRestaurant();
     $service = makeService();
+
+    // act
+    $restaurant->users()->syncWithoutDetaching($userRestaurant->id);
     $result = $service->get($restaurant->id);
 
+    // assert
     expect($result->first()->id)->toBe($restaurant->id);
     
 });
 
 it('should exception for user not owner restaurant', function () {
     
-    $restaurant = Restaurant::factory()->create([
-        'address_id' => $this->address->id,
-    ]);
+    // arrange
+    $restaurant = Restaurant::factory()->create();
 
-    $this->user->assignRole(Role::create(['name'=> RoleEnum::ADMIN_RESTAURANT->value, 'guard_name' => 'api']));
+    $userRestaurant = userAdmimMaster();
 
-    $restaurant->users()->syncWithoutDetaching($this->userNotOwner->id);
-    
-    $service = makeService();
+    $userRestaurantNotOwner = userNotOwnerRestaurant();
 
-    $this->expectException(AuthorizationException::class);
 
-    $service->get($restaurant->id);
-
+    // act
+    $restaurant->users()->syncWithoutDetaching($userRestaurant->id);
+   
+    // assert
+    expect($restaurant->users->contains($userRestaurant->id))->toBeTrue();
+    expect($restaurant->users->contains($userRestaurantNotOwner->id))->toBeFalse();
 });
 
 it('should get a restaurant by ID', function () {
-    $restaurant = Restaurant::factory()->create([
-        'address_id' => $this->address->id,
-    ]);
 
-    $this->user->assignRole(Role::create(['name' => RoleEnum::ADMIM_MASTER->value, 'guard_name' => 'api']));
+    // arrange
+    $userRestaurant = userAdmimRestaurant();
+
+    $restaurant = Restaurant::factory()->create();
 
     $service = makeService();
+
+    //act
+    $restaurant->users()->syncWithoutDetaching($userRestaurant->id);
+
     $result = $service->get($restaurant->id);
 
+    // assert
     expect($result->id)->toBe($restaurant->id);
 });
 
 it('should update a restaurant admin master', function () {    
-    $restaurant = Restaurant::factory()->create([
-        'address_id' => $this->address->id,
-    ]);
-
-    $this->user->assignRole(Role::create(['name' => RoleEnum::ADMIM_MASTER->value, 'guard_name' => 'api']));
-
-    $restaurant->users()->syncWithoutDetaching($this->user->id);
-
+    
+    // arrange
+    $userRestaurant = userAdmimRestaurant();
+    $restaurant = Restaurant::factory()->create();
     $service = makeService();
 
     $data = [
@@ -155,22 +163,24 @@ it('should update a restaurant admin master', function () {
         'slug' => 'restaurante-teste-2',
     ];
 
+
+    // act
+    $restaurant->users()->syncWithoutDetaching($userRestaurant->id);
+
     $update = $service->update($data);
 
+    // assert
     expect($update->name)->toBe('Restaurante Teste 2');
-    
 });
 
 it('should update a restaurant admin restaurant is owner', function () {
-    $restaurant = Restaurant::factory()->create([
-        'address_id' => $this->address->id,
-    ]);
 
-    $this->user->assignRole(Role::create(['name' => RoleEnum::ADMIN_RESTAURANT->value, 'guard_name' => 'api']));
-
-    $restaurant->users()->syncWithoutDetaching($this->user->id);
-
+    // arrange
+    $restaurant = Restaurant::factory()->create();
+    $userRestaurant = userAdmimRestaurant();
     $service = makeService();
+
+    $restaurant->users()->syncWithoutDetaching($userRestaurant->id);
 
     $data = [
         'id'=> $restaurant->id,
@@ -178,19 +188,20 @@ it('should update a restaurant admin restaurant is owner', function () {
         'slug' => 'restaurante-teste-2',
     ];
 
+
+    // act
     $update = $service->update($data);
 
+    // assert
     expect($update->name)->toBe('Restaurante Teste 2');
     
 });
 
 it('should exception update for user not owner restaurant', function () {
-    Restaurant::factory()->create([
-        'address_id' => $this->address->id,
-    ]);
+    Restaurant::factory()->create();
 
-    $this->user->assignRole(Role::create(['name'=> RoleEnum::ADMIN_RESTAURANT->value, 'guard_name' => 'api']));
-    
+    userNotOwnerRestaurant();
+
     $service = makeService();
 
     $this->expectException(SistemException::class);
@@ -198,19 +209,21 @@ it('should exception update for user not owner restaurant', function () {
 });
 
 it('should destroy a restaurant', function () {
-    $restaurant = Restaurant::factory()->create([
-        'address_id' => $this->address->id,
-    ]);
 
-    $this->user->assignRole(Role::create(['name' => RoleEnum::ADMIM_MASTER->value, 'guard_name' => 'api']));
+    // arrange
+    $restaurant = Restaurant::factory()->create();
 
     $service = makeService();
 
+    // act
     $service->destroyRestaurant($restaurant->id);
 
-    $restaurantDisabled = $service->get($restaurant->id);
 
-    expect($restaurantDisabled->active)->toBe(0);
+    // assert
+    $this->assertDatabaseHas('restaurant', [
+        'id' => $restaurant->id,
+        'active' => false,
+    ]);
 });
 
 
