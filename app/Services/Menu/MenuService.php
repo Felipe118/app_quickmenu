@@ -2,6 +2,8 @@
 
 namespace App\Services\Menu;
 
+use App\Enums\MessageEnum;
+use App\Enums\RoleEnum;
 use App\Exceptions\SistemException;
 use App\Helpers\SlugHelpers;
 use App\Interfaces\Menu\MenuServiceInterface;
@@ -24,13 +26,14 @@ class MenuService extends BaseService implements MenuServiceInterface
     {
         try{
             $slug = $this->slugHelpers->slugify($data['name']);
+            
             $slug_restaurant = Restaurant::where('id', $data['restaurant_id'])->first();
 
             $slug_complete = $slug_restaurant->slug.'/'.$slug;
             
             $qrcode = $this->gerarQRcode($slug_complete);
             
-            $menu = Menu::create(
+            return Menu::create(
                 [
                     "name"=> $data["name"],
                     "description" => $data["description"] ?? null,
@@ -40,11 +43,9 @@ class MenuService extends BaseService implements MenuServiceInterface
                     "slug" => $slug
                 ]
             );
-
-            return $menu;
         }catch(\Exception $e){
             Log::error($e->getMessage());
-            throw new SistemException('Erro ao salvar menu');
+            throw new SistemException(MessageEnum::ERRO_AO_SALVAR->value, 500);
         }
     }
 
@@ -66,38 +67,45 @@ class MenuService extends BaseService implements MenuServiceInterface
             $menu->restaurant_id = $data["restaurant_id"];
             $menu->active = $data["active"] ?? true;
             $menu->save();
+
         }catch(\Exception $e){
             Log::error($e->getMessage());
             throw new SistemException($e->getMessage(), $e->getCode());
         }
     }
 
-    public function getMenu(int $restaurant_id, ?int $id): Menu|Collection
+    public function getAll(): Collection
+    {
+        try{
+            $user = auth()->user();
+
+            $this->verifyUserHasRole($user);
+
+            return Menu::where('active', true)->get();
+        }catch(\Exception $e){
+            Log::error($e->getMessage());
+            throw new SistemException($e->getMessage(), $e->getCode());
+        }
+    }
+
+    public function getMenu(int $restaurant_id, int $id): Menu
     {
         try{
             $user = Auth::user();
-            $menu = null;
-
-            if(empty($id)){
-                $menu = Menu::where('restaurant_id', $restaurant_id)->get();
-
-                return $menu;
-            }
-        
+     
+            $this->ensureAdminMasterOrRestaurantOwner($user, $restaurant_id);
+            
             $menu = Menu::find($id);
 
-            if(empty($menu)){
-                throw new SistemException('Menu não encontrado',404);
+            if(is_null($menu)){
+                throw new SistemException(MessageEnum::MENU_NAO_ENCONTRADO->value,404);
             }
-
-            $this->ensureAdminMasterOrRestaurantOwner($user, $restaurant_id);
 
             return $menu;
         }catch(\Exception $e){
             Log::error($e->getMessage());
             throw new SistemException($e->getMessage(), $e->getCode());
         }
-        
     }
 
     public function destroyMenu(int $restaurant_id,int $id): void
@@ -109,8 +117,8 @@ class MenuService extends BaseService implements MenuServiceInterface
 
             $menu = Menu::find($id);
             
-            if(empty($menu)){
-                throw new SistemException('Menu não encontrado',404);
+            if(is_null($menu)){
+                throw new SistemException(MessageEnum::MENU_NAO_ENCONTRADO->value,404);
             }
 
             $menu->update(["active" => false]);
@@ -129,8 +137,8 @@ class MenuService extends BaseService implements MenuServiceInterface
 
             $menu = Menu::find($id);
 
-            if(empty($menu)){
-                throw new SistemException('Menu não encontrado',404);
+            if(is_null($menu)){
+                throw new SistemException(MessageEnum::MENU_NAO_ENCONTRADO->value,404);
             }
 
             $menu->delete();
@@ -140,7 +148,7 @@ class MenuService extends BaseService implements MenuServiceInterface
         }
     }
 
-    private function gerarQRcode(string $slug): ?string
+    protected function gerarQRcode(string $slug): ?string
     {
         $rota = route('cardapio.show', $slug);
 

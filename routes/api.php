@@ -50,7 +50,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/update', [RestaurantController::class, 'update'])
             ->name('updateRestaurant')
             ->middleware('role:admin_master|admin_restaurant');
-        Route::get('/get', [RestaurantController::class, 'get'])
+        Route::get('/get/{id}', [RestaurantController::class, 'get'])
             ->name('getRestaurant')
             ->middleware('role:admin_master|admin_restaurant|user_restaurant');
         Route::get('/get-all', [RestaurantController::class,'getAll'])
@@ -72,6 +72,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/get/{restaurant_id}/{id?}', [MenuController::class,'get'])
             ->name('getMenu')
+            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+
+        Route::get('/getAll', [MenuController::class,'getAll'])
+            ->name('getAllMenu')
             ->middleware('role:admin_master|admin_restaurant|user_restaurant');
 
         Route::patch('/destroy/{restaurant_id}/{id}', [MenuController::class,'destroy'])

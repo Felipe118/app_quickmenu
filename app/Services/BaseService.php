@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\MessageEnum;
 use App\Enums\RoleEnum;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -16,15 +17,13 @@ abstract class BaseService
      */
     protected function ensureAdminMasterOrRestaurantOwner(User $user,int $restaurant_id) :void
     {
-        if($user->hasRole(RoleEnum::ADMIM_MASTER->value)){
-            return;
-        }
-        
-        if($user->restaurants()->where('restaurant_id', $restaurant_id)->exists()){
-           return;
-        }
-
-        throw new AuthorizationException('Acesso negado', 403);
+        if(
+            !$user->restaurants()
+                ->where('restaurant_id', $restaurant_id)->exists() &&
+            !$user->hasRole(RoleEnum::ADMIM_MASTER->value)    
+        ){
+           throw new AuthorizationException(MessageEnum::ACESSO_NEGADO->value, 403);
+        }        
     }
     
     protected function verifyUserHasRestaurant(int $user_id): bool
@@ -38,5 +37,12 @@ abstract class BaseService
         }
 
         return false;
+    }
+
+    protected function verifyUserHasRole(User $user):void
+    {
+        if(!$user->hasRole(RoleEnum::ADMIM_MASTER->value)){
+            throw new AuthorizationException(MessageEnum::ACESSO_NEGADO->value, 403);
+        }
     }
 }

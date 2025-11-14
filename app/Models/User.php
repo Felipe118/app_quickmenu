@@ -15,7 +15,7 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens,HasRoles,HasFactory, Notifiable;
 
-    protected $guard_name = 'api'; 
+    protected $guard_name = 'api';
 
     /**
      * The attributes that are mass assignable.
@@ -37,6 +37,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'restaurants'
     ];
 
     /**
