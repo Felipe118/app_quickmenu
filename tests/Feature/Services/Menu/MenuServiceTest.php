@@ -122,10 +122,26 @@ it('should update a menu for user admin master', function(){
     $this->assertDatabaseHas('menu', ['name' => 'Menu Teste Update']);
 });
 
-it('should get menu for user admin restaurant owner ', function(){
+it('should get menu for user admin restaurant owner', function(){
     $service = instaceServiceMenu();
     
     $menu = MenuFactory::new()->create();
 
-    $this->user->assignRole(Role::create(['name'=> RoleEnum::ADMIM_MASTER->value,''=> '']));
+    $this->user->assignRole(Role::create(['name'=> RoleEnum::ADMIN_RESTAURANT->value,'guard_name'=> 'api']));
+
+    $this->restaurant->users()->syncWithoutDetaching($this->user->id);
+
+    $data = [
+        'id' => $menu->id,
+        'name'=> 'Menu Teste Update',
+        'description'=> 'Menu Teste Update',
+        'image'=> 'teste',
+        'slug'=>'menu-teste-update',
+        'restaurant_id' => $this->restaurant->id,
+    ];
+
+    $service->updateMenu($data);
+
+    $this->assertDatabaseHas('menu', ['name'=> 'Menu Teste Update']);
+    
 });

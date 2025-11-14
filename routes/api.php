@@ -50,7 +50,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/update', [RestaurantController::class, 'update'])
             ->name('updateRestaurant')
             ->middleware('role:admin_master|admin_restaurant');
-        Route::get('/get', [RestaurantController::class, 'get'])
+        Route::get('/get/{id}', [RestaurantController::class, 'get'])
             ->name('getRestaurant')
             ->middleware('role:admin_master|admin_restaurant|user_restaurant');
         Route::get('/get-all', [RestaurantController::class,'getAll'])

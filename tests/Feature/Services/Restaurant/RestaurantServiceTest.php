@@ -17,12 +17,6 @@ beforeEach(function () {
         'password' => 'Teste123',
     ]);
 
-    // $this->userRestaurant = userAdmimRestaurant();
-
-    // $this->userMaster = userAdmimMaster();
-
-    // $this->userNotOwner = userUserNotOwnerRestaurant();
-
     $this->address = Address::factory()->create([
         'address_name' => 'Quadra 122 Rua 12 Lote 3',
         'neighborhood' => 'Mansões Odisseaia',

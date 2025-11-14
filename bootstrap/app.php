@@ -1,6 +1,7 @@
 <?php
 
 use App\Exceptions\SistemException;
+use App\Http\Middleware\CheckTokenExpiration;
 use App\Http\Middleware\ForceJsonResponse;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -16,14 +17,14 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->group('api', [
-            EnsureFrontendRequestsAreStateful::class,
+            //EnsureFrontendRequestsAreStateful::class,
             ForceJsonResponse::class,
         ]);
 
         $middleware->alias([
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
-            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class
         ]);
       
     })

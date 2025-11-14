@@ -14,6 +14,8 @@ class Restaurant extends Model
     
     protected $table = 'restaurant';
 
+    protected $hidden = ['user'];
+
     protected $fillable = [
         'name',
         'perfil_img',
@@ -27,10 +29,7 @@ class Restaurant extends Model
         'slug',
     ];
 
-    // public function getRouteKeyName()
-    // {
-    //     return 'slug';
-    // }
+
 
     public function users() :BelongsToMany
     {
