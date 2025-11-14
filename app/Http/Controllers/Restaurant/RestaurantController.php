@@ -36,7 +36,7 @@ class RestaurantController extends Controller
      *     )
      * )
      */
-    public function storeRestaurant(RestaurantRequest $request)
+    public function store(RestaurantRequest $request)
     {
         return $this->restaurantService->storeRestaurant($request->all());
     }
@@ -67,7 +67,7 @@ class RestaurantController extends Controller
      * )
      */
 
-        public function updateRestaurant(RestaurantRequest $request)
+    public function update(RestaurantRequest $request)
     {
         return $this->restaurantService->update($request->all());
     }
@@ -89,54 +89,80 @@ class RestaurantController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Restaurante encontrado com sucesso"
+     *         description="Restaurante encontrado",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="name", type="string", example="Restaurante 1"),
+     *              @OA\Property(property="perfil_img", type="string", example="https://example.com/perfil.jpg"),
+     *              @OA\Property(property="capa_img", type="string", example="https://example.com/capa.jpg"),
+     *              @OA\Property(property="email", type="string", example="teste@example.com"),
+     *              @OA\Property(property="open_time", type="string", example="10:00"),
+     *              @OA\Property(property="close_time", type="string", example="22:00"),
+     *              @OA\Property(property="phone", type="string", example="1234567890"),
+     *              @OA\Property(property="address_id", type="integer", example=1),
+     *         )
      *     )
      * )
      */
 
-    public function getRestautantById($id)
+    public function get(int $id)
     {
-        return $this->restaurantService->getRestaurantById($id);
+        return $this->restaurantService->get($id);
     }
 
     /**
      * @OA\Get(
-     *    path="/api/restaurant/user",
-     *    tags={"Restaurant"},
-     *    summary="Get restaurant by user logged",
-     *    description="Get restaurant",
-     *
-     *     @OA\Response(
-     *         response=200,
-     *         description="Restaurante encontrado com sucesso"
-     *     )
-     * )
-     */
-
-    public function getRestautantByUser()
-    {
-        return $this->restaurantService->getRestaurantByuser();
-    }
-
-    
-    /**
-     * @OA\Get(
-     *    path="/api/restaurant/getAll",
+     *    path="/api/restaurant/get-all",
      *    tags={"Restaurant"},
      *    summary="Get all restaurants",
-     *    description="Get all restaurant",
-     *
-     *     @OA\Response(
+     *    description="Get all restaurants",
+     *    @OA\Response(
      *         response=200,
-     *         description="Restaurante encontrado com sucesso"
+     *         description="Restaurante encontrado",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="name", type="string", example="Restaurante 1"),
+     *              @OA\Property(property="perfil_img", type="string", example="https://example.com/perfil.jpg"),
+     *              @OA\Property(property="capa_img", type="string", example="https://example.com/capa.jpg"),
+     *              @OA\Property(property="email", type="string", example="teste@example.com"),
+     *              @OA\Property(property="open_time", type="string", example="10:00"),
+     *              @OA\Property(property="close_time", type="string", example="22:00"),
+     *              @OA\Property(property="phone", type="string", example="1234567890"),
+     *              @OA\Property(property="address_id", type="integer", example=1),
+     *         )
      *     )
      * )
      */
-
-    public function getRestautants()
+    public function getAll()
     {
-        return $this->restaurantService->getRestaurants();
+        return $this->restaurantService->getAll();
     }
 
+    /**
+     * @OA\Patch(
+     *    path="/api/restaurant/delete/{id}",
+     *    tags={"Restaurant"},
+     *    summary="Delete restaurant by id",
+     *    description="Delete restaurant by id",
+     *    @OA\Parameter(
+     *         description="ID do restaurante",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *        description="Restaurante deletado com sucesso"
+     *    )
+     * )
+     */
+    public function destroy(int $id)
+    {
+        $this->restaurantService->destroyRestaurant($id);
 
+        return response()->json([
+            'message' => 'Restaurante desativado com sucesso',
+        ],200);
+    }
 }

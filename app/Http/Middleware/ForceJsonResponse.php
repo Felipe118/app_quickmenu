@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class PreventAdminAssignmentMiddleware
+class ForceJsonResponse
 {
     /**
      * Handle an incoming request.
@@ -15,19 +15,7 @@ class PreventAdminAssignmentMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! $request->has('profile_id')) {
-            return $next($request);
-        }
-
-        if (auth('api')->check() && auth('api')->user()->profile_id === 1) {
-            return $next($request);
-        }
-
-        if($request->profile_id == 1) {
-            return response()->json([
-                'error' => 'Acesso negado'
-            ], 403);
-        }
+        $request->headers->set("Accept","application/json");
 
         return $next($request);
     }

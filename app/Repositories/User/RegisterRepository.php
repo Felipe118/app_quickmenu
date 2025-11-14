@@ -19,8 +19,7 @@ class RegisterRepository implements RegisterRepositoryInterface
             [ 
                 'name' => $data['name'],
                 'email'=> $data['email'],
-                'password'=> bcrypt($data['password']),
-                'profile_id'=> $data['profile_id'] ?? 4,
+                'password'=> bcrypt($data['password'])
             ]
         );
     }

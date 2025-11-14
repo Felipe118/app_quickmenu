@@ -25,7 +25,8 @@ class RestaurantFactory extends Factory
             "close_time"=> $this->faker->time(),
             "phone" => $this->faker->phoneNumber(),
             "email" => $this->faker->email(),
-            'address_id' => Address::factory()
+            'address_id' => Address::factory(),
+            'slug' => $this->faker->slug(),
         ];
     }
 }

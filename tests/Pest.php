@@ -1,6 +1,13 @@
 <?php
 
+use App\Enums\RoleEnum;
+use Database\Factories\RestaurantFactory;
+use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabaseState;
+use Spatie\Permission\Models\Role;
+
+use function Pest\Laravel\actingAs;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -43,7 +50,41 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+
+function userAdmimMaster()
 {
-    // ..
+    $user = UserFactory::new()->create();
+
+    $user->assignRole(Role::create(['name'=> RoleEnum::ADMIM_MASTER->value, 'guard_name' => 'api']));
+
+    actingAs($user);
+
+    return $user;
+}   
+
+function userAdmimRestaurant()
+{
+    $user = UserFactory::new()->create();
+
+    $user->assignRole(Role::create(['name'=> RoleEnum::ADMIN_RESTAURANT->value, 'guard_name' => 'api']));
+
+    actingAs($user);
+
+    return $user;
+}
+
+function userNotOwnerRestaurant()
+{
+    $user = UserFactory::new()->create();
+
+    $user->assignRole(Role::create(['name'=> RoleEnum::ADMIN_RESTAURANT->value, 'guard_name' => 'api']));
+
+    actingAs($user);
+
+    return $user;
+}
+
+function restaurant()
+{
+    return RestaurantFactory::new()->create();
 }

@@ -2,14 +2,16 @@
 
 namespace App\Services\Restaurant;
 
-use App\Exceptions\Address\SistemException;
+use App\Enums\MessageEnum;
+use App\Exceptions\SistemException;
 use App\Interfaces\Restaurant\RestaurantRepositoryInterface;
 use App\Interfaces\Restaurant\RestaurantServiceInterface;
 use App\Models\Restaurant;
+use App\Services\BaseService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 
-class RestaurantService implements RestaurantServiceInterface
+class RestaurantService extends BaseService implements RestaurantServiceInterface
 {
 
     public function __construct(
@@ -21,9 +23,7 @@ class RestaurantService implements RestaurantServiceInterface
         try{
             $userId = auth()->user()->id;
             
-            $restaunt = $this->restaurantRepository->store($userId,$data);
-
-            return $restaunt;
+            return $this->restaurantRepository->store($userId,$data);
         }catch(\Throwable $e){
             Log::error($e->getMessage());
             throw new SistemException('Erro ao salvar restaurante');
@@ -31,54 +31,66 @@ class RestaurantService implements RestaurantServiceInterface
        
     }
 
-    public function getRestaurantById(int $id): Restaurant
+    public function get(int $id): Restaurant
     {
-       
         try{
             $user = auth()->user();
-            
-            $restaurant = $user->restaurants()->where('restaurant.id', $id)->first();
 
-            if(!$restaurant){
-                throw new SistemException('Restaurante nao encontrado.', 404);
-            }
+            $this->ensureAdminMasterOrRestaurantOwner($user, $id);
 
-            return $restaurant; 
+            return Restaurant::where('id', $id)->first();
+        }catch (\Illuminate\Auth\Access\AuthorizationException $e) {
+            throw $e;
+        }catch (\Throwable $e) {
+            Log::error($e->getMessage());
+            throw new SistemException('Erro ao buscar restaurante', 500);
+        }
+    }
+
+    public function getAll(): Collection
+    {
+        try{
+            $user = auth()->user();
+
+            $this->verifyUserHasRole($user);
+
+            return Restaurant::where('active', true)->get();
+           
         }catch(\Throwable $e){
             Log::error($e->getMessage());
-            throw new SistemException('Erro ao buscar restaurante',500);
-        } 
+            throw new SistemException('Restaurante nao encontrado',404);
+        }
     }
 
     public function update(array $data): Restaurant
     {
-        try{
+        try {
+            $user = auth()->user();
+
+            $this->ensureAdminMasterOrRestaurantOwner($user, $data['id']);
+
             return $this->restaurantRepository->update($data);
-        }catch(\Throwable $e){
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            throw new SistemException(MessageEnum::RESTAURANTE_NAO_ENCONTRADO->value, 404);
+        } catch (\Throwable $e) {
+            // dd($e->getMessage());
             Log::error($e->getMessage());
-            throw new SistemException('Erro ao atualizar restaurante');
+            throw new SistemException($e->getMessage(),$e->getCode());
         }
     }
 
 
-    public function getRestaurants() :Collection
+    public function destroyRestaurant(int $id): void
     {
-        try{
-            return Restaurant::all();
-        }catch(\Throwable $e){
-            Log::error($e->getMessage());
-            throw new SistemException('Erro ao buscar restaurantes');
-        }
-
-    }
-
-    public function getRestaurantByuser() :Collection
-    {
-        try{
-            return auth()->user()->restaurants()->get();
-        }catch(\Throwable $e){
-            Log::error($e->getMessage());
-            throw new SistemException('Erro ao buscar restaurante');
+        try {
+            $restaurant = Restaurant::findOrFail($id);
+            $restaurant->update(['active' => false]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            throw new SistemException(MessageEnum::RESTAURANTE_NAO_ENCONTRADO->value, 404);
+        } catch (\Throwable $e) {
+            Log::error($e);
+            throw new SistemException(MessageEnum::ERRO_AO_DELETAR->value, 500);
         }
     }
 }

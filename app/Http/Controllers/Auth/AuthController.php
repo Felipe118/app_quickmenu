@@ -23,7 +23,12 @@ class AuthController extends Controller
             );
         }
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $tokenResult = $user->createToken('auth_token', ['*']);
+        $token = $tokenResult->plainTextToken;
+
+        $tokenResult->accessToken->update([
+            'expires_at' => now()->addSeconds(3000)
+        ]);
 
         return response()->json([
             'access_token'=> $token,
@@ -38,5 +43,10 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Deslogado com sucesso',
         ]);
+    }
+
+    public function me(Request $request)
+    {
+        return response()->json($request->user());
     }
 }
