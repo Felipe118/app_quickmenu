@@ -4,7 +4,9 @@ namespace App\Services;
 
 use App\Enums\MessageEnum;
 use App\Enums\RoleEnum;
+use App\Exceptions\SistemException;
 use App\Models\User;
+use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 
 abstract class BaseService
@@ -26,21 +28,21 @@ abstract class BaseService
         }        
     }
     
-    protected function verifyUserHasRestaurant(int $user_id): bool
+    protected function verifyUserHasRestaurant(int $user_id): void
     {
-        if(User::find($user_id)->restaurants()->where('user_id', $user_id)->exists()){
-           return true;
+        if (
+            User::find($user_id)->restaurants()->where('user_id', $user_id)->exists() ||
+            User::find($user_id)->hasRole(RoleEnum::ADMIM_MASTER->value)
+        ){
+           return;
         }
 
-        if(User::find($user_id)->hasRole(RoleEnum::ADMIM_MASTER->value)){
-            return true;
-        }
-
-        return false;
+        throw new SistemException(MessageEnum::RESTAURANTE_NAO_ENCONTRADO->value, 404);
     }
 
     protected function verifyUserHasRole(User $user):void
     {
+        dd(!$user->hasRole(RoleEnum::ADMIM_MASTER->value));
         if(!$user->hasRole(RoleEnum::ADMIM_MASTER->value)){
             throw new AuthorizationException(MessageEnum::ACESSO_NEGADO->value, 403);
         }

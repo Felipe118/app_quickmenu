@@ -52,13 +52,13 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
         try{
             $user = auth()->user();
 
-            $this->verifyUserHasRole($user);
+            $this->verifyUserHasRestaurant($user->id);
 
             return Restaurant::where('active', true)->get();
            
         }catch(\Throwable $e){
             Log::error($e->getMessage());
-            throw new SistemException('Restaurante nao encontrado',404);
+            throw new SistemException($e->getMessage(), $e->getCode());
         }
     }
 
