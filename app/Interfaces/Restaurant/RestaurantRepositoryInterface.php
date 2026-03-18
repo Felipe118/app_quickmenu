@@ -8,6 +8,6 @@ use Illuminate\Support\Arr;
 
 interface RestaurantRepositoryInterface
 {
-    public function store(int $userId,array $data) :Restaurant;
+    public function store(array $data, int $userId) :Restaurant;
     public function update(array $data) :Restaurant;
 }

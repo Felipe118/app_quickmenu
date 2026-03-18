@@ -125,9 +125,9 @@ class MenuController extends Controller
      *  )
      */
 
-    public function get(int $restaurant_id,?int $id = null)
+    public function get(int $id)
     {
-        return $this->menuService->getMenu($restaurant_id, $id);
+        return $this->menuService->getMenu($id);
     }
     
     /**

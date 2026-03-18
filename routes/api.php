@@ -6,7 +6,6 @@ use App\Http\Controllers\Categories\CategoryController;
 use App\Http\Controllers\Menu\MenuController;
 use App\Http\Controllers\MenuItem\MenuItemController;
 use App\Http\Controllers\Restaurant\RestaurantController;
-use App\Http\Controllers\User\RegisterController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,14 +16,9 @@ Route::get('/', function () {
 
 Route::get('/cardapio/{slug}', [MenuController::class, 'show'])->name('cardapio.show');
 
-Route::post('/register', [
-    RegisterController::class,
-    'register'
-])->name('register');
-
 Route::post('/login', [AuthController::class,'login'])->name('login');
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/me', [AuthController::class, 'me'])->name('me');
     Route::post('/logout', [AuthController::class,'logout'])->name('logout');
 
@@ -43,48 +37,48 @@ Route::middleware('auth:sanctum')->group(function () {
             ->middleware('role:admin_master|admin_restaurant');
     });
 
-    Route::group(['prefix' => 'restaurant'], function () {
+    Route::group(['prefix' => 'restaurant'], function () { 
         Route::post('/store', [RestaurantController::class, 'store'])
             ->name('storeRestaurant')
             ->middleware('role:admin_master|admin_restaurant');
         Route::post('/update', [RestaurantController::class, 'update'])
             ->name('updateRestaurant')
-            ->middleware('role:admin_master|admin_restaurant');
+            ->middleware(['role:admin_master|admin_restaurant', 'owner.restaurant']);
         Route::get('/get/{id}', [RestaurantController::class, 'get'])
             ->name('getRestaurant')
-            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+            ->middleware(['role:admin_master|admin_restaurant|user_restaurant', 'owner.restaurant']);
         Route::get('/get-all', [RestaurantController::class,'getAll'])
             ->name('getAll')
-            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+            ->middleware(['role:admin_master|admin_restaurant|user_restaurant', 'owner.restaurant']);
         Route::delete('/delete/{id}', [RestaurantController::class, 'destroy'])
             ->name('destroy')
-            ->middleware('role:admin_master');
+            ->middleware(['role:admin_master']);
     });
 
     Route::group(['prefix'=> 'menu'], function () {
         Route::post('/store', [MenuController::class,'store'])
             ->name('storeMenu')
-            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+            ->middleware(['role:admin_master|admin_restaurant|user_restaurant']);
 
         Route::post('/update', [MenuController::class,'update'])
             ->name('updateMenu')
-            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+            ->middleware(['role:admin_master|admin_restaurant|user_restaurant', 'owner.restaurant']);
 
-        Route::get('/get/{restaurant_id}/{id?}', [MenuController::class,'get'])
+        Route::get('/get/{id?}', [MenuController::class,'get'])
             ->name('getMenu')
-            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+            ->middleware(['role:admin_master|admin_restaurant|user_restaurant', 'owner.restaurant']);
 
         Route::get('/getAll', [MenuController::class,'getAll'])
             ->name('getAllMenu')
-            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+            ->middleware(['role:admin_master|admin_restaurant|user_restaurant', 'owner.restaurant']);
 
         Route::patch('/destroy/{restaurant_id}/{id}', [MenuController::class,'destroy'])
             ->name('destroyMenu')
-            ->middleware('role:admin_master');
+            ->middleware(['role:admin_master', 'owner.restaurant']);
 
         Route::delete('/delete/{restaurant_id}/{id}', [MenuController::class,'delete'])
             ->name('deleteMenu')
-            ->middleware('role:admin_master');
+            ->middleware(['role:admin_master', 'owner.restaurant']);
             
     });
 
@@ -96,23 +90,21 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::put('/update', [CategoryController::class,'update'])
             ->name('updateCategory')
-            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+            ->middleware(['role:admin_master|admin_restaurant|user_restaurant', 'owner.restaurant']);
 
-        Route::get('/get/{id}/restaurant/{restaurant_id}', [CategoryController::class,'get'])
+        Route::get('/get/{id}', [CategoryController::class,'get'])
             ->name('getCategory')
-            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
-
-        Route::get('getAll/{restaurant_id}', [CategoryController::class,'getAll'])
+            ->middleware(['role:admin_master|admin_restaurant|user_restaurant', 'owner.restaurant']);
+        Route::get('getAll', [CategoryController::class,'getAll'])
             ->name('getAll')
-            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
-
+            ->middleware(['role:admin_master|admin_restaurant|user_restaurant', 'owner.restaurant']);
         Route::patch('/destroy/{id}', [CategoryController::class,'destroy'])
             ->name('destroyCategory')
-            ->middleware('role:admin_master|admin_restaurant');
+            ->middleware(['role:admin_master|admin_restaurant','owner.restaurant']);
 
-        Route::delete('/delete/{id}/restaurant/{restaurant_id}', [CategoryController::class,'delete'])
+        Route::delete('/{id}', [CategoryController::class,'delete'])
             ->name('deleteCategory')
-            ->middleware('role:admin_master|admin_restaurant');
+            ->middleware(['role:admin_master|admin_restaurant', 'owner.restaurant']);
     });
 
     Route::group(['prefix'=> 'menu-item'], function () {

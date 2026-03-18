@@ -22,17 +22,25 @@ class CategoryService extends BaseService implements CategoryServiceInterface
        
     }
 
-    public function getCategory(int $id, int $restaurant_id): Categories
+    public function getCategoryAdmin(int $id_category): Categories
     {
-        try{
-            $user = auth()->user();
+          $category = Categories::find($id_category);
 
-            $this->ensureAdminMasterOrRestaurantOwner($user, $restaurant_id);
+            if(!$category){
+                throw new SistemException('Categoria não encontrada',404);
+            }
+                
+            return $category;
+    }
 
+    public function getCategory(int $id, ?int $restaurant_id): Categories
+    {
+        try{  
             $category = Categories::where('restaurant_id', $restaurant_id)
+            ->where('active', true)
                 ->find($id);
 
-            if($category === null){
+            if(!$category){
                 throw new SistemException('Categoria não encontrada',404);
             }
                 
@@ -44,18 +52,17 @@ class CategoryService extends BaseService implements CategoryServiceInterface
         }   
     }
 
-    public function getAll(int $restaurant_id):Collection
+    public function getAll(?int $restaurant_id = null):Collection
     {
        try{
-            $user = auth()->user();
-
-            $this->ensureAdminMasterOrRestaurantOwner($user, $restaurant_id);
+            if(is_null($restaurant_id)){
+                return Categories::all();
+            }
 
             $category = Categories::where('restaurant_id', $restaurant_id)
-                ->get()
-                ->toArray();
+                ->get();
 
-            if($category === null){
+            if($category->isEmpty()){
                 throw new SistemException('Categorias não encontradas',404);
             }
 
@@ -87,19 +94,26 @@ class CategoryService extends BaseService implements CategoryServiceInterface
         }
     }
 
-    public function delete(int $id, int $restaurant_id):void
+    public function delete(int $id_category,int|null $id_restaurant = null):void
     {
         try{
-            $user = auth()->user();
-            
-            $this->ensureAdminMasterOrRestaurantOwner($user, $restaurant_id);
+            if(is_null($id_restaurant)){
+                Categories::find($id_category)->delete();
+            }
 
-            Categories::find($id)->delete();
+           $category = Categories::where('restaurant_id', $id_restaurant)
+                ->where('id', $id_category)->first();
+              
+
+            if(!$category){
+                throw new SistemException('Categoria não encontrada',404);
+            }
+
+            $category->delete();
+
         }catch(\Exception $e){
             Log::error($e->getMessage());
             throw new SistemException('Erro ao deletar categoria');
         }
     }
-
-
 }

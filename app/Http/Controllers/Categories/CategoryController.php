@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Categories;
 
+use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
 use App\Interfaces\Categories\CategoryServiceInterface;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -45,7 +47,7 @@ class CategoryController extends Controller
 
     /** 
      * @OA\Get(
-     *     path="/api/category/get/{id}/restaurant/{restaurant_id}",
+     *     path="/api/category/get/{id}",
      *     tags={"Category"},
      *     summary="Get category",
      *     description="Get category",
@@ -88,9 +90,16 @@ class CategoryController extends Controller
      * )
      * 
      */
-    public function get(int $id, int $restaurant_id)
+    public function get(int $id_category, Request $request)
     {
-       return $this->categoryService->getCategory($id,$restaurant_id);
+        $user = auth()->user();
+        
+        if($user->hasRole(RoleEnum::ADMIM_MASTER->value)){
+            return $this->categoryService->getCategoryAdmin($id_category);
+        }
+        $restaurant = $request->get('restaurant');
+    
+        return $this->categoryService->getCategory($id_category, $restaurant->id);
     }
 
     /**
@@ -129,9 +138,17 @@ class CategoryController extends Controller
      *     ),
      * )
      */
-    public function getAll(int $restaurant_id)
+    public function getAll(Request $request)
     {
-        return $this->categoryService->getAll($restaurant_id);
+        $user = auth()->user();
+        
+        if($user->hasRole(RoleEnum::ADMIM_MASTER->value)){
+            return $this->categoryService->getAll();
+        }
+
+        $restaurant = $request->get('restaurant');
+
+        return $this->categoryService->getAll($restaurant->id);
     }
 
 
@@ -211,10 +228,25 @@ class CategoryController extends Controller
      *     )     
      * )
     */
-    public function delete(int $id, int $restaurant_id)
+    public function delete(Request $request, int $id)
     {
-        $this->categoryService->delete($id, $restaurant_id);
+        $user = auth()->user();
+
+        if($user->hasRole(RoleEnum::ADMIM_MASTER->value)){
+            $this->categoryService->delete($id);
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Categoria deletada com sucesso',
+            ]);
+        }
+
+        $restaurant = $request->get('restaurant');
+
+        $this->categoryService->delete($id, $restaurant->id);
+
         return response()->json([
+            'status'=> 200,
             'message' => 'Categoria deletada com sucesso',
         ]);
     }

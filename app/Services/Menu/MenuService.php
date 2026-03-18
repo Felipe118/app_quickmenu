@@ -88,13 +88,9 @@ class MenuService extends BaseService implements MenuServiceInterface
         }
     }
 
-    public function getMenu(int $restaurant_id, int $id): Menu
+    public function getMenu(int $id): Menu
     {
         try{
-            $user = Auth::user();
-     
-            $this->ensureAdminMasterOrRestaurantOwner($user, $restaurant_id);
-            
             $menu = Menu::find($id);
 
             if(is_null($menu)){

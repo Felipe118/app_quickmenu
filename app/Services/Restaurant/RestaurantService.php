@@ -23,7 +23,7 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
         try{
             $userId = auth()->user()->id;
             
-            return $this->restaurantRepository->store($userId,$data);
+            return $this->restaurantRepository->store($data, $userId);
         }catch(\Throwable $e){
             Log::error($e->getMessage());
             throw new SistemException('Erro ao salvar restaurante');

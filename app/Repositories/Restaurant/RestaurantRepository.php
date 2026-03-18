@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Restaurant;
 
+use App\Enums\RoleEnum;
 use App\Helpers\SlugHelpers;
 use App\Interfaces\Restaurant\RestaurantRepositoryInterface;
 use App\Models\Restaurant;
@@ -13,7 +14,7 @@ class RestaurantRepository implements RestaurantRepositoryInterface
         private SlugHelpers $slugHelpers
     )
     {}
-    public function store(int $userId,array $data) :Restaurant
+    public function store(array $data, int $userId) :Restaurant
     {
         $slug = $this->slugHelpers->slugify($data["name"]);
 
@@ -32,7 +33,8 @@ class RestaurantRepository implements RestaurantRepositoryInterface
           ]
         );
 
-        $restaurant->users()->syncWithoutDetaching($userId);
+        $userIds = array_unique([$userId, RoleEnum::ADMIM_MASTER->getId()]);
+        $restaurant->users()->syncWithoutDetaching($userIds);
 
         return $restaurant;
     }

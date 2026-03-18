@@ -1,12 +1,11 @@
 <?php
 
 use App\Exceptions\SistemException;
-use App\Http\Middleware\CheckTokenExpiration;
 use App\Http\Middleware\ForceJsonResponse;
+use App\Http\Middleware\OwnerRestaurant;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 use Spatie\Permission\Exceptions\UnauthorizedException;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -17,14 +16,14 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->group('api', [
-            //EnsureFrontendRequestsAreStateful::class,
-            ForceJsonResponse::class,
+            ForceJsonResponse::class
         ]);
 
         $middleware->alias([
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
-            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class
+            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+            'owner.restaurant' => OwnerRestaurant::class,
         ]);
       
     })
