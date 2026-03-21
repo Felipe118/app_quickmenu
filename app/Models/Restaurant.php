@@ -40,6 +40,15 @@ class Restaurant extends Model
         );
     }
 
+    public function scopeVisibleTo($query,$user)
+    {
+        if ($user->hasRole('admin_master')) {
+            return $query;
+        }
+      
+        return $query->whereIn('restaurant.id', $user->restaurants()->pluck('restaurant.id'));
+    }
+
     public function address():HasOne
     {
         return $this->hasOne(Address::class,'id','address_id');

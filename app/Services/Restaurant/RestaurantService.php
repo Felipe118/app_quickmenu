@@ -7,6 +7,7 @@ use App\Exceptions\SistemException;
 use App\Interfaces\Restaurant\RestaurantRepositoryInterface;
 use App\Interfaces\Restaurant\RestaurantServiceInterface;
 use App\Models\Restaurant;
+use App\Models\User;
 use App\Services\BaseService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
@@ -47,18 +48,15 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
         }
     }
 
-    public function getAll(): Collection
+    public function index(User $user): Collection
     {
-        try{
-            $user = auth()->user();
-
-            $this->verifyUserHasRestaurant($user->id);
-
-            return Restaurant::where('active', true)->get();
-           
-        }catch(\Throwable $e){
+        try {
+            return Restaurant::visibleTo($user)
+                ->where('active', true)
+                ->get();
+        } catch (\Throwable $e) {
             Log::error($e->getMessage());
-            throw new SistemException($e->getMessage(), $e->getCode());
+            throw new SistemException($e->getMessage());
         }
     }
 

@@ -42,6 +42,59 @@ Route::middleware('auth:sanctum')->group(function () {
             ->name('destroyAddress')
             ->middleware('role:admin_master|admin_restaurant');
     });
+    
+    Route::prefix('restaurants')
+    ->middleware(['auth:sanctum'])
+    ->group(function () {
+
+        Route::get('/', [RestaurantController::class, 'index'])
+            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+
+        Route::post('/', [RestaurantController::class, 'store'])
+            ->middleware('role:admin_master|admin_restaurant');
+
+        Route::get('/{restaurant}', [RestaurantController::class, 'show'])
+            ->middleware(['role:admin_master|admin_restaurant|user_restaurant','check.restaurant']);
+
+        Route::put('/{restaurant}', [RestaurantController::class, 'update'])
+            ->middleware(['role:admin_master|admin_restaurant', 'check.restaurant']);
+
+        Route::delete('/{restaurant}', [RestaurantController::class, 'destroy'])
+            ->middleware(['role:admin_master','check.restaurant']);
+    });
+
+    // Route::prefix('restaurants/{restaurant}')
+    // ->middleware(['role:admin_master|admin_restaurant|user_restaurant', 'check.restaurant'])
+    // ->group(function () {
+
+    //     // MENUS
+    //     Route::prefix('menus')->group(function () {
+    //         Route::get('/', [MenuController::class, 'index']);
+    //         Route::post('/', [MenuController::class, 'store']);
+    //         Route::get('/{menu}', [MenuController::class, 'show']);
+    //         Route::put('/{menu}', [MenuController::class, 'update']);
+    //         Route::delete('/{menu}', [MenuController::class, 'destroy']);
+    //     });
+
+    //     // CATEGORIES
+    //     Route::prefix('categories')->group(function () {
+    //         Route::get('/', [CategoryController::class, 'index']);
+    //         Route::post('/', [CategoryController::class, 'store']);
+    //         Route::get('/{category}', [CategoryController::class, 'show']);
+    //         Route::put('/{category}', [CategoryController::class, 'update']);
+    //         Route::delete('/{category}', [CategoryController::class, 'destroy']);
+    //     });
+
+    //     // MENU ITEMS
+    //     Route::prefix('menu-items')->group(function () {
+    //         Route::get('/', [MenuItemController::class, 'index']);
+    //         Route::post('/', [MenuItemController::class, 'store']);
+    //         Route::get('/{menuItem}', [MenuItemController::class, 'show']);
+    //         Route::put('/{menuItem}', [MenuItemController::class, 'update']);
+    //         Route::delete('/{menuItem}', [MenuItemController::class, 'destroy']);
+    //     });
+
+    // });
 
     Route::group(['prefix' => 'restaurant'], function () {
         Route::post('/store', [RestaurantController::class, 'store'])
