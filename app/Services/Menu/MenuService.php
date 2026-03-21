@@ -104,14 +104,12 @@ class MenuService extends BaseService implements MenuServiceInterface
         }
     }
 
-    public function destroyMenu(int $restaurant_id,int $id): void
+    public function destroyMenu(int $id, int $restaurant_id): void
     {
         try{
-            $user = Auth::user();
 
-            $this->ensureAdminMasterOrRestaurantOwner($user, $restaurant_id);
-
-            $menu = Menu::find($id);
+            $menu = Menu::find($id)
+            ->where('restaurant_id', $restaurant_id);
             
             if(is_null($menu)){
                 throw new SistemException(MessageEnum::MENU_NAO_ENCONTRADO->value,404);

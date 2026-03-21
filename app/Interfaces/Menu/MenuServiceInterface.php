@@ -11,6 +11,6 @@ interface MenuServiceInterface
     public function updateMenu(array $data) :void;
     public function getMenu(int $id): Menu;
     public function getAll():Collection;
-    public function destroyMenu(int $restaurant_id,int $id):void;
+    public function destroyMenu(int $id, int $restaurant_id):void;
     public function deleteMenu(int $restaurant_id,int $id):void;
 }

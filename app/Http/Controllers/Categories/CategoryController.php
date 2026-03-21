@@ -104,19 +104,10 @@ class CategoryController extends Controller
 
     /**
      *     @OA\Get(
-     *     path="/api/category/getAll/{restaurant_id}",
+     *     path="/api/category/getAll",
      *     tags={"Category"},
      *     summary="Get all categories",
      *     description="Get all categories",
-     *     @OA\Parameter(
-     *         description="ID do restaurante",
-     *         in="path",
-     *         name="restaurant_id",
-     *         required=true,
-     *         @OA\Schema(
-     *             type="integer"
-     *         )
-     *      ),
      *     @OA\Response(
      *          response=200, 
      *          description="Restaurante encontrado",

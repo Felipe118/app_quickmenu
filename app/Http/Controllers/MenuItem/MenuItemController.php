@@ -79,7 +79,7 @@ class MenuItemController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/menu-item/get/{id}/restaurant/{restaurant_id}",
+     *     path="/api/menu-item/get/{id}",
      *     tags={"Menu Item"},
      *     summary="Get menu item",
      *     description="Get menu item",
@@ -92,15 +92,6 @@ class MenuItemController extends Controller
      *             type="integer"
      *         ),
      *     ),
-     *     @OA\Parameter(
-     *         description="ID do restaurante",
-     *         in="path",
-     *         name="restaurant_id",
-     *         required=true,
-     *         @OA\Schema(
-     *             type="integer"
-     *         )
-     *      ),
      *     @OA\Response(
      *              response=200, 
      *              description="Item do menu encontrado",
@@ -115,9 +106,9 @@ class MenuItemController extends Controller
      *     )
      * )
      */
-    public function get(int $id, int $restaurant_id)
+    public function get(int $id)
     {
-        return $this->menuItemService->get($id, $restaurant_id);
+        return $this->menuItemService->get($id);
     }
 
     /**

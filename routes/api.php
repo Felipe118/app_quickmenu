@@ -72,9 +72,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
             ->name('getAllMenu')
             ->middleware(['role:admin_master|admin_restaurant|user_restaurant', 'owner.restaurant']);
 
-        Route::patch('/destroy/{restaurant_id}/{id}', [MenuController::class,'destroy'])
+        Route::patch('/destroy/{id}', [MenuController::class,'destroy'])
             ->name('destroyMenu')
-            ->middleware(['role:admin_master', 'owner.restaurant']);
+            ->middleware(['role:admin_master|admin_restaurant', 'owner.restaurant']);
 
         Route::delete('/delete/{restaurant_id}/{id}', [MenuController::class,'delete'])
             ->name('deleteMenu')
@@ -114,23 +114,23 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
         Route::put('/update', [MenuItemController::class,'update'])
             ->name('updateMenuItem')
-            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+            ->middleware(['role:admin_master|admin_restaurant|user_restaurant','owner.restaurant']);
 
         Route::get('/get/{id}/restaurant/{restaurant_id}', [MenuItemController::class,'get'])
             ->name('getMenuItem')
-            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+            ->middleware(['role:admin_master|admin_restaurant|user_restaurant','owner.restaurant']);
         
         Route::get('/getAll/restaurant/{restaurant_id}', [MenuItemController::class,'getAll'])
             ->name('getAllMenuItem')
-            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+            ->middleware(['role:admin_master|admin_restaurant|user_restaurant','owner.restaurant']);
 
         Route::patch('/destroy/{id}/restaurant/{restaurant_id}', [MenuItemController::class,'destroy'])
             ->name('destroyMenuItem')
-            ->middleware('role:admin_master|admin_restaurant');
+            ->middleware(['role:admin_master|admin_restaurant','owner.restaurant']);
 
         Route::delete('/delete/{id}/restaurant/{restaurant_id}', [MenuItemController::class,'delete'])
             ->name('deleteMenuItem')
-            ->middleware('role:admin_master');
+            ->middleware(['role:admin_master|admin_restaurant','owner.restaurant']);
     });
 
 

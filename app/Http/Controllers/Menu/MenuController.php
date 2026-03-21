@@ -164,19 +164,10 @@ class MenuController extends Controller
 
     /**
      * @OA\patch(
-     *     path="/api/menu/destroy/{restaurant_id}/{id}",
+     *     path="/api/menu/destroy/{id}",
      *     tags={"Menu"},
      *     summary="Destroy menu ",
      *     description="Desativar menu",
-     *     @OA\Parameter(
-     *         description="ID do Restaurante",
-     *         in="path",
-     *         name="id",
-     *         required=true,
-     *         @OA\Schema(
-     *             type="integer"
-     *         ),
-     *     ),
      *     @OA\Parameter(
      *         description="ID do Menu",
      *         in="query",
@@ -193,9 +184,11 @@ class MenuController extends Controller
      * )
      */
 
-    public function destroy(int $restaurant_id, int $id)
+    public function destroy(int $id, Request $request)
     {
-        $this->menuService->destroyMenu($restaurant_id, $id);
+        $restaurant = $request->get('restaurant');
+
+        $this->menuService->destroyMenu($id, $restaurant->id);
 
         return response()->json([
             'message' => 'Menu desativado com sucesso',
@@ -204,19 +197,10 @@ class MenuController extends Controller
 
      /**
      * @OA\DELETE(
-     *     path="/api/menu/delete/{restaurant_id}/{id}",
+     *     path="/api/menu/delete/{id}",
      *     tags={"Menu"},
      *     summary="Delete menu ",
      *     description="Deletar menu",
-     *     @OA\Parameter(
-     *         description="ID do Restaurante",
-     *         in="path",
-     *         name="id",
-     *         required=true,
-     *         @OA\Schema(
-     *             type="integer"
-     *         ),
-     *     ),
      *     @OA\Parameter(
      *         description="ID do Menu",
      *         in="query",

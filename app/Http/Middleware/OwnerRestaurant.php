@@ -30,6 +30,7 @@ class OwnerRestaurant
         }
         
         $restaurant = $user->restaurants()->where('restaurant_id', $restaurantId)->first();
+        dd($restaurant);
 
         if (!$restaurant) {
             abort(403, 'Você não tem permissão para acessar este restaurante');

@@ -41,13 +41,9 @@ class MenuItemService extends BaseService implements MenuItemServiceInterface
         }
     }
 
-    public function get(int $id, int $restaurant_id): MenuItems
+    public function get(int $id): MenuItems
     {
         try{
-            $user = auth()->user();
-
-            $this->ensureAdminMasterOrRestaurantOwner($user, $restaurant_id);
-
             return $this->items
                 ->with('menu','category')
                 ->where('id', $id)->first();
