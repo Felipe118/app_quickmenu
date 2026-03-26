@@ -32,14 +32,14 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
        
     }
 
-    public function get(int $id): Restaurant
+    public function get(Restaurant $restaurant, User $user): Restaurant
     {
         try{
-            $user = auth()->user();
+            return Restaurant::visibleTo($user)
+                ->where('active', true)
+                ->where('id', $restaurant->id)
+                ->first();
 
-            $this->ensureAdminMasterOrRestaurantOwner($user, $id);
-
-            return Restaurant::where('id', $id)->first();
         }catch (\Illuminate\Auth\Access\AuthorizationException $e) {
             throw $e;
         }catch (\Throwable $e) {
@@ -58,31 +58,24 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
             Log::error($e->getMessage());
             throw new SistemException($e->getMessage());
         }
-    }
+    } 
 
-    public function update(array $data): Restaurant
+    public function update(array $data, Restaurant $restaurant): Restaurant
     {
         try {
-            $user = auth()->user();
-
-            $this->ensureAdminMasterOrRestaurantOwner($user, $data['id']);
-
-            return $this->restaurantRepository->update($data);
-
+            return $this->restaurantRepository->update($data, $restaurant);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             throw new SistemException(MessageEnum::RESTAURANTE_NAO_ENCONTRADO->value, 404);
         } catch (\Throwable $e) {
-            // dd($e->getMessage());
             Log::error($e->getMessage());
             throw new SistemException($e->getMessage(),$e->getCode());
         }
     }
 
 
-    public function destroyRestaurant(int $id): void
+    public function destroyRestaurant(Restaurant $restaurant): void
     {
         try {
-            $restaurant = Restaurant::findOrFail($id);
             $restaurant->update(['active' => false]);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             throw new SistemException(MessageEnum::RESTAURANTE_NAO_ENCONTRADO->value, 404);

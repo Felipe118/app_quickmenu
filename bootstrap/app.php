@@ -2,12 +2,11 @@
 
 use App\Exceptions\SistemException;
 use App\Http\Middleware\CheckRestaurantAccess;
-use App\Http\Middleware\CheckTokenExpiration;
 use App\Http\Middleware\ForceJsonResponse;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
+use Illuminate\Routing\Middleware\SubstituteBindings;
 use Spatie\Permission\Exceptions\UnauthorizedException;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -19,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->group('api', [
             ForceJsonResponse::class,
+            SubstituteBindings::class,
         ]);
 
         $middleware->alias([

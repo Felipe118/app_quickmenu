@@ -8,9 +8,17 @@ use Illuminate\Auth\Access\Response;
 
 class RestaurantPolicy
 {
+    public function before(User $user)
+    {
+        if ($user->hasRole('admin_master')) {
+            return true;
+        }
+    }
+
     /**
      * Determine whether the user can view any models.
      */
+    
     public function viewAny(User $user): bool
     {
          return $user->hasRole('admin_master')
@@ -22,7 +30,9 @@ class RestaurantPolicy
      */
     public function view(User $user, Restaurant $restaurant): bool
     {
-        return false;
+        return $user->restaurants()
+            ->where('restaurant.id', $restaurant->id)
+            ->exists();
     }
 
     /**
@@ -38,8 +48,8 @@ class RestaurantPolicy
      */
     public function update(User $user, Restaurant $restaurant): bool
     {
-       return $user->restaurants()
-            ->where('id', $restaurant->id)
+        return $user->restaurants()
+            ->where('restaurant.id', $restaurant->id)
             ->exists();
     }
 
@@ -47,23 +57,10 @@ class RestaurantPolicy
      * Determine whether the user can delete the model.
      */
     public function delete(User $user, Restaurant $restaurant): bool
-    {
-        return false;
+    {  
+        return $user->restaurants()
+            ->where('restaurant.id', $restaurant->id)
+            ->exists();
     }
 
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Restaurant $restaurant): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Restaurant $restaurant): bool
-    {
-        return false;
-    }
 }

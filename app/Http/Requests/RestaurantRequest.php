@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class RestaurantRequest extends FormRequest
 {
@@ -21,6 +22,8 @@ class RestaurantRequest extends FormRequest
      */
     public function rules(): array
     {
+        $restaurantId = $this->route('restaurant')?->id;
+
         return [
             "name"=> "required|string|max:255",
             "perfil_img"=> "string|max:255",
@@ -28,7 +31,11 @@ class RestaurantRequest extends FormRequest
             "email"=>  "required|string|email|max:255",
             "open_time"=> "required|max:255",
             "close_time"=> "required|max:255",
-            "phone"=> "required|max:30|unique:restaurant",
+            "phone"=> [
+                'required',
+                'max:30',
+                Rule::unique('restaurant', 'phone')->ignore($restaurantId),
+            ],
             "active"=> "boolean",
             "address_id"=> "required|integer|exists:address,id",
         ];

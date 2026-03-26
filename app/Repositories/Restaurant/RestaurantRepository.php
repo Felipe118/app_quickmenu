@@ -37,10 +37,8 @@ class RestaurantRepository implements RestaurantRepositoryInterface
         return $restaurant;
     }
 
-    public function update(array $data) :Restaurant
+    public function update(array $data, Restaurant $restaurant) :Restaurant
     {
-      $restaurant = $this->restaurant->findOrFail($data['id']);
-
       $restaurant->update([
           'name'=> $data['name'] ?? $restaurant->name,
           'email'=> $data['email'] ?? $restaurant->email,

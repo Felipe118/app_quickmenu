@@ -40,15 +40,14 @@ class RestaurantController extends Controller
      */
     public function index()
     {
-        $this->authorize("viewAny", Restaurant::class);
-        
+        $this->authorize('viewAny', Restaurant::class);
 
         return $this->restaurantService->index(auth()->user());
     }
 
     /**
      * @OA\Post(
-     *    path="/api/restaurant/store",
+     *    path="/api/restaurants",
      *    tags={"Restaurant"},
      *    summary="Store restaurant",
      *    description="Store restaurant",
@@ -77,11 +76,20 @@ class RestaurantController extends Controller
     }
 
       /**
-     * @OA\Post(
-     *    path="/api/restaurant/update",
+     * @OA\Put(
+     *    path="/api/restaurants/{restaurant}",
      *    tags={"Restaurant"},
      *    summary="Update restaurant",
      *    description="Update restaurant",
+     *    @OA\Parameter(
+     *         description="ID do restaurante",
+     *         in="path",
+     *         name="restaurant",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
      *    @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -102,21 +110,22 @@ class RestaurantController extends Controller
      * )
      */
 
-    public function update(RestaurantRequest $request)
+    public function update(RestaurantRequest $request, Restaurant $restaurant) 
     {
-        return $this->restaurantService->update($request->all());
+        $this->authorize('update', $restaurant);
+        return $this->restaurantService->update($request->all(), $restaurant);
     }
 
     /**
      * @OA\Get(
-     *    path="/api/restaurant/get/{id}",
+     *    path="/api/restaurants/{restaurant}",
      *    tags={"Restaurant"},
      *    summary="Get restaurant",
      *    description="Get restaurant",
      *    @OA\Parameter(
      *         description="ID do restaurante",
      *         in="path",
-     *         name="id",
+     *         name="restaurant",
      *         required=true,
      *         @OA\Schema(
      *             type="integer"
@@ -139,23 +148,25 @@ class RestaurantController extends Controller
      * )
      */
 
-    public function get(int $id)
+    public function show(Restaurant $restaurant)
     {
-        return $this->restaurantService->get($id);
+        $this->authorize('view', $restaurant);
+
+        return $this->restaurantService->get($restaurant, auth()->user());
     }
 
    
 
     /**
-     * @OA\Patch(
-     *    path="/api/restaurant/delete/{id}",
+     * @OA\Delete(
+     *    path="/api/restaurants/{restaurant}",
      *    tags={"Restaurant"},
      *    summary="Delete restaurant by id",
      *    description="Delete restaurant by id",
      *    @OA\Parameter(
      *         description="ID do restaurante",
      *         in="path",
-     *         name="id",
+     *         name="restaurant",
      *         required=true,
      *         @OA\Schema(
      *             type="integer"
@@ -167,9 +178,11 @@ class RestaurantController extends Controller
      *    )
      * )
      */
-    public function destroy(int $id)
+    public function destroy(Restaurant $restaurant)
     {
-        $this->restaurantService->destroyRestaurant($id);
+        $this->authorize('delete', $restaurant);
+
+        $this->restaurantService->destroyRestaurant($restaurant);
 
         return response()->json([
             'message' => 'Restaurante desativado com sucesso',
