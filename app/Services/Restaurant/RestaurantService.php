@@ -19,7 +19,7 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
         private RestaurantRepositoryInterface $restaurantRepository
     ){}
 
-    public function storeRestaurant(array $data): Restaurant
+    public function store(array $data): Restaurant
     {
         try{
             $userId = auth()->user()->id;
@@ -32,7 +32,7 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
        
     }
 
-    public function get(Restaurant $restaurant, User $user): Restaurant
+    public function getRestaurant(Restaurant $restaurant, User $user): Restaurant
     {
         try{
             return Restaurant::visibleTo($user)
@@ -73,7 +73,7 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
     }
 
 
-    public function destroyRestaurant(Restaurant $restaurant): void
+    public function destroy(Restaurant $restaurant): void
     {
         try {
             $restaurant->update(['active' => false]);

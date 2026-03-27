@@ -4,17 +4,23 @@ namespace App\Http\Controllers\Categories;
 
 use App\Http\Controllers\Controller;
 use App\Interfaces\Categories\CategoryServiceInterface;
+use App\Models\Categories;
+use App\Models\Restaurant;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
+    use AuthorizesRequests;
+
     public function __construct(
         public CategoryServiceInterface $categoryService
     ){}
     
     /**
      * @OA\Post(
-     *     path="/api/category/store",
+     *     path="/api/categories",
      *     tags={"Category"},
      *     summary="Store category",
      *     description="Store category",
@@ -45,7 +51,7 @@ class CategoryController extends Controller
 
     /** 
      * @OA\Get(
-     *     path="/api/category/get/{id}/restaurant/{restaurant_id}",
+     *     path="/api/categories/{id}",
      *     tags={"Category"},
      *     summary="Get category",
      *     description="Get category",
@@ -58,15 +64,6 @@ class CategoryController extends Controller
      *             type="integer"
      *         ),
      *     ),
-     *     @OA\Parameter(
-     *         description="ID do restaurante",
-     *         in="path",
-     *         name="restaurant_id",
-     *         required=true,
-     *         @OA\Schema(
-     *             type="integer"
-     *         )
-     *      ),
      *     @OA\Response(
      *          response=200, 
      *          description="Restaurante encontrado",
@@ -88,14 +85,18 @@ class CategoryController extends Controller
      * )
      * 
      */
-    public function get(int $id, int $restaurant_id)
+    public function show(Categories $categories)
     {
-       return $this->categoryService->getCategory($id,$restaurant_id);
+        $this->authorize('view', $categories);
+
+        $user = Auth::user();
+
+        return $this->categoryService->getCategory($categories, $user);
     }
 
     /**
      *     @OA\Get(
-     *     path="/api/category/getAll/{restaurant_id}",
+     *     path="/api/restaurants/{restaurant}/categories",
      *     tags={"Category"},
      *     summary="Get all categories",
      *     description="Get all categories",
@@ -110,7 +111,7 @@ class CategoryController extends Controller
      *      ),
      *     @OA\Response(
      *          response=200, 
-     *          description="Restaurante encontrado",
+     *          description="Categorias encontradas",
      *          @OA\JsonContent(
      *               type="array",
      *               @OA\Items(
@@ -125,22 +126,35 @@ class CategoryController extends Controller
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Categoria não encontrada",
+     *         description="Categorias não encontradas",
      *     ),
      * )
      */
-    public function getAll(int $restaurant_id)
+    public function index(Restaurant $restaurant)
     {
-        return $this->categoryService->getAll($restaurant_id);
+        $this->authorize('get', Categories::class);
+
+        $user = Auth::user();
+        
+        return $this->categoryService->index($restaurant->id, $user);
     }
 
 
     /**
-     * @OA\Post(
-     *     path="/api/category/update",
+     * @OA\Put(
+     *     path="/api/categories/{id}",
      *     tags={"Category"},
      *     summary="Update category",
      *     description="Update category",
+     *     @OA\Parameter(
+     *         description="ID da categoria",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -156,14 +170,20 @@ class CategoryController extends Controller
      *     )
      * )
      */
-    public function update(Request $request)
+    public function update(Categories $categories,Request $request)
     {
-        $this->categoryService->update($request->all());
+        $this->authorize('update', $categories);
+
+        $this->categoryService->update($categories,$request->all());
+
+        return response()->json([
+            'message' => 'Categoria atualizado com sucesso',
+        ], 200);
     }
 
     /**
-     * @OA\patch(
-     *     path="/api/category/destroy/{id}",
+     * @OA\PATCH(
+     *     path="/api/categories/{id}",
      *     tags={"Category"},
      *     summary="Destroy category",
      *     description="Destroy category",
@@ -182,17 +202,20 @@ class CategoryController extends Controller
      *     )
      * )
      */
-    public function destroy(int $id)
+    public function destroy(Categories $categories)
     {
-        $this->categoryService->destroy($id);
+        $this->authorize('delete', $categories);
+
+        $this->categoryService->destroy($categories->id);
+
         return response()->json([
             'message' => 'Categoria desativada com sucesso',
         ]);
     }
 
     /** 
-     * @OA\Delete(
-     *     path="/api/category/delete/{id}",
+     * @OA\DELETE(
+     *     path="/api/categories/{id}",
      *     tags={"Category"},
      *     summary="Delete category",
      *     description="Delete category",
@@ -211,9 +234,12 @@ class CategoryController extends Controller
      *     )     
      * )
     */
-    public function delete(int $id, int $restaurant_id)
+    public function delete(Categories $categories)
     {
-        $this->categoryService->delete($id, $restaurant_id);
+        $this->authorize('delete', $categories);
+
+        $this->categoryService->delete($categories->id);
+        
         return response()->json([
             'message' => 'Categoria deletada com sucesso',
         ]);

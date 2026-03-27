@@ -9,6 +9,7 @@ use App\Helpers\SlugHelpers;
 use App\Interfaces\Menu\MenuServiceInterface;
 use App\Models\Menu;
 use App\Models\Restaurant;
+use App\Models\User;
 use App\Services\BaseService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,7 @@ class MenuService extends BaseService implements MenuServiceInterface
         private SlugHelpers $slugHelpers,
     ){}
 
-    public function storeMenu(array $data): Menu
+    public function store(array $data): Menu
     {
         try{
             $slug = $this->slugHelpers->slugify($data['name']);
@@ -49,14 +50,9 @@ class MenuService extends BaseService implements MenuServiceInterface
         }
     }
 
-    public function updateMenu(array $data) :void
+    public function update(array $data, Menu $menu) :void
     {
         try{
-            $menu = Menu::find($data["id"]);
-
-            $user = Auth::user();
-
-            $this->ensureAdminMasterOrRestaurantOwner($user, $data['restaurant_id']);
 
             $menu->name = $data["name"];
             $menu->description = $data["description"] ?? null;
@@ -70,30 +66,30 @@ class MenuService extends BaseService implements MenuServiceInterface
 
         }catch(\Exception $e){
             Log::error($e->getMessage());
-            throw new SistemException($e->getMessage(), $e->getCode());
+            throw new SistemException($e->getMessage(), $e->getCode() ?? 500);
         }
     }
 
-    public function getAll(): Collection
+    public function index(User $user): Collection
     {
         try{
-            $user = auth()->user();
-
-            $this->verifyUserHasRole($user);
-
-            return Menu::where('active', true)->get();
+            return Menu::visibleTo($user)
+                ->where('active', true)
+                ->get();
         }catch(\Exception $e){
             Log::error($e->getMessage());
-            throw new SistemException($e->getMessage(), $e->getCode());
+            throw new SistemException($e->getMessage(), $e->getCode() ?? 500);
         }
     }
 
-    public function getMenu(int $restaurant_id, int $id): Menu
+    public function getMenu(Menu $menu, User $user): Menu
     {
         try{
             $user = Auth::user();
-     
-            $this->ensureAdminMasterOrRestaurantOwner($user, $restaurant_id);
+            return Menu::visibleTo($user)
+                ->where('active', true)
+                ->where('id', $menu->id)
+                ->first();
             
             $menu = Menu::find($id);
 
@@ -104,17 +100,13 @@ class MenuService extends BaseService implements MenuServiceInterface
             return $menu;
         }catch(\Exception $e){
             Log::error($e->getMessage());
-            throw new SistemException($e->getMessage(), $e->getCode());
+            throw new SistemException($e->getMessage(), $e->getCode() ?? 500);
         }
     }
 
-    public function destroyMenu(int $restaurant_id,int $id): void
+    public function destroy(int $id): void
     {
         try{
-            $user = Auth::user();
-
-            $this->ensureAdminMasterOrRestaurantOwner($user, $restaurant_id);
-
             $menu = Menu::find($id);
             
             if(is_null($menu)){
@@ -124,17 +116,13 @@ class MenuService extends BaseService implements MenuServiceInterface
             $menu->update(["active" => false]);
         }catch(\Exception $e){
             Log::error($e->getMessage());
-            throw new SistemException($e->getMessage(), $e->getCode());
+            throw new SistemException($e->getMessage(), $e->getCode() ?? 500);
         }
     }
 
-    public function deleteMenu(int $restaurant_id,int $id): void
+    public function delete(int $id): void
     {
         try{
-            $user = Auth::user();
-
-            $this->ensureAdminMasterOrRestaurantOwner($user, $restaurant_id);
-
             $menu = Menu::find($id);
 
             if(is_null($menu)){

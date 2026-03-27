@@ -5,6 +5,7 @@ namespace App\Services\Categories;
 use App\Exceptions\SistemException;
 use App\Interfaces\Categories\CategoryServiceInterface;
 use App\Models\Categories;
+use App\Models\User;
 use App\Services\BaseService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
@@ -22,15 +23,13 @@ class CategoryService extends BaseService implements CategoryServiceInterface
        
     }
 
-    public function getCategory(int $id, int $restaurant_id): Categories
+    public function getCategory(Categories $category, User $user): Categories
     {
         try{
-            $user = auth()->user();
-
-            $this->ensureAdminMasterOrRestaurantOwner($user, $restaurant_id);
-
-            $category = Categories::where('restaurant_id', $restaurant_id)
-                ->find($id);
+            $category = Categories::visibleTo($user)
+                ->where('id', $category->id)
+                ->where('active', true)
+                ->first();
 
             if($category === null){
                 throw new SistemException('Categoria não encontrada',404);
@@ -40,20 +39,17 @@ class CategoryService extends BaseService implements CategoryServiceInterface
 
         }catch(\Exception $e){
             Log::error($e->getMessage());
-            throw new SistemException($e->getMessage(), $e->getCode());
+            throw new SistemException($e->getMessage(), $e->getCode() ?? 500);
         }   
     }
 
-    public function getAll(int $restaurant_id):Collection
+    public function index(int $restaurant_id, User $user):Collection
     {
        try{
-            $user = auth()->user();
-
-            $this->ensureAdminMasterOrRestaurantOwner($user, $restaurant_id);
-
-            $category = Categories::where('restaurant_id', $restaurant_id)
-                ->get()
-                ->toArray();
+            return Categories::visibleTo($user)
+                ->where('restaurant_id', $restaurant_id)
+                ->where('active', true)
+                ->get();
 
             if($category === null){
                 throw new SistemException('Categorias não encontradas',404);
@@ -63,14 +59,14 @@ class CategoryService extends BaseService implements CategoryServiceInterface
 
        }catch(\Exception $e){
             Log::error($e->getMessage());
-            throw new SistemException($e->getMessage(), $e->getCode());
+            throw new SistemException($e->getMessage(), $e->getCode() ?? 500);
        }
     }
 
-    public function update(array $data):void
+    public function update(Categories $categories, array $data):void
     {
         try{
-            Categories::find($data['id'])->update($data);
+            $categories->update($data);
         }catch(\Exception $e){
             Log::error($e->getMessage());
             throw new SistemException('Erro ao atualizar categoria');
@@ -87,13 +83,9 @@ class CategoryService extends BaseService implements CategoryServiceInterface
         }
     }
 
-    public function delete(int $id, int $restaurant_id):void
+    public function delete(int $id):void
     {
         try{
-            $user = auth()->user();
-            
-            $this->ensureAdminMasterOrRestaurantOwner($user, $restaurant_id);
-
             Categories::find($id)->delete();
         }catch(\Exception $e){
             Log::error($e->getMessage());

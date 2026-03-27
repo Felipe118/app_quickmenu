@@ -33,4 +33,13 @@ class Menu extends Model
     {
         return $this->belongsTo(Restaurant::class,'restaurant_id');
     }
+
+    public function scopeVisibleTo($query,$user)
+    {
+        if ($user->hasRole('admin_master')) {
+            return $query;
+        }
+      
+        return $query->whereIn('restaurant_id', $user->restaurants()->pluck('restaurant_id'));
+    }
 }

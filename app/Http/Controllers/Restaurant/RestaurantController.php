@@ -7,6 +7,7 @@ use App\Http\Requests\RestaurantRequest;
 use App\Interfaces\Restaurant\RestaurantServiceInterface;
 use App\Models\Restaurant;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Auth;
 
 class RestaurantController extends Controller
 {
@@ -42,7 +43,9 @@ class RestaurantController extends Controller
     {
         $this->authorize('viewAny', Restaurant::class);
 
-        return $this->restaurantService->index(auth()->user());
+        $user = Auth::user();
+
+        return $this->restaurantService->index($user);
     }
 
     /**
@@ -72,7 +75,7 @@ class RestaurantController extends Controller
      */
     public function store(RestaurantRequest $request)
     {
-        return $this->restaurantService->storeRestaurant($request->all());
+        return $this->restaurantService->store($request->all());
     }
 
       /**
@@ -112,7 +115,7 @@ class RestaurantController extends Controller
 
     public function update(RestaurantRequest $request, Restaurant $restaurant) 
     {
-        $this->authorize('update', $restaurant);
+        $this->authorize('update', Restaurant::class);
         return $this->restaurantService->update($request->all(), $restaurant);
     }
 
@@ -152,7 +155,9 @@ class RestaurantController extends Controller
     {
         $this->authorize('view', $restaurant);
 
-        return $this->restaurantService->get($restaurant, auth()->user());
+        $user = Auth::user();
+        
+        return $this->restaurantService->getRestaurant($restaurant, $user);
     }
 
    
@@ -182,7 +187,7 @@ class RestaurantController extends Controller
     {
         $this->authorize('delete', $restaurant);
 
-        $this->restaurantService->destroyRestaurant($restaurant);
+        $this->restaurantService->destroy($restaurant);
 
         return response()->json([
             'message' => 'Restaurante desativado com sucesso',

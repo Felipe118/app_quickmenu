@@ -40,9 +40,8 @@ abstract class BaseService
         throw new SistemException(MessageEnum::RESTAURANTE_NAO_ENCONTRADO->value, 404);
     }
 
-    protected function verifyUserHasRole(User $user):void
+    protected function isAdmimMaster(User $user):void
     {
-        dd(!$user->hasRole(RoleEnum::ADMIM_MASTER->value));
         if(!$user->hasRole(RoleEnum::ADMIM_MASTER->value)){
             throw new AuthorizationException(MessageEnum::ACESSO_NEGADO->value, 403);
         }

@@ -5,10 +5,15 @@ namespace App\Http\Controllers\Menu;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MenuRequest;
 use App\Interfaces\Menu\MenuServiceInterface;
+use App\Models\Menu;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Auth;
 
 class MenuController extends Controller
 {
+    use AuthorizesRequests;
+
     public function __construct(
         public MenuServiceInterface $menuService,
     )
@@ -39,7 +44,7 @@ class MenuController extends Controller
      **/
     public function store(MenuRequest $request)
     {
-        $this->menuService->storeMenu($request->all());
+        $this->menuService->store($request->all());
 
         return response()->json([
             'message' => 'Menu registrado com sucesso',
@@ -69,9 +74,11 @@ class MenuController extends Controller
      *     )
      * )    
      */
-    public function update(MenuRequest $request)
+    public function update(MenuRequest $request, Menu $menu)
     {
-        $this->menuService->updateMenu($request->all());
+        $this->authorize('update', $menu);
+
+        $this->menuService->update($request->all(), $menu);
 
         return response()->json([
             'message' => 'Menu atualizado com sucesso',
@@ -81,7 +88,7 @@ class MenuController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/menu/{id}",
+     *     path="/api/menus/{id}",
      *     tags={"Menu"},
      *     summary="Get menu",
      *     description="Get menu",
@@ -125,14 +132,18 @@ class MenuController extends Controller
      *  )
      */
 
-    public function get(int $restaurant_id,?int $id = null)
+    public function show(Menu $menu)
     {
-        return $this->menuService->getMenu($restaurant_id, $id);
+        $this->authorize('view', $menu);
+
+        $user = Auth::user();
+
+        return $this->menuService->getMenu($menu, $user);
     }
     
     /**
      * @OA\Get(
-     *     path="/api/menu/getAll",
+     *     path="/api/menus",
      *     tags={"Menu"},
      *     summary="Get all menu",
      *     description="Get all menu",
@@ -157,26 +168,21 @@ class MenuController extends Controller
      *     )
      * )
      */
-    public function getAll()
+    public function index()
     {
-        return $this->menuService->getAll();
+        $this->authorize('viewAny', Menu::class);
+
+        $user = Auth::user();
+        
+        return $this->menuService->index($user);
     }
 
     /**
-     * @OA\patch(
-     *     path="/api/menu/destroy/{restaurant_id}/{id}",
+     * @OA\PATCH(
+     *     path="/api/menus/{id}",
      *     tags={"Menu"},
      *     summary="Destroy menu ",
      *     description="Desativar menu",
-     *     @OA\Parameter(
-     *         description="ID do Restaurante",
-     *         in="path",
-     *         name="id",
-     *         required=true,
-     *         @OA\Schema(
-     *             type="integer"
-     *         ),
-     *     ),
      *     @OA\Parameter(
      *         description="ID do Menu",
      *         in="query",
@@ -193,9 +199,11 @@ class MenuController extends Controller
      * )
      */
 
-    public function destroy(int $restaurant_id, int $id)
+    public function destroy(Menu $menu)
     {
-        $this->menuService->destroyMenu($restaurant_id, $id);
+        $this->authorize('delete', $menu);
+
+        $this->menuService->destroy($menu->id);
 
         return response()->json([
             'message' => 'Menu desativado com sucesso',
@@ -204,19 +212,10 @@ class MenuController extends Controller
 
      /**
      * @OA\DELETE(
-     *     path="/api/menu/delete/{restaurant_id}/{id}",
+     *     path="/api/menus/{id}",
      *     tags={"Menu"},
      *     summary="Delete menu ",
      *     description="Deletar menu",
-     *     @OA\Parameter(
-     *         description="ID do Restaurante",
-     *         in="path",
-     *         name="id",
-     *         required=true,
-     *         @OA\Schema(
-     *             type="integer"
-     *         ),
-     *     ),
      *     @OA\Parameter(
      *         description="ID do Menu",
      *         in="query",
@@ -232,17 +231,12 @@ class MenuController extends Controller
      *     )
      * )
      */
-    public function delete(int $restaurant_id, int $id)
+    public function delete(Menu $menu)
     {
-         $this->menuService->deleteMenu($restaurant_id, $id);
+         $this->menuService->delete($menu->id);
 
          return response()->json([
              'message' => 'Menu deletado com sucesso',
          ],200);
-    }
-
-    public function show(string $slug)
-    {
-        dd($slug);
     }
 }
