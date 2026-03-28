@@ -15,7 +15,6 @@ Route::get('/', function () {
     ]);
 });
 
-
 Route::get('/cardapio/{slug}', [MenuController::class, 'show'])->name('cardapio.show');
 
 Route::post('/register', [
@@ -29,19 +28,24 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me'])->name('me');
     Route::post('/logout', [AuthController::class,'logout'])->name('logout');
 
-    Route::group(['prefix' => 'address'], function () {
-        Route::post('/store', [AddressController::class,'storeAddress'])
-            ->name('storeAddress')
-            ->middleware('role:admin_master|admin_restaurant');
-        Route::put('/update/{id}', [AddressController::class, 'updateAddress'])
-            ->name('updateAddress')
-            ->middleware('role:admin_master|admin_restaurant');
-        Route::get('get/{id}', [AddressController::class, 'getAddress'])
-            ->name('getAddressById')
-            ->middleware('role:admin_master|admin_restaurant');
-        Route::delete('/delete/{id}', [AddressController::class, 'destroyAddress'])
-            ->name('destroyAddress')
-            ->middleware('role:admin_master|admin_restaurant');
+    Route::prefix('addresses')
+    ->middleware(['auth:sanctum'])
+    ->group(function () {
+        RoUTE::post('/', [AddressController::class, 'store'])
+            ->middleware(['role:admin_master|admin_restaurant', 'check.restaurant']);
+
+        Route::get('/', [AddressController::class, 'index'])
+            ->middleware(['role:admin_master|admin_restaurant', 'check.restaurant']);
+
+        Route::get('/{address}', [AddressController::class, 'show'])
+            ->middleware(['role:admin_master|admin_restaurant', 'check.restaurant']);
+
+        Route::put('/{address}', [AddressController::class, 'update'])
+            ->middleware(['role:admin_master|admin_restaurant', 'check.restaurant']);
+
+
+        Route::delete('/{address}', [AddressController::class, 'delete'])
+            ->middleware(['role:admin_master', 'check.restaurant']);
     });
      
     Route::prefix('restaurants')
@@ -69,13 +73,23 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     
     Route::prefix('menus')->group(function () {
-        Route::get('/', [MenuController::class, 'index']);
-        Route::post('/', [MenuController::class, 'store']);
-        Route::get('/{menu}', [MenuController::class, 'show']);
-        Route::put('/{menu}', [MenuController::class, 'update']);
-        Route::patch('/{menu}', [MenuController::class, 'destroy']);
-        Route::delete('/{menu}', [MenuController::class, 'delete']);
+        Route::get('/', [MenuController::class, 'index'])
+            ->middleware(['role:admin_master|admin_restaurant|user_restaurant', 'check.restaurant']);
 
+        Route::post('/', [MenuController::class, 'store'])
+            ->middleware(['role:admin_master|admin_restaurant|user_restaurant']);
+
+        Route::get('/{menu}', [MenuController::class, 'show'])
+            ->middleware(['role:admin_master|admin_restaurant|user_restaurant', 'check.restaurant']);
+
+        Route::put('/{menu}', [MenuController::class, 'update'])
+            ->middleware(['role:admin_master|admin_restaurant|user_restaurant', 'check.restaurant']);
+
+        Route::patch('/{menu}', [MenuController::class, 'destroWy'])
+            ->middleware(['role:admin_master|admin_restaurant|user_restaurant', 'check.restaurant']);
+
+        Route::delete('/{menu}', [MenuController::class, 'delete'])
+            ->middleware(['role:admin_master|admin_restaurant|user_restaurant', 'check.restaurant']);
     });
 
     Route::prefix('categories')

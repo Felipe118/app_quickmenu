@@ -98,8 +98,8 @@ class CategoryController extends Controller
      *     @OA\Get(
      *     path="/api/restaurants/{restaurant}/categories",
      *     tags={"Category"},
-     *     summary="Get all categories",
-     *     description="Get all categories",
+     *     summary="Get all categories by restaurant",
+     *     description="Get all categories by restaurant",
      *     @OA\Parameter(
      *         description="ID do restaurante",
      *         in="path",

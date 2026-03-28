@@ -20,8 +20,8 @@ class MenuController extends Controller
     {}
 
     /**
-     * @OA\Post(
-     *     path="/api/menu/store",
+     * @OA\POST(
+     *     path="/api/menus",
      *     tags={"Menu"},
      *     summary="Store menu",
      *     description="Store menu",
@@ -52,11 +52,20 @@ class MenuController extends Controller
     }
 
     /**
-     * @OA\Post(
-     *     path="/api/menu/update",
+     * @OA\PUT(
+     *     path="/api/menus/{id}",
      *     tags={"Menu"},
      *     summary="Update menu",
      *     description="Update menu",
+     *     @OA\Parameter(
+     *         description="ID do Menu",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -233,6 +242,8 @@ class MenuController extends Controller
      */
     public function delete(Menu $menu)
     {
+         $this->authorize('delete', $menu);
+
          $this->menuService->delete($menu->id);
 
          return response()->json([

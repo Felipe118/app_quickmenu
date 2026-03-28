@@ -14,46 +14,59 @@ class AddressService implements AddressServiceInterface
         public AddressRepositoryInterface $addressRepository    
     ){}
 
-    public function storeAddress(array $data): Address
+    public function store(array $data): Address
     {
         try {
-            $address = $this->addressRepository->storeAddress($data);
+            $address = $this->addressRepository->store($data);
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
             throw new SistemException('Erro ao salvar endereço');
         }
 
         return $address;
-     
     }
 
-    public function updateAddress(int $id, array $data): Address
+    public function index(): \Illuminate\Database\Eloquent\Collection
     {
-
-        $address = $this->addressRepository->updateAddress($id, $data);
-        
-        if(!isset($address->id)){
-            throw new SistemException();
+        try {
+            return $this->addressRepository->index();
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage());
+            throw new SistemException('Erro ao buscar endereços');
         }
-
-        return $address;
     }
 
     public function getAddressById(int $id): Address
     {
         $address = $this->addressRepository->getAddressById($id);
-        
-        if(!isset($address->id)){
+
+        if (!isset($address->id)) {
             throw new SistemException('Endereço não encontrado.', 404);
         }
 
         return $address;
     }
 
-    public function deleteAddress(int $id): bool
+    public function update(int $id, array $data): Address
     {
-        $address = $this->addressRepository->getAddressById($id);
+        $address = $this->getAddressById($id);
 
-        return $address->delete();
+        try {
+            return $this->addressRepository->update($data, $address);
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage());
+            throw new SistemException('Erro ao atualizar endereço');
+        }
+    }
+
+
+    public function delete(int $id): void
+    {
+        try {
+            $this->addressRepository->delete($id);
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage());
+            throw new SistemException('Erro ao deletar endereço');
+        }
     }
 }

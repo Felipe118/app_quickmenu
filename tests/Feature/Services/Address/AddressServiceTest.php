@@ -77,7 +77,15 @@ test('should delete an address', function () {
 
     $address = $this->addressService->storeAddress($data);
 
-    $deleted = $this->addressService->deleteAddress($address->id);
+    $this->addressService->deleteAddress($address->id);
 
-    expect($deleted)->toBe(true);
+    $this->assertDatabaseMissing('address', ['id' => $address->id]);
+});
+
+it('should list all addresses', function () {
+    Address::factory()->count(2)->create();
+
+    $addresses = $this->addressService->index();
+
+    expect($addresses->count())->toBe(2);
 });

@@ -12,58 +12,48 @@
         }
     ],
     "paths": {
-        "/api/address/store": {
+        "/api/addresses": {
+            "get": {
+                "tags": [
+                    "Address"
+                ],
+                "summary": "List all addresses",
+                "description": "Retrieve list of all addresses",
+                "operationId": "d36bf2c013f585f04a4b79829ac21883",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "addresses": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Address"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "Address"
                 ],
-                "summary": "Store address",
+                "summary": "Create address",
                 "description": "Store address",
-                "operationId": "118d0f248e23cf01a2083fe6cd6b3133",
+                "operationId": "6bbc1d4e6af4b09f0e76bc48dc84ea95",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "properties": {
-                                    "address_name": {
-                                        "type": "string",
-                                        "example": "Rua das Flores"
-                                    },
-                                    "quatrain": {
-                                        "type": "string",
-                                        "example": "Quadra 10"
-                                    },
-                                    "city": {
-                                        "type": "string",
-                                        "example": "São Paulo"
-                                    },
-                                    "state": {
-                                        "type": "string",
-                                        "example": "SP"
-                                    },
-                                    "cep": {
-                                        "type": "string",
-                                        "example": "12345-678"
-                                    },
-                                    "complement": {
-                                        "type": "string",
-                                        "example": "Apto 101"
-                                    },
-                                    "district": {
-                                        "type": "string",
-                                        "example": "Centro"
-                                    },
-                                    "neighborhood": {
-                                        "type": "string",
-                                        "example": "Jardim das Flores"
-                                    },
-                                    "number": {
-                                        "type": "string",
-                                        "example": "123"
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/Address"
                             }
                         }
                     }
@@ -75,22 +65,51 @@
                 }
             }
         },
-        "/api/address/update/{id}": {
+        "/api/addresses/{address}": {
+            "get": {
+                "tags": [
+                    "Address"
+                ],
+                "summary": "Get address by id",
+                "description": "Retrieve a single address",
+                "operationId": "2afc0f801cfd83bca228c2c15ec9a5f8",
+                "parameters": [
+                    {
+                        "name": "address",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Address"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "put": {
                 "tags": [
                     "Address"
                 ],
-                "summary": "Store address",
-                "description": "Store address",
-                "operationId": "updateAddress",
+                "summary": "Update address",
+                "description": "Update address data",
+                "operationId": "03c1acda1e9e3f86f3f388edfb0f1e33",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "address",
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "integer",
-                            "example": 1
+                            "type": "integer"
                         }
                     }
                 ],
@@ -99,49 +118,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "properties": {
-                                    "address_name": {
-                                        "type": "string",
-                                        "example": "Rua das Flores"
-                                    },
-                                    "quatrain": {
-                                        "type": "string",
-                                        "example": "Quadra 10"
-                                    },
-                                    "city": {
-                                        "type": "string",
-                                        "example": "São Paulo"
-                                    },
-                                    "state": {
-                                        "type": "string",
-                                        "example": "SP"
-                                    },
-                                    "cep": {
-                                        "type": "string",
-                                        "example": "12345-678"
-                                    },
-                                    "complement": {
-                                        "type": "string",
-                                        "example": "Apto 101"
-                                    },
-                                    "district": {
-                                        "type": "string",
-                                        "example": "Centro"
-                                    },
-                                    "neighborhood": {
-                                        "type": "string",
-                                        "example": "Jardim das Flores"
-                                    },
-                                    "number": {
-                                        "type": "string",
-                                        "example": "123"
-                                    },
-                                    "id": {
-                                        "type": "integer",
-                                        "example": 1
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/Address"
                             }
                         }
                     }
@@ -151,100 +128,21 @@
                         "description": "Endereço atualizado com sucesso"
                     }
                 }
-            }
-        },
-        "/api/address/get/{id}": {
-            "get": {
-                "tags": [
-                    "Address"
-                ],
-                "summary": "Get address by id",
-                "description": "Get address by id",
-                "operationId": "getAddress",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "example": 1
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Address found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "address": {
-                                            "properties": {
-                                                "address_name": {
-                                                    "type": "string",
-                                                    "example": "Rua das Flores"
-                                                },
-                                                "quatrain": {
-                                                    "type": "string",
-                                                    "example": "Quadra 10"
-                                                },
-                                                "city": {
-                                                    "type": "string",
-                                                    "example": "São Paulo"
-                                                },
-                                                "state": {
-                                                    "type": "string",
-                                                    "example": "SP"
-                                                },
-                                                "cep": {
-                                                    "type": "string",
-                                                    "example": "12345-678"
-                                                },
-                                                "complement": {
-                                                    "type": "string",
-                                                    "example": "Apto 101"
-                                                },
-                                                "district": {
-                                                    "type": "string",
-                                                    "example": "Centro"
-                                                },
-                                                "neighborhood": {
-                                                    "type": "string",
-                                                    "example": "Jardim das Flores"
-                                                },
-                                                "number": {
-                                                    "type": "string",
-                                                    "example": "123"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/address/delete/{id}": {
+            },
             "delete": {
                 "tags": [
                     "Address"
                 ],
-                "summary": "Delete address by id",
-                "description": "Delete address by id",
-                "operationId": "deleteAddress",
+                "summary": "Delete address",
+                "description": "Permanently delete address",
+                "operationId": "a9355aee849aeb0e9e73b2c42b77ea39",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "address",
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "integer",
-                            "example": 1
+                            "type": "integer"
                         }
                     }
                 ],
@@ -255,14 +153,14 @@
                 }
             }
         },
-        "/api/category/store": {
+        "/api/categories": {
             "post": {
                 "tags": [
                     "Category"
                 ],
                 "summary": "Store category",
                 "description": "Store category",
-                "operationId": "ac058d873e099866846bdc4ade49c18d",
+                "operationId": "d5d39337e0ae1ad328da08f7b468fbbe",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -295,28 +193,19 @@
                 }
             }
         },
-        "/api/category/get/{id}/restaurant/{restaurant_id}": {
+        "/api/categories/{id}": {
             "get": {
                 "tags": [
                     "Category"
                 ],
                 "summary": "Get category",
                 "description": "Get category",
-                "operationId": "8bf73b5ac38dc19e03bb584fd8fdd6bd",
+                "operationId": "7706bd1bbea7216615ae2d54256aac49",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
                         "description": "ID da categoria",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "restaurant_id",
-                        "in": "path",
-                        "description": "ID do restaurante",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -369,16 +258,112 @@
                         }
                     }
                 }
+            },
+            "put": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Update category",
+                "description": "Update category",
+                "operationId": "3876780767a6c0512fcd21fc7913395e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da categoria",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Category 1"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Category 1"
+                                    },
+                                    "active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Categoria atualizado com sucesso"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Delete category",
+                "description": "Delete category",
+                "operationId": "09f09c1bc59c6969c4749771edae84cd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da categoria",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Categoria deletada com sucesso"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Destroy category",
+                "description": "Destroy category",
+                "operationId": "6cd45a617d912adf04d79b4b25775c09",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da categoria",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Categoria desativada com sucesso"
+                    }
+                }
             }
         },
-        "/api/category/getAll/{restaurant_id}": {
+        "/api/restaurants/{restaurant}/categories": {
             "get": {
                 "tags": [
                     "Category"
                 ],
-                "summary": "Get all categories",
-                "description": "Get all categories",
-                "operationId": "5a23d16e5f7fc02003b5055b0d9218f6",
+                "summary": "Get all categories by restaurant",
+                "description": "Get all categories by restaurant",
+                "operationId": "ad71bf7cc8c0f4d9ff9cfc88779d2e40",
                 "parameters": [
                     {
                         "name": "restaurant_id",
@@ -392,7 +377,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Restaurante encontrado",
+                        "description": "Categorias encontradas",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -423,348 +408,7 @@
                         }
                     },
                     "404": {
-                        "description": "Categoria não encontrada"
-                    }
-                }
-            }
-        },
-        "/api/category/update": {
-            "post": {
-                "tags": [
-                    "Category"
-                ],
-                "summary": "Update category",
-                "description": "Update category",
-                "operationId": "f84cc860379c538ef76743700fe2201e",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "name": {
-                                        "type": "string",
-                                        "example": "Category 1"
-                                    },
-                                    "description": {
-                                        "type": "string",
-                                        "example": "Category 1"
-                                    },
-                                    "active": {
-                                        "type": "boolean",
-                                        "example": true
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Categoria atualizado com sucesso"
-                    }
-                }
-            }
-        },
-        "/api/category/destroy/{id}": {
-            "patch": {
-                "tags": [
-                    "Category"
-                ],
-                "summary": "Destroy category",
-                "description": "Destroy category",
-                "operationId": "3db30709e6d83b45e6412b2a309ebae9",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID da categoria",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Categoria desativada com sucesso"
-                    }
-                }
-            }
-        },
-        "/api/category/delete/{id}": {
-            "delete": {
-                "tags": [
-                    "Category"
-                ],
-                "summary": "Delete category",
-                "description": "Delete category",
-                "operationId": "aa1917128b7de5fe080014b36517c1de",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID da categoria",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Categoria deletada com sucesso"
-                    }
-                }
-            }
-        },
-        "/api/menu/store": {
-            "post": {
-                "tags": [
-                    "Menu"
-                ],
-                "summary": "Store menu",
-                "description": "Store menu",
-                "operationId": "704fc2fa61b7658f707cfe4d35395286",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "name": {
-                                        "type": "string",
-                                        "example": "Menu 1"
-                                    },
-                                    "description": {
-                                        "type": "string",
-                                        "example": "Menu 1"
-                                    },
-                                    "image": {
-                                        "type": "string",
-                                        "example": "https://example.com/image.jpg"
-                                    },
-                                    "active": {
-                                        "type": "boolean",
-                                        "default": true,
-                                        "example": true
-                                    },
-                                    "restaurant_id": {
-                                        "type": "integer",
-                                        "example": 1
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Menu registrado com sucesso"
-                    }
-                }
-            }
-        },
-        "/api/menu/update": {
-            "post": {
-                "tags": [
-                    "Menu"
-                ],
-                "summary": "Update menu",
-                "description": "Update menu",
-                "operationId": "97fc87d06f887f3bda35710ce1e03cb5",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "name": {
-                                        "type": "string",
-                                        "example": "Menu 1"
-                                    },
-                                    "description": {
-                                        "type": "string",
-                                        "example": "Menu 1"
-                                    },
-                                    "image": {
-                                        "type": "string",
-                                        "example": "https://example.com/image.jpg"
-                                    },
-                                    "active": {
-                                        "type": "boolean",
-                                        "example": true
-                                    },
-                                    "restaurant_id": {
-                                        "type": "integer",
-                                        "example": 1
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Menu registrado com sucesso"
-                    }
-                }
-            }
-        },
-        "/api/menu/{id}": {
-            "get": {
-                "tags": [
-                    "Menu"
-                ],
-                "summary": "Get menu",
-                "description": "Get menu",
-                "operationId": "fb3186aa471c4d8d426a547bfbd3d711",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID do Restaurante",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "id",
-                        "in": "query",
-                        "description": "ID do Menu",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Lista de menus",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "properties": {
-                                            "id": {
-                                                "type": "integer",
-                                                "example": 3
-                                            },
-                                            "name": {
-                                                "type": "string",
-                                                "example": "Cardapio Teste"
-                                            },
-                                            "description": {
-                                                "type": "string",
-                                                "example": "Cardapio Teste"
-                                            },
-                                            "image": {
-                                                "type": "string",
-                                                "example": "Teste.jpg"
-                                            },
-                                            "restaurant_id": {
-                                                "type": "integer",
-                                                "example": 2
-                                            },
-                                            "active": {
-                                                "type": "boolean",
-                                                "example": true
-                                            },
-                                            "slug": {
-                                                "type": "string",
-                                                "example": "cardapio-Teste"
-                                            },
-                                            "created_at": {
-                                                "type": "string",
-                                                "format": "date-time",
-                                                "example": "2025-09-09T03:58:10.000000Z"
-                                            },
-                                            "updated_at": {
-                                                "type": "string",
-                                                "format": "date-time",
-                                                "example": "2025-09-09T03:58:10.000000Z"
-                                            }
-                                        },
-                                        "type": "object"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/menu/destroy/{restaurant_id}/{id}": {
-            "patch": {
-                "tags": [
-                    "Menu"
-                ],
-                "summary": "Destroy menu ",
-                "description": "Desativar menu",
-                "operationId": "32f22c762d1e2f8dc770322c6608a496",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID do Restaurante",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "id",
-                        "in": "query",
-                        "description": "ID do Menu",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Menu desativado com sucesso"
-                    }
-                }
-            }
-        },
-        "/api/menu/delete/{restaurant_id}/{id}": {
-            "delete": {
-                "tags": [
-                    "Menu"
-                ],
-                "summary": "Delete menu ",
-                "description": "Deletar menu",
-                "operationId": "ecb5b5f5d20c3d3b01045c7d82b9d488",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID do Restaurante",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "id",
-                        "in": "query",
-                        "description": "ID do Menu",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Menu deletado com sucesso"
+                        "description": "Categorias não encontradas"
                     }
                 }
             }
@@ -1066,14 +710,368 @@
                 }
             }
         },
-        "/api/restaurant/store": {
+        "/api/menus": {
+            "get": {
+                "tags": [
+                    "Menu"
+                ],
+                "summary": "Get all menu",
+                "description": "Get all menu",
+                "operationId": "e1e5e59287840410f132fe091d1fbfe7",
+                "responses": {
+                    "200": {
+                        "description": "Lista de menus",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 3
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Cardapio Teste"
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "example": "Cardapio Teste"
+                                            },
+                                            "image": {
+                                                "type": "string",
+                                                "example": "Teste.jpg"
+                                            },
+                                            "restaurant_id": {
+                                                "type": "integer",
+                                                "example": 2
+                                            },
+                                            "active": {
+                                                "type": "boolean",
+                                                "example": true
+                                            },
+                                            "slug": {
+                                                "type": "string",
+                                                "example": "cardapio-Teste"
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2025-09-09T03:58:10.000000Z"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2025-09-09T03:58:10.000000Z"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Menu"
+                ],
+                "summary": "Store menu",
+                "description": "Store menu",
+                "operationId": "95eb7940157cb1f157df64b40ec5ccb0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Menu 1"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Menu 1"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "example": "https://example.com/image.jpg"
+                                    },
+                                    "active": {
+                                        "type": "boolean",
+                                        "default": true,
+                                        "example": true
+                                    },
+                                    "restaurant_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Menu registrado com sucesso"
+                    }
+                }
+            }
+        },
+        "/api/menus/{id}": {
+            "get": {
+                "tags": [
+                    "Menu"
+                ],
+                "summary": "Get menu",
+                "description": "Get menu",
+                "operationId": "b6d832555451425d6528be660b6bba4c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do Restaurante",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "ID do Menu",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de menus",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 3
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Cardapio Teste"
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "example": "Cardapio Teste"
+                                            },
+                                            "image": {
+                                                "type": "string",
+                                                "example": "Teste.jpg"
+                                            },
+                                            "restaurant_id": {
+                                                "type": "integer",
+                                                "example": 2
+                                            },
+                                            "active": {
+                                                "type": "boolean",
+                                                "example": true
+                                            },
+                                            "slug": {
+                                                "type": "string",
+                                                "example": "cardapio-Teste"
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2025-09-09T03:58:10.000000Z"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2025-09-09T03:58:10.000000Z"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Menu"
+                ],
+                "summary": "Update menu",
+                "description": "Update menu",
+                "operationId": "760bce89fb01239625d38f9c46ae92e1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do Menu",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Menu 1"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Menu 1"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "example": "https://example.com/image.jpg"
+                                    },
+                                    "active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "restaurant_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Menu registrado com sucesso"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Menu"
+                ],
+                "summary": "Delete menu ",
+                "description": "Deletar menu",
+                "operationId": "ffa4606f2c88409876feda88cd424cc8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "ID do Menu",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Menu deletado com sucesso"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Menu"
+                ],
+                "summary": "Destroy menu ",
+                "description": "Desativar menu",
+                "operationId": "12fa98b501dc4c5d02d6baddfb4608f4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "ID do Menu",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Menu desativado com sucesso"
+                    }
+                }
+            }
+        },
+        "/api/restaurants": {
+            "get": {
+                "tags": [
+                    "Restaurant"
+                ],
+                "summary": "Get all restaurants",
+                "description": "Get all restaurants",
+                "operationId": "aecb2c1eec20a0dd9ec39785a59e052f",
+                "responses": {
+                    "200": {
+                        "description": "Restaurante encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Restaurante 1"
+                                        },
+                                        "perfil_img": {
+                                            "type": "string",
+                                            "example": "https://example.com/perfil.jpg"
+                                        },
+                                        "capa_img": {
+                                            "type": "string",
+                                            "example": "https://example.com/capa.jpg"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "teste@example.com"
+                                        },
+                                        "open_time": {
+                                            "type": "string",
+                                            "example": "10:00"
+                                        },
+                                        "close_time": {
+                                            "type": "string",
+                                            "example": "22:00"
+                                        },
+                                        "phone": {
+                                            "type": "string",
+                                            "example": "1234567890"
+                                        },
+                                        "address_id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "Restaurant"
                 ],
                 "summary": "Store restaurant",
                 "description": "Store restaurant",
-                "operationId": "e16ffab74d3de2923d3d9900d965cc7e",
+                "operationId": "76be6ed9db09a138106513fe1b2cb36f",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1125,76 +1123,17 @@
                 }
             }
         },
-        "/api/restaurant/update": {
-            "post": {
-                "tags": [
-                    "Restaurant"
-                ],
-                "summary": "Update restaurant",
-                "description": "Update restaurant",
-                "operationId": "e7791203a6ee074e9b9a4f56e1679e68",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "name": {
-                                        "type": "string",
-                                        "example": "Restaurante 1"
-                                    },
-                                    "perfil_img": {
-                                        "type": "string",
-                                        "example": "https://example.com/perfil.jpg"
-                                    },
-                                    "capa_img": {
-                                        "type": "string",
-                                        "example": "https://example.com/capa.jpg"
-                                    },
-                                    "email": {
-                                        "type": "string",
-                                        "example": "teste@example.com"
-                                    },
-                                    "open_time": {
-                                        "type": "string",
-                                        "example": "10:00"
-                                    },
-                                    "close_time": {
-                                        "type": "string",
-                                        "example": "22:00"
-                                    },
-                                    "phone": {
-                                        "type": "string",
-                                        "example": "1234567890"
-                                    },
-                                    "address_id": {
-                                        "type": "integer",
-                                        "example": 1
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Restaurante atualizado com sucesso"
-                    }
-                }
-            }
-        },
-        "/api/restaurant/get/{id}": {
+        "/api/restaurants/{restaurant}": {
             "get": {
                 "tags": [
                     "Restaurant"
                 ],
                 "summary": "Get restaurant",
                 "description": "Get restaurant",
-                "operationId": "fb28d4737b66680ee5c2ba572e796bc1",
+                "operationId": "6e97a75b391d75dea6438aef4841e5cf",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "restaurant",
                         "in": "path",
                         "description": "ID do restaurante",
                         "required": true,
@@ -1249,19 +1188,85 @@
                         }
                     }
                 }
-            }
-        },
-        "/api/restaurant/delete/{id}": {
-            "patch": {
+            },
+            "put": {
+                "tags": [
+                    "Restaurant"
+                ],
+                "summary": "Update restaurant",
+                "description": "Update restaurant",
+                "operationId": "4cd07120d35bf2c1b3c644f2779d723c",
+                "parameters": [
+                    {
+                        "name": "restaurant",
+                        "in": "path",
+                        "description": "ID do restaurante",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Restaurante 1"
+                                    },
+                                    "perfil_img": {
+                                        "type": "string",
+                                        "example": "https://example.com/perfil.jpg"
+                                    },
+                                    "capa_img": {
+                                        "type": "string",
+                                        "example": "https://example.com/capa.jpg"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "teste@example.com"
+                                    },
+                                    "open_time": {
+                                        "type": "string",
+                                        "example": "10:00"
+                                    },
+                                    "close_time": {
+                                        "type": "string",
+                                        "example": "22:00"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "1234567890"
+                                    },
+                                    "address_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Restaurante atualizado com sucesso"
+                    }
+                }
+            },
+            "delete": {
                 "tags": [
                     "Restaurant"
                 ],
                 "summary": "Delete restaurant by id",
                 "description": "Delete restaurant by id",
-                "operationId": "98d4308a2619c054b32d525034feb59a",
+                "operationId": "fff3145c95634139e150982e0cfa97df",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "restaurant",
                         "in": "path",
                         "description": "ID do restaurante",
                         "required": true,
@@ -1320,6 +1325,70 @@
             }
         }
     },
+    "components": {
+        "schemas": {
+            "Address": {
+                "title": "Address",
+                "required": [
+                    "address_name",
+                    "quatrain",
+                    "number",
+                    "city",
+                    "state",
+                    "cep"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "address_name": {
+                        "description": "Nome do endereço",
+                        "type": "string"
+                    },
+                    "quatrain": {
+                        "description": "Quadra",
+                        "type": "string"
+                    },
+                    "number": {
+                        "type": "string"
+                    },
+                    "complement": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "district": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "city": {
+                        "type": "string"
+                    },
+                    "state": {
+                        "type": "string"
+                    },
+                    "neighborhood": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "cep": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
     "tags": [
         {
             "name": "Address",
@@ -1330,12 +1399,12 @@
             "description": "Category"
         },
         {
-            "name": "Menu",
-            "description": "Menu"
-        },
-        {
             "name": "Menu Item",
             "description": "Menu Item"
+        },
+        {
+            "name": "Menu",
+            "description": "Menu"
         },
         {
             "name": "Restaurant",
