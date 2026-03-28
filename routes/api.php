@@ -111,30 +111,30 @@ Route::middleware('auth:sanctum')->group(function () {
             ->middleware(['role:admin_master|admin_restaurant', 'check.restaurant']);
     });
 
-    Route::group(['prefix'=> 'menu-item'], function () {
-        Route::post('/store', [MenuItemController::class,'store'])
+    Route::prefix('menu-items')->group(function () {
+        Route::get('/restaurant/{restaurant}', [MenuItemController::class, 'index'])
+            ->name('menuItemsIndex')
+            ->middleware(['role:admin_master|admin_restaurant|user_restaurant', 'check.restaurant']);
+
+        Route::post('/', [MenuItemController::class, 'store'])
             ->name('storeMenuItem')
-            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+            ->middleware(['role:admin_master|admin_restaurant|user_restaurant']);
 
-        Route::put('/update', [MenuItemController::class,'update'])
+        Route::get('/{menuItem}', [MenuItemController::class, 'show'])
+            ->name('showMenuItem')
+            ->middleware(['role:admin_master|admin_restaurant|user_restaurant', 'check.restaurant']);
+
+        Route::put('/{menuItem}', [MenuItemController::class, 'update'])
             ->name('updateMenuItem')
-            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
+            ->middleware(['role:admin_master|admin_restaurant|user_restaurant', 'check.restaurant']);
 
-        Route::get('/get/{id}/restaurant/{restaurant_id}', [MenuItemController::class,'get'])
-            ->name('getMenuItem')
-            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
-        
-        Route::get('/getAll/restaurant/{restaurant_id}', [MenuItemController::class,'getAll'])
-            ->name('getAllMenuItem')
-            ->middleware('role:admin_master|admin_restaurant|user_restaurant');
-
-        Route::patch('/destroy/{id}/restaurant/{restaurant_id}', [MenuItemController::class,'destroy'])
+        Route::patch('/{menuItem}', [MenuItemController::class, 'destroy'])
             ->name('destroyMenuItem')
-            ->middleware('role:admin_master|admin_restaurant');
+            ->middleware(['role:admin_master|admin_restaurant', 'check.restaurant']);
 
-        Route::delete('/delete/{id}/restaurant/{restaurant_id}', [MenuItemController::class,'delete'])
+        Route::delete('/{menuItem}', [MenuItemController::class, 'delete'])
             ->name('deleteMenuItem')
-            ->middleware('role:admin_master');
+            ->middleware(['role:admin_master', 'check.restaurant']);
     });
 
 

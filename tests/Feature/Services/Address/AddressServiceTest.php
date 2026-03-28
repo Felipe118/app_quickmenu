@@ -22,7 +22,7 @@ it('should create a new address', function () {
         "cep" => "12345678",
     ];
 
-    $address = $this->addressService->storeAddress($data);
+    $address = $this->addressService->store($data);
 
     expect($address)->toBeInstanceOf(Address::class);
     expect($address->address_name)->toBe($data['address_name']);
@@ -49,13 +49,13 @@ test('should update an existing address', function () {
         "cep" => "12345678",
     ];
 
-    $address = $this->addressService->storeAddress($data);
+    $address = $this->addressService->store($data);
 
     $updateData = [
         "address_name" => "Rua 3 de maio Avenida Updated",
     ];
 
-    $updatedAddress =  $this->addressService->updateAddress($address->id, $updateData);
+    $updatedAddress =  $this->addressService->update($address->id, $updateData);
 
     expect($updatedAddress)->toBeInstanceOf(Address::class);
     expect($updatedAddress->address_name)->toBe($updateData['address_name']);
@@ -75,9 +75,9 @@ test('should delete an address', function () {
         "cep" => "12345678",
     ];
 
-    $address = $this->addressService->storeAddress($data);
+    $address = $this->addressService->store($data);
 
-    $this->addressService->deleteAddress($address->id);
+    $this->addressService->delete($address->id);
 
     $this->assertDatabaseMissing('address', ['id' => $address->id]);
 });

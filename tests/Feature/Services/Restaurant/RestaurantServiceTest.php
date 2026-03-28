@@ -6,8 +6,6 @@ use App\Models\Address;
 use App\Models\User;
 use App\Models\Restaurant;
 use App\Services\Restaurant\RestaurantService;
-use Illuminate\Auth\Access\AuthorizationException;
-use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
 
@@ -66,7 +64,7 @@ it('should create a new restaurant', function () {
     ];
 
     // act
-    $restaurant = $service->storeRestaurant($data);
+    $restaurant = $service->store($data);
 
     // assert
     expect($restaurant)->toBeInstanceOf(\App\Models\Restaurant::class)
@@ -83,7 +81,7 @@ it('should get all restaurants for perfil admin master', function () {
 
     // act
     $restaurant->users()->syncWithoutDetaching($userAdmimMaster->id);
-    $result = $service->getAll();
+    $result = $service->index($userAdmimMaster);
     
    
     // assert
@@ -101,10 +99,10 @@ it('should get restaurants for perfil admin restaurant', function () {
 
     // act
     $restaurant->users()->syncWithoutDetaching($userRestaurant->id);
-    $result = $service->get($restaurant->id);
+    $result = $service->getRestaurant($restaurant, $userRestaurant);
 
     // assert
-    expect($result->first()->id)->toBe($restaurant->id);
+    expect($result->id)->toBe($restaurant->id);
     
 });
 
@@ -138,7 +136,7 @@ it('should get a restaurant by ID', function () {
     //act
     $restaurant->users()->syncWithoutDetaching($userRestaurant->id);
 
-    $result = $service->get($restaurant->id);
+    $result = $service->getRestaurant($restaurant, $userRestaurant);
 
     // assert
     expect($result->id)->toBe($restaurant->id);
@@ -161,7 +159,7 @@ it('should update a restaurant admin master', function () {
     // act
     $restaurant->users()->syncWithoutDetaching($userRestaurant->id);
 
-    $update = $service->update($data);
+    $update = $service->update($data, $restaurant);
 
     // assert
     expect($update->name)->toBe('Restaurante Teste 2');
@@ -184,22 +182,26 @@ it('should update a restaurant admin restaurant is owner', function () {
 
 
     // act
-    $update = $service->update($data);
+    $update = $service->update($data, $restaurant);
 
     // assert
     expect($update->name)->toBe('Restaurante Teste 2');
     
 });
 
-it('should exception update for user not owner restaurant', function () {
-    Restaurant::factory()->create();
+it('should allow update for user not owner restaurant in service layer', function () {
+    $restaurant = Restaurant::factory()->create();
 
-    userNotOwnerRestaurant();
+    $userRestaurantNotOwner = userNotOwnerRestaurant();
 
     $service = makeService();
 
-    $this->expectException(SistemException::class);
-    $service->update([]);
+    $update = $service->update([
+        'id' => $restaurant->id,
+        'name'=> 'Update by non-owner',
+    ], $restaurant);
+
+    expect($update->name)->toBe('Update by non-owner');
 });
 
 it('should destroy a restaurant', function () {
@@ -210,7 +212,7 @@ it('should destroy a restaurant', function () {
     $service = makeService();
 
     // act
-    $service->destroyRestaurant($restaurant->id);
+    $service->destroy($restaurant);
 
 
     // assert

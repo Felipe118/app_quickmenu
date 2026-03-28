@@ -7,7 +7,7 @@ use App\Interfaces\Address\AddressRepositoryInterface;
 use App\Interfaces\Address\AddressServiceInterface;
 use App\Models\Address;
 use Illuminate\Support\Facades\Log;
-
+use \Illuminate\Database\Eloquent\Collection;
 class AddressService implements AddressServiceInterface
 {
     public function __construct(
@@ -26,7 +26,7 @@ class AddressService implements AddressServiceInterface
         return $address;
     }
 
-    public function index(): \Illuminate\Database\Eloquent\Collection
+    public function index(): Collection
     {
         try {
             return $this->addressRepository->index();

@@ -58,7 +58,7 @@ it('should create a new menu', function () {
         'slug'=>'menu-teste',
     ];
 
-    $menu = $service->storeMenu($menu);
+    $menu = $service->store($menu);
 
     expect($menu)->toBeInstanceOf(Menu::class)
         ->and($menu->name)->toBe('Menu Teste');
@@ -88,7 +88,7 @@ it('should update a menu for user admin restaurant', function () {
         'restaurant_id' => $this->restaurant->id,
     ];
 
-    $service->updateMenu($data);
+    $service->update($data, $menu);
 
     $this->assertDatabaseHas('menu', ['name' => 'Menu Teste Update']);
 });
@@ -117,7 +117,7 @@ it('should update a menu for user admin master', function(){
         'restaurant_id' => $this->restaurant->id,
     ];
 
-    $service->updateMenu($data);
+    $service->update($data, $menu);
 
     $this->assertDatabaseHas('menu', ['name' => 'Menu Teste Update']);
 });
@@ -140,7 +140,7 @@ it('should get menu for user admin restaurant owner', function(){
         'restaurant_id' => $this->restaurant->id,
     ];
 
-    $service->updateMenu($data);
+    $service->update($data, $menu);
 
     $this->assertDatabaseHas('menu', ['name'=> 'Menu Teste Update']);
     

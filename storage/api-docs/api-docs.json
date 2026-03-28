@@ -413,46 +413,20 @@
                 }
             }
         },
-        "/api/menu-item/store": {
+        "/api/menu-items": {
             "post": {
                 "tags": [
                     "Menu Item"
                 ],
                 "summary": "Store menu item",
                 "description": "Store menu item",
-                "operationId": "5caec38024b2741460209cce23db601c",
+                "operationId": "39d7c8a497a79e4900adf54e389a7c84",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "properties": {
-                                    "name": {
-                                        "type": "string",
-                                        "example": "Item 1"
-                                    },
-                                    "description": {
-                                        "type": "string",
-                                        "example": "Item 1"
-                                    },
-                                    "img": {
-                                        "type": "string",
-                                        "example": "https://example.com/image.jpg"
-                                    },
-                                    "price": {
-                                        "type": "number",
-                                        "example": "10.99"
-                                    },
-                                    "category_id": {
-                                        "type": "integer",
-                                        "example": 2
-                                    },
-                                    "menu_id": {
-                                        "type": "integer",
-                                        "example": 1
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/MenuItem"
                             }
                         }
                     }
@@ -464,136 +438,17 @@
                 }
             }
         },
-        "/api/menu-item/update": {
-            "put": {
-                "tags": [
-                    "Menu Item"
-                ],
-                "summary": "Update menu item",
-                "description": "Update menu item",
-                "operationId": "c754671f39764d8848f8ebb35132e345",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "name": {
-                                        "type": "string",
-                                        "example": "Item 1"
-                                    },
-                                    "description": {
-                                        "type": "string",
-                                        "example": "Item 1"
-                                    },
-                                    "img": {
-                                        "type": "string",
-                                        "example": "https://example.com/image.jpg"
-                                    },
-                                    "price": {
-                                        "type": "number",
-                                        "example": "10.99"
-                                    },
-                                    "category_id": {
-                                        "type": "integer",
-                                        "example": 2
-                                    },
-                                    "menu_id": {
-                                        "type": "integer",
-                                        "example": 1
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Item do menu atualizado com sucesso"
-                    }
-                }
-            }
-        },
-        "/api/menu-item/get/{id}/restaurant/{restaurant_id}": {
+        "/api/menu-items/restaurant/{restaurant}": {
             "get": {
                 "tags": [
                     "Menu Item"
                 ],
-                "summary": "Get menu item",
-                "description": "Get menu item",
-                "operationId": "62e059f8837006bf594034cde4864ca0",
+                "summary": "Get all menu items",
+                "description": "Get all menu items for a restaurant",
+                "operationId": "5d0d064c04c15c12967c81c6828d79af",
                 "parameters": [
                     {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID do item do menu",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "restaurant_id",
-                        "in": "path",
-                        "description": "ID do restaurante",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Item do menu encontrado",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "name": {
-                                            "type": "string",
-                                            "example": "Item 1"
-                                        },
-                                        "description": {
-                                            "type": "string",
-                                            "example": "Item 1"
-                                        },
-                                        "img": {
-                                            "type": "string",
-                                            "example": "https://example.com/image.jpg"
-                                        },
-                                        "price": {
-                                            "type": "number",
-                                            "example": "10.99"
-                                        },
-                                        "category_id": {
-                                            "type": "integer",
-                                            "example": 2
-                                        },
-                                        "menu_id": {
-                                            "type": "integer",
-                                            "example": 1
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/menu-item/get-all/restaurant/{restaurant_id}": {
-            "get": {
-                "tags": [
-                    "Menu Item"
-                ],
-                "summary": "Get all menu item",
-                "description": "Get all menu item",
-                "operationId": "734545a91ae398d7e0834473555f0f74",
-                "parameters": [
-                    {
-                        "name": "restaurant_id",
+                        "name": "restaurant",
                         "in": "path",
                         "description": "ID do restaurante",
                         "required": true,
@@ -608,33 +463,10 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "name": {
-                                            "type": "string",
-                                            "example": "Item 1"
-                                        },
-                                        "description": {
-                                            "type": "string",
-                                            "example": "Item 1"
-                                        },
-                                        "img": {
-                                            "type": "string",
-                                            "example": "https://example.com/image.jpg"
-                                        },
-                                        "price": {
-                                            "type": "number",
-                                            "example": "10.99"
-                                        },
-                                        "category_id": {
-                                            "type": "integer",
-                                            "example": 2
-                                        },
-                                        "menu_id": {
-                                            "type": "integer",
-                                            "example": 1
-                                        }
-                                    },
-                                    "type": "object"
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/MenuItem"
+                                    }
                                 }
                             }
                         }
@@ -642,28 +474,84 @@
                 }
             }
         },
-        "/api/menu-item/delete/{id}/restaurant/{restaurant_id}": {
-            "delete": {
+        "/api/menu-items/{menuItem}": {
+            "get": {
                 "tags": [
                     "Menu Item"
                 ],
-                "summary": "Delete menu item",
-                "description": "Delete menu item",
-                "operationId": "c231e535ecc6e0388a28eedeeea65a27",
+                "summary": "Get menu item",
+                "description": "Get menu item by id",
+                "operationId": "19841a906e673349e0bdde8442c2a785",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "menuItem",
                         "in": "path",
                         "description": "ID do item do menu",
                         "required": true,
                         "schema": {
                             "type": "integer"
                         }
-                    },
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item do menu encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MenuItem"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Menu Item"
+                ],
+                "summary": "Update menu item",
+                "description": "Update menu item",
+                "operationId": "48797db6147bad242e6aa93b2846f793",
+                "parameters": [
                     {
-                        "name": "restaurant_id",
+                        "name": "menuItem",
                         "in": "path",
-                        "description": "ID do menu item",
+                        "description": "ID do item do menu",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MenuItem"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Item do menu atualizado com sucesso"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Menu Item"
+                ],
+                "summary": "Delete menu item",
+                "description": "Delete a menu item",
+                "operationId": "ed03c8aa861c7d1e53e231799acbe63f",
+                "parameters": [
+                    {
+                        "name": "menuItem",
+                        "in": "path",
+                        "description": "ID do item do menu",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -680,23 +568,14 @@
                 "tags": [
                     "Menu Item"
                 ],
-                "summary": "Delete menu item",
-                "description": "Delete menu item",
-                "operationId": "4157d8012e92c653a652a83b111dd484",
+                "summary": "Soft delete menu item",
+                "description": "Deactivate a menu item",
+                "operationId": "f4554858ade207d6b332218f11f08450",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "menuItem",
                         "in": "path",
                         "description": "ID do item do menu",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "restaurant_id",
-                        "in": "path",
-                        "description": "ID do menu item",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -705,7 +584,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Item do menu deletado"
+                        "description": "Item do menu desativado com sucesso"
                     }
                 }
             }
@@ -1383,6 +1262,55 @@
                         "type": "string",
                         "format": "date-time",
                         "readOnly": true
+                    }
+                },
+                "type": "object"
+            },
+            "MenuItem": {
+                "title": "MenuItem",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Item 1"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Delicious item"
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 10.99
+                    },
+                    "image": {
+                        "type": "string",
+                        "example": "https://example.com/image.jpg"
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "menu_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "category_id": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-09-09T03:58:10.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-09-09T03:58:10.000000Z"
                     }
                 },
                 "type": "object"
