@@ -9,6 +9,7 @@ use App\Models\MenuItems;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Auth;
 
 class MenuItemController extends Controller
 {
@@ -69,7 +70,9 @@ class MenuItemController extends Controller
     {
         $this->authorize('get', MenuItems::class);
 
-        return $this->menuItemService->getAll($restaurant->id);
+        $user = Auth::user();
+
+        return $this->menuItemService->index($user);
     }
 
     /**

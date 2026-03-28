@@ -92,7 +92,7 @@ it('should get all active menu items for restaurant', function () {
         'category_id' => $this->category->id,
     ]);
 
-    $items = $this->menuItemService->getAll($this->restaurant->id);
+    $items = $this->menuItemService->index(userAdmimMaster());
 
     expect($items->count())->toBe(2);
 });

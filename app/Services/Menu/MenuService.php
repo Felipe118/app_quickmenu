@@ -86,6 +86,7 @@ class MenuService extends BaseService implements MenuServiceInterface
     {
         try{
             $user = Auth::user();
+            
             return Menu::visibleTo($user)
                 ->where('active', true)
                 ->where('id', $menu->id)
@@ -104,7 +105,7 @@ class MenuService extends BaseService implements MenuServiceInterface
         }
     }
 
-    public function destroy(int $id): void
+    public function destroy(int $id): void 
     {
         try{
             $menu = Menu::find($id);

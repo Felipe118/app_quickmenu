@@ -5,6 +5,7 @@ namespace App\Services\MenuItem;
 use App\Exceptions\SistemException;
 use App\Interfaces\MenuItem\MenuItemServiceInterface;
 use App\Models\MenuItems;
+use App\Models\User;
 use App\Services\BaseService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
@@ -45,26 +46,13 @@ class MenuItemService extends BaseService implements MenuItemServiceInterface
         }
     }
 
-    public function getAll(int $restaurant_id): Collection
+    public function index(User $user) :Collection
     {
-        try{
-            return $this->items
-                ->select(
-                    'menu_items.id',
-                    'menu_items.name',
-                    'menu_items.description',
-                    'menu_items.price',
-                    'menu_items.menu_id',
-                    'menu_items.active',
-                    'menu.restaurant_id',
-                )
-                ->join(
-                    'menu','menu_id','=','menu.id'
-                )
-                ->where('menu_items.active', true)
-                ->where('restaurant_id', $restaurant_id)
+        try{ 
+            return MenuItems::VisibleTo($user)
+                ->with(['menu','category'])
+                ->where('active', true)
                 ->get();
-
         }catch(\Exception $e){
             Log::error($e->getMessage());
             throw new SistemException($e->getMessage(),$e->getCode() ?: 500);
