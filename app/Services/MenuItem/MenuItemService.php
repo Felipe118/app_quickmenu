@@ -49,7 +49,7 @@ class MenuItemService extends BaseService implements MenuItemServiceInterface
     public function index(User $user) :Collection
     {
         try{ 
-            return MenuItems::VisibleTo($user)
+            return $this->items->VisibleTo($user)
                 ->with(['menu','category'])
                 ->where('active', true)
                 ->get();
