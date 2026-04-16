@@ -72,7 +72,7 @@ class MenuItemController extends Controller
 
         $user = Auth::user();
 
-        return $this->menuItemService->index($user);
+        return $this->menuItemService->index($restaurant, $user);
     }
 
     /**

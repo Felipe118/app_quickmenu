@@ -5,6 +5,7 @@ namespace App\Services\MenuItem;
 use App\Exceptions\SistemException;
 use App\Interfaces\MenuItem\MenuItemServiceInterface;
 use App\Models\MenuItems;
+use App\Models\Restaurant;
 use App\Models\User;
 use App\Services\BaseService;
 use Illuminate\Database\Eloquent\Collection;
@@ -46,16 +47,18 @@ class MenuItemService extends BaseService implements MenuItemServiceInterface
         }
     }
 
-    public function index(User $user) :Collection
+    public function index(Restaurant  $restaurant, User $user) :Collection
     {
         try{ 
-            return $this->items->VisibleTo($user)
-                ->with(['menu','category'])
+            $this->ensureAdminMasterOrRestaurantOwner($user, $restaurant->id);
+
+            return $this->items->with(['menu','category'])
                 ->where('active', true)
                 ->get();
         }catch(\Exception $e){
+            dd($e);
             Log::error($e->getMessage());
-            throw new SistemException($e->getMessage(),$e->getCode() ?: 500);
+            throw new SistemException($e->getMessage(),$e->getCode() ?? 500);
         }
     }
 
