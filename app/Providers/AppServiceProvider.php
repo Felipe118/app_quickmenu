@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
@@ -25,5 +26,7 @@ class AppServiceProvider extends ServiceProvider
             Log::info("SQL Executada: " . $query->sql, $query->bindings);
             Log::info("Tempo: " . $query->time . " ms");
         });
+
+        JsonResource::withoutWrapping();
     }
 }

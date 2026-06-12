@@ -6,6 +6,7 @@ use App\Enums\StatusCode\StatusCodeEnum;
 use App\Exceptions\Auth\AuthException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\AuthRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -47,6 +48,6 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
-        return response()->json($request->user());
+        return new UserResource($request->user()->load('restaurants'));
     }
 }

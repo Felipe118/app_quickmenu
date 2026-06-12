@@ -9,6 +9,8 @@ use App\Interfaces\Restaurant\RestaurantServiceInterface;
 use App\Models\Restaurant;
 use App\Models\User;
 use App\Services\BaseService;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -29,18 +31,28 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
             Log::error($e->getMessage());
             throw new SistemException('Erro ao salvar restaurante');
         }
-       
     }
 
     public function getRestaurant(Restaurant $restaurant, User $user): Restaurant
     {
         try{
             return Restaurant::visibleTo($user)
+                ->select(
+                    'id',
+                    'name',
+                    'perfil_img',	
+                    'capa_img',
+                    'open_time',
+                    'close_time',	
+                    'phone',
+                    'email',
+                    'address_id',	
+                    'slug'
+                )
                 ->where('active', true)
                 ->where('id', $restaurant->id)
                 ->first();
-
-        }catch (\Illuminate\Auth\Access\AuthorizationException $e) {
+        }catch (AuthorizationException $e) {
             throw $e;
         }catch (\Throwable $e) {
             Log::error($e->getMessage());
@@ -64,7 +76,7 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
     {
         try {
             return $this->restaurantRepository->update($data, $restaurant);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             throw new SistemException(MessageEnum::RESTAURANTE_NAO_ENCONTRADO->value, 404);
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
@@ -77,7 +89,7 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
     {
         try {
             $restaurant->update(['active' => false]);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             throw new SistemException(MessageEnum::RESTAURANTE_NAO_ENCONTRADO->value, 404);
         } catch (\Throwable $e) {
             Log::error($e);
