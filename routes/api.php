@@ -136,6 +136,4 @@ Route::middleware('auth:sanctum')->group(function () {
             ->name('deleteMenuItem')
             ->middleware(['role:admin_master', 'check.restaurant']);
     });
-
-
 });

@@ -3,6 +3,8 @@
 use App\Exceptions\SistemException;
 use App\Http\Middleware\CheckRestaurantAccess;
 use App\Http\Middleware\ForceJsonResponse;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -34,7 +36,7 @@ return Application::configure(basePath: dirname(__DIR__))
             function (SistemException $e, $request) {
                 return response()->json([
                     'message' => $e->getMessage(),
-                ], $e->getCode());
+                ], $e->status());
             }
         );
         $exceptions->renderable(
@@ -44,5 +46,17 @@ return Application::configure(basePath: dirname(__DIR__))
                 ], 403);
             }
         );
-            
+        
+        $exceptions->render(function (ModelNotFoundException $e) {
+            return response()->json([
+                'message' => 'Recurso não encontrado.'
+            ], 404);
+
+        });
+
+        $exceptions->render(function (QueryException $e, $request) {
+            return response()->json([
+                'message' => 'Erro interno.'
+            ], 500);
+        });
     })->create();

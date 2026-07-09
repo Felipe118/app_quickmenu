@@ -29,7 +29,9 @@ class Restaurant extends Model
         'slug',
     ];
 
-
+    protected $casts = [
+        'active' => 'boolean'
+    ];
 
     public function users() :BelongsToMany
     {

@@ -3,17 +3,20 @@
 namespace App\Exceptions;
 
 use Exception;
+use Throwable;
 
 class SistemException extends Exception
 {
-    /**
-     * Create a new exception instance.
-     *
-     * @param string $message
-     * @param int $code
-     */
-    public function __construct(string $message = 'Error:', int $code = 500)
+    public function __construct(
+        string $message = 'Erro interno.',
+        protected int $status = 500,
+        ?Throwable $previous = null
+    ) {
+        parent::__construct($message, 0, $previous);
+    }
+
+    public function status(): int
     {
-        parent::__construct($message, $code);
+        return $this->status;
     }
 }
