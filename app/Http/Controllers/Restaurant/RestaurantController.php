@@ -78,7 +78,7 @@ class RestaurantController extends Controller
         return $this->restaurantService->store($request->all());
     }
 
-      /**
+    /**
      * @OA\Put(
      *    path="/api/restaurants/{restaurant}",
      *    tags={"Restaurant"},
@@ -116,7 +116,11 @@ class RestaurantController extends Controller
     public function update(RestaurantRequest $request, Restaurant $restaurant) 
     {
         $this->authorize('update', Restaurant::class);
-        return $this->restaurantService->update($request->all(), $restaurant);
+        $this->restaurantService->update($request->all(), $restaurant);
+
+        return response()->json([
+            'message' => 'Restaurante atualizado com sucessoss',
+        ],200);
     }
 
     /**

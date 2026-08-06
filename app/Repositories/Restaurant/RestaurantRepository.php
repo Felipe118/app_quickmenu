@@ -5,6 +5,7 @@ namespace App\Repositories\Restaurant;
 use App\Helpers\SlugHelpers;
 use App\Interfaces\Restaurant\RestaurantRepositoryInterface;
 use App\Models\Restaurant;
+use Illuminate\Support\Facades\DB;
 
 class RestaurantRepository implements RestaurantRepositoryInterface
 {
@@ -13,7 +14,7 @@ class RestaurantRepository implements RestaurantRepositoryInterface
         private SlugHelpers $slugHelpers
     )
     {}
-    public function store(int $userId,array $data) :Restaurant
+    public function store(int $userId,array $data): Restaurant
     {
         $slug = $this->slugHelpers->slugify($data["name"]);
 
@@ -37,21 +38,23 @@ class RestaurantRepository implements RestaurantRepositoryInterface
         return $restaurant;
     }
 
-    public function update(array $data, Restaurant $restaurant) :Restaurant
+    public function update(array $data, Restaurant $restaurant): void
     {
-      $restaurant->update([
-          'name'=> $data['name'] ?? $restaurant->name,
-          'email'=> $data['email'] ?? $restaurant->email,
-          'perfil_img' => $data['perfil_img'] ?? $restaurant->perfil_img,
-          'capa_img' => $data['capa_img']  ?? $restaurant->capa_img,
-          'open_time' => $data['open_time'] ?? $restaurant->open_time,
-          'close_time' => $data['close_time'] ?? $restaurant->close_time,
-          'phone' => $data['phone'] ?? $restaurant->phone, 
-          'active' => true,
-          'address_id' => $data['address_id'] ?? $restaurant->address_id,
-          'slug' => $this->slugHelpers->slugify($data['name'])
-      ]);
-      
-      return $restaurant;
+        DB::transaction(function () use ($data, $restaurant) {
+            $restaurant->update([
+                'name'=> $data['name'] ?? $restaurant->name,
+                'email'=> $data['email'] ?? $restaurant->email,
+                'perfil_img' => $data['perfil_img'] ?? $restaurant->perfil_img,
+                'capa_img' => $data['capa_img']  ?? $restaurant->capa_img,
+                'open_time' => $data['open_time'] ?? $restaurant->open_time,
+                'close_time' => $data['close_time'] ?? $restaurant->close_time,
+                'phone' => $data['phone'] ?? $restaurant->phone, 
+                'active' => true,
+                'address_id' => $data['address_id'] ?? $restaurant->address_id,
+                'slug' => $this->slugHelpers->slugify($data['name'])
+            ]);
+
+            $restaurant->address()->update($data['address']);
+        });
     }
 }

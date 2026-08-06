@@ -28,6 +28,7 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
     {
         try{
             return Restaurant::visibleTo($user)
+                ->with('address')
                 ->select(
                     'id',
                     'name',
@@ -51,6 +52,7 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
     public function index(User $user): LengthAwarePaginator
     {
         return Restaurant::visibleTo($user)
+            ->with('address')
             ->select(
                 'id',
                 'name',
@@ -68,9 +70,9 @@ class RestaurantService extends BaseService implements RestaurantServiceInterfac
             ->paginate(10);
     } 
 
-    public function update(array $data, Restaurant $restaurant): Restaurant
+    public function update(array $data, Restaurant $restaurant): void
     {
-        return $this->restaurantRepository->update($data, $restaurant);
+        $this->restaurantRepository->update($data, $restaurant);
     }
 
     public function destroy(Restaurant $restaurant): void

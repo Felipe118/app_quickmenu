@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('city', 50)->nullable();
             $table->string('state', 40)->countries()->nullable();
             $table->string('cep', 20);
-            $table->string('quatrain');
+            $table->string('quatrain')->nullable();
             $table->string('neighborhood', 50)->nullable();
             $table->timestamps();
         });

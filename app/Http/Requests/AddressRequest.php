@@ -23,7 +23,7 @@ class AddressRequest extends FormRequest
     {
         return [
             'address_name' => 'required|string|max:255',
-            'quatrain' => 'required|string|max:255',
+            'quatrain' => 'string|max:255',
             'city'=> 'required|string|max:255',
             'state'=> 'required|string|max:255',
             'cep'=> 'required|string|max:20',
@@ -39,7 +39,6 @@ class AddressRequest extends FormRequest
             'address_name.required'=> 'O campo nome é obrigatório',
             'address_name.string'=> 'O campo nome deve ser uma string',
             'address_name.max'=> 'O campo nome deve ter no máximo 255 caracteres',
-            'quatrain.required'=> 'O campo quadra é obrigatório',
             'quatrain.string'=> 'O campo quadra deve ser uma string',
             'quatrain.max'=>  'O campo quadra deve ter no máximo 255 caracteres',
             'city.required'=> 'O campo cidade é obrigatório',

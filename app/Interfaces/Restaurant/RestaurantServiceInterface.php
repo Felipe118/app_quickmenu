@@ -11,6 +11,6 @@ interface RestaurantServiceInterface
     public function store(array $data): Restaurant;
     public function getRestaurant(Restaurant $restaurant, User $user): Restaurant;
     public function index(User $user): LengthAwarePaginator;
-    public function update(array $data, Restaurant $restaurant): Restaurant;
+    public function update(array $data, Restaurant $restaurant): void;
     public function destroy(Restaurant $restaurant): void;
 }

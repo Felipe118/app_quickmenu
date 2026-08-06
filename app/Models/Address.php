@@ -22,4 +22,9 @@ class Address extends Model
         'neighborhood',
         'cep',
     ];
+
+    public function restaurant()
+    {
+        return $this->belongsTo(Restaurant::class);
+    }
 }

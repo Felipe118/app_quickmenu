@@ -37,7 +37,7 @@ class RestaurantRequest extends FormRequest
                 Rule::unique('restaurant', 'phone')->ignore($restaurantId),
             ],
             "active"=> "boolean",
-            "address_id"=> "required|integer|exists:address,id",
+            // "address_id"=> "required|integer|exists:address,id",
         ];
     }
 

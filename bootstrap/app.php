@@ -9,6 +9,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Exceptions\UnauthorizedException;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -39,6 +40,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 ], $e->status());
             }
         );
+        
         $exceptions->renderable(
             function (UnauthorizedException $e, $request ) {
                 return response()->json([
@@ -55,6 +57,7 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (QueryException $e, $request) {
+            Log::error($e->getMessage());
             return response()->json([
                 'message' => 'Erro interno.'
             ], 500);
